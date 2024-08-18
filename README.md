@@ -4,10 +4,13 @@
 https://github.com/Moonlight-the-Fried-Fish/moonlight-ios-NativeMultiTouchPassthrough
 
 
+# Features of this fork:
+
 允许调整触点在右分屏或分屏的移速， 对调节米家游戏视角转动的灵敏度尤其有用。
 This is a fork with some manipulation on native multi-touch pointer coordinaties, allows pointer to move faster or slower on specified enhanced touch zone.
 Maybe useful for tweaking view rotation sensitivity in some games.
-<br>
+<br><br>
+
 ![image](https://github.com/TrueZhuangJia/moonlight-android-Enhanced-MultiTouch/assets/78474576/3bd8efeb-89ab-477d-b501-22f25cdb8fc6)
 ![image](https://github.com/TrueZhuangJia/moonlight-android-Enhanced-MultiTouch/assets/78474576/0d58b391-71ef-48be-82f8-6fef1649e2eb)
 
