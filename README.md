@@ -1,5 +1,7 @@
 # 首个实现多点触控 灵敏度调节 (触点移速调节) 的 Moonlight分支. <br>
 # The first Moonlight fork to implement multi-touch sensitivity tweak (touch point velocity tweak)
+# I'm currently working on my moonlight-iOS fork, with too much deviations from the original version:
+https://github.com/Moonlight-the-Fried-Fish/moonlight-ios-NativeMultiTouchPassthrough
 
 
 允许调整触点在右分屏或分屏的移速， 对调节米家游戏视角转动的灵敏度尤其有用。
