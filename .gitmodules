@@ -1,3 +1,6 @@
 [submodule "app/src/main/jni/moonlight-core/moonlight-common-c"]
 	path = app/src/main/jni/moonlight-core/moonlight-common-c
 	url = https://github.com/moonlight-stream/moonlight-common-c.git
+[submodule "app/src/main/jni/libusb"]
+	path = app/src/main/jni/libusb
+	url = https://github.com/libusb/libusb.git
