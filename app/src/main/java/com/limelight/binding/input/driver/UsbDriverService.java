@@ -42,6 +42,8 @@ public class UsbDriverService extends Service implements UsbDriverListener {
     private UsbDriverStateListener stateListener;
     private int nextDeviceId;
 
+    private final ArrayList<XboxWirelessDongle> xboxWirelessDongles = new ArrayList<>();
+
     @Override
     public void reportControllerState(int controllerId, int buttonFlags, float leftStickX, float leftStickY,
                                       float rightStickX, float rightStickY, float leftTrigger, float rightTrigger) {
@@ -182,6 +184,15 @@ public class UsbDriverService extends Service implements UsbDriverListener {
                 return;
             }
 
+            if (XboxWirelessDongle.canClaimDevice(device)) {
+                var dongle = new XboxWirelessDongle(device, connection, this);
+                if(!dongle.start()) {
+                    connection.close();
+                    return;
+                }
+                xboxWirelessDongles.add(dongle);
+                return;
+            }
 
             AbstractController controller;
 
@@ -278,7 +289,8 @@ public class UsbDriverService extends Service implements UsbDriverListener {
         return ((!kernelSupportsXboxOne() || !isRecognizedInputDevice(device) || claimAllAvailable) && XboxOneController.canClaimDevice(device)) ||
                 ((!isRecognizedInputDevice(device) || claimAllAvailable) && Xbox360Controller.canClaimDevice(device)) ||
                 // We must not call isRecognizedInputDevice() because wireless controllers don't share the same product ID as the dongle
-                ((!kernelSupportsXbox360W() || claimAllAvailable) && Xbox360WirelessDongle.canClaimDevice(device));
+                ((!kernelSupportsXbox360W() || claimAllAvailable) && Xbox360WirelessDongle.canClaimDevice(device) ||
+                        XboxWirelessDongle.canClaimDevice(device));
     }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
@@ -318,6 +330,12 @@ public class UsbDriverService extends Service implements UsbDriverListener {
 
         // Stop the attachment receiver
         unregisterReceiver(receiver);
+
+        // Stop all dongles
+        while (xboxWirelessDongles.size() > 0) {
+            // Stop and remove the dongle
+            xboxWirelessDongles.remove(0).stop();
+        }
 
         // Stop all controllers
         while (controllers.size() > 0) {
