@@ -586,6 +586,12 @@ public class NvHTTP {
         }
     }
 
+    /**
+     * Get an app by ID
+     * @param appId The ID of the app
+     * @see #getAppByName(String) for alternative.
+     * @return app details, or null if no app with that ID exists
+     */
     public NvApp getAppById(int appId) throws IOException, XmlPullParserException {
         LinkedList<NvApp> appList = getAppList();
         for (NvApp appFromList : appList) {
@@ -595,11 +601,16 @@ public class NvHTTP {
         }
         return null;
     }
-    
-    /* NOTE: Only use this function if you know what you're doing.
-     * It's totally valid to have two apps named the same thing,
-     * or even nothing at all! Look apps up by ID if at all possible
-     * using the above function */
+
+    /**
+     * Get an app by name
+     * NOTE: It is perfectly valid for multiple apps to have the same name,
+     * this function will only return the first one it finds.
+     * Consider using getAppById instead.
+     * @param appName The name of the app
+     * @see #getAppById(int) for alternative.
+     * @return app details, or null if no app with that name exists
+     */
     public NvApp getAppByName(String appName) throws IOException, XmlPullParserException {
         LinkedList<NvApp> appList = getAppList();
         for (NvApp appFromList : appList) {

@@ -190,6 +190,35 @@ public class ComputerDatabaseManager {
         }
     }
 
+    /**
+     * Get a computer by name
+     * NOTE: It is perfectly valid for multiple computers to have the same name,
+     * this function will only return the first one it finds.
+     * Consider using getComputerByUUID instead.
+     * @param name The name of the computer
+     * @see ComputerDatabaseManager#getComputerByUUID(String) for alternative.
+     * @return The computer details, or null if no computer with that name exists
+     */
+    public ComputerDetails getComputerByName(String name) {
+        try (final Cursor c = computerDb.query(
+                COMPUTER_TABLE_NAME, null, COMPUTER_NAME_COLUMN_NAME+"=?",
+                new String[]{ name }, null, null, null)
+        ) {
+            if (!c.moveToFirst()) {
+                // No matching computer
+                return null;
+            }
+
+            return getComputerFromCursor(c);
+        }
+    }
+
+    /**
+     * Get a computer by UUID
+     * @param uuid The UUID of the computer
+     * @see ComputerDatabaseManager#getComputerByName(String) for alternative.
+     * @return The computer details, or null if no computer with that UUID exists
+     */
     public ComputerDetails getComputerByUUID(String uuid) {
         try (final Cursor c = computerDb.query(
                 COMPUTER_TABLE_NAME, null, COMPUTER_UUID_COLUMN_NAME+"=?",

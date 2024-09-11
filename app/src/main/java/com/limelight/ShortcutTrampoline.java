@@ -8,19 +8,26 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.limelight.computers.ComputerDatabaseManager;
 import com.limelight.computers.ComputerManagerListener;
 import com.limelight.computers.ComputerManagerService;
 import com.limelight.nvstream.http.ComputerDetails;
 import com.limelight.nvstream.http.NvApp;
+import com.limelight.nvstream.http.NvHTTP;
 import com.limelight.nvstream.http.PairingManager;
 import com.limelight.nvstream.wol.WakeOnLanSender;
+import com.limelight.utils.CacheHelper;
 import com.limelight.utils.Dialog;
 import com.limelight.utils.ServerHelper;
 import com.limelight.utils.SpinnerDialog;
 import com.limelight.utils.UiHelper;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ShortcutTrampoline extends Activity {
@@ -33,6 +40,7 @@ public class ShortcutTrampoline extends Activity {
     private SpinnerDialog blockingLoadSpinner;
 
     private ComputerManagerService.ComputerManagerBinder managerBinder;
+
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
             final ComputerManagerService.ComputerManagerBinder localBinder =
@@ -214,9 +222,9 @@ public class ShortcutTrampoline extends Activity {
         }
     };
 
-    protected boolean validateInput(String uuidString, String appIdString) {
-        // Validate UUID
-        if (uuidString == null) {
+    protected boolean validateInput(String uuidString, String appIdString, String nameString) {
+        // Validate PC UUID/Name
+        if (uuidString == null && nameString == null) {
             Dialog.displayDialog(ShortcutTrampoline.this,
                     getResources().getString(R.string.conn_error_title),
                     getResources().getString(R.string.scut_invalid_uuid),
@@ -224,14 +232,25 @@ public class ShortcutTrampoline extends Activity {
             return false;
         }
 
-        try {
-            UUID.fromString(uuidString);
-        } catch (IllegalArgumentException ex) {
-            Dialog.displayDialog(ShortcutTrampoline.this,
-                    getResources().getString(R.string.conn_error_title),
-                    getResources().getString(R.string.scut_invalid_uuid),
-                    true);
-            return false;
+        if (uuidString != null && !uuidString.isEmpty()) {
+            try {
+                UUID.fromString(uuidString);
+            } catch (IllegalArgumentException ex) {
+                Dialog.displayDialog(ShortcutTrampoline.this,
+                        getResources().getString(R.string.conn_error_title),
+                        getResources().getString(R.string.scut_invalid_uuid),
+                        true);
+                return false;
+            }
+        } else {
+            // UUID is null, so fallback to Name
+            if (nameString == null || nameString.isEmpty()) {
+                Dialog.displayDialog(ShortcutTrampoline.this,
+                        getResources().getString(R.string.conn_error_title),
+                        getResources().getString(R.string.scut_invalid_uuid),
+                        true);
+                return false;
+            }
         }
 
         // Validate App ID (if provided)
@@ -255,24 +274,93 @@ public class ShortcutTrampoline extends Activity {
         super.onCreate(savedInstanceState);
 
         UiHelper.notifyNewRootView(this);
+        ComputerDatabaseManager dbManager = new ComputerDatabaseManager(this);
+        ComputerDetails _computer = null;
 
-        String appIdString = getIntent().getStringExtra(Game.EXTRA_APP_ID);
+        // PC arguments, both are optional, but at least one must be provided
         uuidString = getIntent().getStringExtra(AppView.UUID_EXTRA);
+        String nameString = getIntent().getStringExtra(AppView.NAME_EXTRA);
 
-        if (validateInput(uuidString, appIdString)) {
-            if (appIdString != null && !appIdString.isEmpty()) {
-                app = new NvApp(getIntent().getStringExtra(Game.EXTRA_APP_NAME),
-                        Integer.parseInt(appIdString),
-                        getIntent().getBooleanExtra(Game.EXTRA_APP_HDR, false));
+        // App arguments, both are optional, but one must be provided in order to start an app
+        String appIdString = getIntent().getStringExtra(Game.EXTRA_APP_ID);
+        String appNameString = getIntent().getStringExtra(Game.EXTRA_APP_NAME);
+
+        if (!validateInput(uuidString, appIdString, nameString)) {
+            // Invalid input, so just return
+            return;
+        }
+
+        if (uuidString == null || uuidString.isEmpty()) {
+            // Use nameString to find the corresponding UUID
+            _computer = dbManager.getComputerByName(nameString);
+
+            if (_computer == null) {
+                Dialog.displayDialog(ShortcutTrampoline.this,
+                        getResources().getString(R.string.conn_error_title),
+                        getResources().getString(R.string.scut_pc_not_found),
+                        true);
+                return;
             }
 
-            // Bind to the computer manager service
-            bindService(new Intent(this, ComputerManagerService.class), serviceConnection,
-                    Service.BIND_AUTO_CREATE);
+            uuidString = _computer.uuid;
 
-            blockingLoadSpinner = SpinnerDialog.displayDialog(this, getResources().getString(R.string.conn_establishing_title),
-                    getResources().getString(R.string.applist_connect_msg), true);
+            // Set the AppView UUID intent, since it wasn't provided
+            setIntent(new Intent(getIntent()).putExtra(AppView.UUID_EXTRA, uuidString));
         }
+
+        if (appIdString != null && !appIdString.isEmpty()) {
+            app = new NvApp(getIntent().getStringExtra(Game.EXTRA_APP_NAME),
+                    Integer.parseInt(appIdString),
+                    getIntent().getBooleanExtra(Game.EXTRA_APP_HDR, false));
+        }
+        else if (appNameString != null && !appNameString.isEmpty()) {
+            // Use appNameString to find the corresponding AppId
+            try {
+                int appId = -1;
+                String rawAppList = CacheHelper.readInputStreamToString(CacheHelper.openCacheFileForInput(getCacheDir(), "applist", uuidString));
+
+                if (rawAppList.isEmpty()) {
+                    Dialog.displayDialog(ShortcutTrampoline.this,
+                            getResources().getString(R.string.conn_error_title),
+                            getResources().getString(R.string.scut_invalid_app_id),
+                            true);
+                    return;
+                }
+                List<NvApp> applist = NvHTTP.getAppListByReader(new StringReader(rawAppList));
+
+                for (NvApp _app : applist) {
+                    if (_app.getAppName().equals(appNameString)) {
+                        appId = _app.getAppId();
+                        break;
+                    }
+                }
+                if (appId < 0) {
+                    Dialog.displayDialog(ShortcutTrampoline.this,
+                            getResources().getString(R.string.conn_error_title),
+                            getResources().getString(R.string.scut_invalid_app_id),
+                            true);
+                    return;
+                }
+                setIntent(new Intent(getIntent()).putExtra(Game.EXTRA_APP_ID, appId));
+                app = new NvApp(
+                        appNameString,
+                        appId,
+                        getIntent().getBooleanExtra(Game.EXTRA_APP_HDR, false));
+            } catch (IOException | XmlPullParserException e) {
+                Dialog.displayDialog(ShortcutTrampoline.this,
+                        getResources().getString(R.string.conn_error_title),
+                        getResources().getString(R.string.scut_invalid_app_id),
+                        true);
+                return;
+            }
+        }
+
+        // Bind to the computer manager service
+        bindService(new Intent(this, ComputerManagerService.class), serviceConnection,
+                Service.BIND_AUTO_CREATE);
+
+        blockingLoadSpinner = SpinnerDialog.displayDialog(this, getResources().getString(R.string.conn_establishing_title),
+                getResources().getString(R.string.applist_connect_msg), true);
     }
 
     @Override
