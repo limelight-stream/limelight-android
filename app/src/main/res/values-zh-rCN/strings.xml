@@ -123,7 +123,21 @@
     <string name="summary_audio_config_list"> 为家庭影院系统启用5.1或7.1环绕声 </string>
     <string name="category_input_settings">输入设置</string>
     <string name="title_checkbox_touchscreen_trackpad">将触控屏作为触控板使用</string>
-    <string name="summary_checkbox_touchscreen_trackpad">如果启用，则将触控屏作为触控板使用。 如果禁止，则触控屏直接控制鼠标光标。</string>
+    <string name="summary_checkbox_touchscreen_trackpad">如果启用，则将触控屏作为触控板使用。如果禁用，则启用多点触控模式</string>
+
+    <string name="title_seekbar_long_press_flat_region">多点触控长按抖动消除区域</string>
+    <string name="summary_seekbar_long_press_flat_region">全屏生效。像素值越高，抖动消除区域越大。抖动消除区域内，应用只发送触点的初始坐标</string>
+    <string name="suffix_seekbar_flat_region_pixels">像素</string>
+
+    <string name="title_checkbox_sync_touch_event_with_display">触控事件与显示刷新同步</string>
+    <string name="summary_checkbox_sync_touch_event_with_display">打开后触控事件上报率与显示刷新率同步，比如显示为60Hz，那么触控与之同步。不一定有用，习惯哪个用哪个。Moonlight原版相当于禁用该项。</string>
+
+    <string name="title_checkbox_enable_keyboard_toggle_in_native_touch">多点触控模式下打开本地键盘切换</string>
+    <string name="summary_checkbox_enable_keyboard_toggle_in_native_touch">\t</string>
+    <string name="title_seekbar_keyboard_toggle_fingers_native_touch">轻敲手指数量</string>
+    <string name="summary_seekbar_keyboard_toggle_fingers_native_touch">轻敲切换本地键盘的最少手指数量。\n仅在多点触控模式生效，触摸板模式3指即可切换本地键盘(不受此配置影响)。</string>
+    <string name="suffix_seekbar_keyboard_toggle_fingers_native_touch"> </string>
+
     <string name="title_checkbox_multi_controller"> 自动检测手柄 </string>
     <string name="summary_checkbox_multi_controller"> 禁用此项所有手柄将视为一个手柄 </string>
     <string name="title_checkbox_vibrate_fallback"> 用设备震动模拟游戏震动效果 </string>
@@ -138,6 +152,25 @@
     <string name="summary_checkbox_mouse_emulation"> 长按开始键将手柄切换为鼠标模式 </string>
     <string name="title_checkbox_mouse_nav_buttons"> 启用前进后退鼠标键 </string>
     <string name="summary_checkbox_mouse_nav_buttons"> 在一些支持不佳的设备上启用此项可能会使其右键失效 </string>
+
+    <string name="category_enhanced_touch_settings">增强型多点触控</string>
+    <string name="title_checkbox_enable_enhanced_touch">打开增强型触控</string>
+    <string name="summary_checkbox_enable_enhanced_touch">\t</string>
+    <string name="title_checkbox_enhanced_touch_on_which_side">反转增强型触控区</string>
+    <string name="summary_checkbox_enhanced_touch_on_which_side">反转增强型触控区 (增强区默认在右边)</string>
+    <string name="title_enhanced_touch_zone_divider">增强型触控分区位置</string>
+    <string name="summary_enhanced_touch_zone_divider">增强型触控与原生触控的分区位置，小于50%代表在屏幕左边的某个位置分区，大于50%代表分割线在右边</string>
+    <string name="dialog_title_enhanced_touch_zone_divider">增强型触控与原生触控的分区位置，小于50%代表在屏幕左边的某个位置分区，大于50%代表分割线在右边</string>
+    <string name="suffix_enhanced_touch_zone_divider">%</string>
+    <string name="title_pointer_velocity_factor">触点移速比例</string>
+    <string name="summary_pointer_velocity_factor">设置增强型触控区内的触点移速比例。100% = 禁用，小于100%为缩小，大于100%为放大</string>
+    <string name="dialog_title_pointer_velocity_factor">增强型触控区内的触点移速比例</string>
+    <string name="suffix_pointer_velocity_factor">%</string>
+    <string name="title_fixed_x_velocity">设置增强型触控区内触点的水平方向固定移速</string>
+    <string name="summary_fixed_x_velocity">设置增强型触控区内触点的水平方向固定移速. 0像素 = 禁用，大于0将禁用水平方向的移速比例，改为固定移速</string>
+    <string name="dialog_title_fixed_x_velocity">触点水平方向固定移速</string>
+    <string name="suffix_fixed_x_velocity">像素</string>
+
     <string name="title_checkbox_flip_face_buttons"> 反转技能键 </string>
     <string name="summary_checkbox_flip_face_buttons"> 为手柄和虚拟手柄调转A/B和X/Y技能键 </string>
     <string name="category_on_screen_controls_settings"> 屏幕控制按钮设置 </string>

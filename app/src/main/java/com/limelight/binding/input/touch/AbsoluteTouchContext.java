@@ -3,7 +3,6 @@ package com.limelight.binding.input.touch;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-
 import com.limelight.nvstream.NvConnection;
 import com.limelight.nvstream.input.MouseButtonPacket;
 
@@ -195,13 +194,11 @@ public class AbsoluteTouchContext implements TouchContext {
         if (cancelled) {
             return true;
         }
-
         if (actionIndex == 0) {
             if (distanceExceeds(eventX - lastTouchDownX, eventY - lastTouchDownY, LONG_PRESS_DISTANCE_THRESHOLD)) {
                 // Moved too far since touch down. Cancel the long press timer.
                 cancelLongPressTimer();
             }
-
             // Ignore motion within the deadzone period after touch down
             if (confirmedTap || distanceExceeds(eventX - lastTouchDownX, eventY - lastTouchDownY, TOUCH_DOWN_DEAD_ZONE_DISTANCE_THRESHOLD)) {
                 tapConfirmed();

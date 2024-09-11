@@ -82,8 +82,8 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            resValue "string", "app_label", "Moonlight (Debug)"
-            resValue "string", "app_label_root", "Moonlight (Root Debug)"
+            resValue "string", "app_label", "Moonlight-搓屏砖家版"
+            resValue "string", "app_label_root", "Moonlight-搓屏砖家版"
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

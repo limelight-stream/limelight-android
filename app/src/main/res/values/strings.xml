@@ -196,11 +196,43 @@
 
     <string name="category_input_settings">Input Settings</string>
     <string name="title_checkbox_touchscreen_trackpad">Use the touchscreen as a trackpad</string>
-    <string name="summary_checkbox_touchscreen_trackpad">If enabled, the touchscreen acts like a trackpad. If disabled, the touchscreen directly controls the mouse cursor.</string>
+    <string name="summary_checkbox_touchscreen_trackpad">If enabled, the touchscreen acts like a trackpad. If disabled, multi-point touch will be enabled.</string>
+
+    <string name="title_checkbox_sync_touch_event_with_display">Synchronize touch event with display refresh </string>
+    <string name="summary_checkbox_sync_touch_event_with_display">If enabled, touch event will be synchronized with display refresh rate, like 60Hz.</string>
+
+    <string name="title_seekbar_long_press_flat_region">Flat region for long press jitter elimination in multi-point touch mode</string>
+    <string name="summary_seekbar_long_press_flat_region">Works for the whole screen. Increase for larger long-press flat region, within which the app sends initial contact coordinates to server.</string>
+    <string name="suffix_seekbar_flat_region_pixels">pixels</string>
+
+    <string name="title_checkbox_enable_keyboard_toggle_in_native_touch">Enable keyboard toggle in multi-point touch mode </string>
+    <string name="summary_checkbox_enable_keyboard_toggle_in_native_touch">\t</string>
+    <string name="title_seekbar_keyboard_toggle_fingers_native_touch">Fingers to tap</string>
+    <string name="summary_seekbar_keyboard_toggle_fingers_native_touch">Least number of fingers to tap to toggle local on-screen keyboard in multi-point touch mode. \nIn trackpad mode, you always only need to tap 3 or more fingers to toggle local keyboard.</string>
+    <string name="suffix_seekbar_keyboard_toggle_fingers_native_touch"> </string>
+
     <string name="title_checkbox_absolute_mouse_mode">Remote desktop mouse mode</string>
     <string name="summary_checkbox_absolute_mouse_mode">This can make mouse acceleration behave more naturally for remote desktop usage, but it is incompatible with many games.</string>
     <string name="title_checkbox_mouse_nav_buttons">Enable back and forward mouse buttons</string>
     <string name="summary_checkbox_mouse_nav_buttons">Enabling this option may break right clicking on some buggy devices</string>
+
+    <string name="category_enhanced_touch_settings">Enhanced Multi-Point Touch</string>
+    <string name="title_checkbox_enable_enhanced_touch">Enable enhanced touch</string>
+    <string name="summary_checkbox_enable_enhanced_touch">\t</string>
+    <string name="title_checkbox_enhanced_touch_on_which_side">Reverse enhanced touch zone</string>
+    <string name="summary_checkbox_enhanced_touch_on_which_side">Reverse enhanced touch zone to the left (default: on the right side of screen)</string>
+    <string name="title_enhanced_touch_zone_divider">Enhanced touch zone divider</string>
+    <string name="summary_enhanced_touch_zone_divider">Defines where to divide native-touch and enhanced-touch zones, less than 50% means divide from a point on the left, more than 50% means right</string>
+    <string name="dialog_title_enhanced_touch_zone_divider">Less than 50% means divide from a point on the left, more than 50% means right</string>
+    <string name="suffix_enhanced_touch_zone_divider">%</string>
+    <string name="title_pointer_velocity_factor">Pointer velocity factor</string>
+    <string name="summary_pointer_velocity_factor">Set pointer velocity factor for enhanced touch zone. Set 100% to disable</string>
+    <string name="dialog_title_pointer_velocity_factor">Set pointer velocity factor for enhanced touch zone. Set 100% to disable</string>
+    <string name="suffix_pointer_velocity_factor">%</string>
+    <string name="title_fixed_x_velocity">Set fixed X (horizontal) velocity</string>
+    <string name="summary_fixed_x_velocity">Set fixed X (horizontal) velocity. Set 0 to disable fixed x velocity mode. Larger than 0 means disable horizontal velocity factor to use fixed velocity instead.</string>
+    <string name="dialog_title_fixed_x_velocity">Set fixed X (horizontal) velocity in pixels. Set 0 to disable fixed x velocity.</string>
+    <string name="suffix_fixed_x_velocity">pixels</string>
 
     <string name="category_on_screen_controls_settings">On-screen Controls Settings</string>
     <string name="title_checkbox_show_onscreen_controls">Show on-screen controls</string>
