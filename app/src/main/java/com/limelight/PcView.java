@@ -65,6 +65,7 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
     private ShortcutHelper shortcutHelper;
     private ComputerManagerService.ComputerManagerBinder managerBinder;
     private boolean freezeUpdates, runningPolling, inForeground, completeOnCreateCalled;
+    private long createStartTime;
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
             final ComputerManagerService.ComputerManagerBinder localBinder =
@@ -231,6 +232,7 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
 
     private void completeOnCreate() {
         completeOnCreateCalled = true;
+        createStartTime = System.currentTimeMillis();
 
         shortcutHelper = new ShortcutHelper(this);
 
@@ -258,6 +260,12 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
                             @Override
                             public void run() {
                                 updateComputer(details);
+                                if(System.currentTimeMillis() - createStartTime < 5000 &&
+                                        details.state == ComputerDetails.State.ONLINE &&
+                                        details.pairState == PairState.PAIRED) {
+                                    createStartTime = 0;
+                                    doAppList(details, false, false);
+                                }
                             }
                         });
 
@@ -597,6 +605,7 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
         i.putExtra(AppView.UUID_EXTRA, computer.uuid);
         i.putExtra(AppView.NEW_PAIR_EXTRA, newlyPaired);
         i.putExtra(AppView.SHOW_HIDDEN_APPS_EXTRA, showHiddenGames);
+        i.putExtra(AppView.IP_ADDRESS, computer.activeAddress.address);
         startActivity(i);
     }
 

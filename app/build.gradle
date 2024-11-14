@@ -133,6 +133,12 @@ android {
             path "src/main/jni/Android.mk"
         }
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/libs']
+        }
+    }
 }
 
 dependencies {
@@ -142,4 +148,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
     implementation 'org.jmdns:jmdns:3.5.9'
     implementation 'com.github.cgutman:ShieldControllerExtensions:1.0.1'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.17.0'
+
 }

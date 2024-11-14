@@ -2,62 +2,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AppView" >
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/appFragmentContainer"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/settingsButton"/>
-    
+        android:layout_above="@+id/v_settings_wrap">
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/appListText"
         android:layout_width="fill_parent"
         android:layout_height="65dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/settingsButton"
         android:gravity="center"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:preferKeepClear="true"
-        android:textSize="28sp"/>
-
-    <ImageButton
-        android:id="@+id/settingsButton"
-        android:layout_width="70dp"
-        android:layout_height="65dp"
-        android:cropToPadding="false"
-        android:scaleType="fitXY"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/ic_settings"
-        android:preferKeepClear="true"
-        style="?android:attr/borderlessButtonStyle"/>
-
-
-
+        android:textSize="28sp"
+        android:visibility="gone"/>
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
-        android:padding="8dp">
+        android:layout_alignParentBottom="true"
+        android:padding="4dp"
+        android:id="@+id/v_settings_wrap">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:id="@+id/v_settings">
+
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="50dp"
+                android:layout_height="46dp"
+                android:cropToPadding="false"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_settings"
+                style="?android:attr/borderlessButtonStyle"/>
 
             <Spinner
                 android:id="@+id/spinner"

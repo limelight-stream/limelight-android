@@ -113,6 +113,7 @@
     <string name="perf_overlay_netdrops">Frames dropped by your network connection: %1$.2f%%</string>
     <string name="perf_overlay_netlatency">Average network latency: %1$d ms (variance: %2$d ms)</string>
     <string name="perf_overlay_dectime">Average decoding time: %1$.2f ms</string>
+    <string name="perf_overlay_bitrate">Bitrate: %1$s</string>
 
     <!-- AppList activity -->
     <string name="applist_connect_msg">Connecting to PC…</string>
@@ -144,7 +145,9 @@
     <string name="addpc_wrong_sitelocal">That address doesn\'t look right. You must use your router\'s public IP address for streaming over the Internet.</string>
 
     <!-- Preferences -->
+    <string name="category_pref_info">Preferences Info</string>
     <string name="category_basic_settings">Basic Settings</string>
+    <string name="title_enable_reset_bitrate">Reset bitrate after preferences changed.</string>
     <string name="title_resolution_list">Video resolution</string>
     <string name="summary_resolution_list">Increase to improve image clarity. Decrease for better performance on lower end devices and slower networks.</string>
     <string name="title_native_res_dialog">Native Resolution Warning</string>
@@ -252,6 +255,8 @@
     <string name="summary_full_range">This will cause loss of detail in light and dark areas if your device doesn\'t properly display full range video content.</string>
     <string name="title_enable_perf_overlay">Show performance stats while streaming</string>
     <string name="summary_enable_perf_overlay">Display real-time stream performance information while streaming</string>
+    <string name="title_enable_min_perf_overlay">Show min performance stats while streaming</string>
+    <string name="summary_enable_min_perf_overlay">Display real-time stream min performance information while streaming</string>
     <string name="title_enable_post_stream_toast">Show latency message after streaming</string>
     <string name="summary_enable_post_stream_toast">Display a latency information message after the stream ends</string>
 

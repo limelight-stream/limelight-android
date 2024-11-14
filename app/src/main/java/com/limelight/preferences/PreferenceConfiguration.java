@@ -26,8 +26,9 @@ public class PreferenceConfiguration {
     private static final String LEGACY_RES_FPS_PREF_STRING = "list_resolution_fps";
     private static final String LEGACY_ENABLE_51_SURROUND_PREF_STRING = "checkbox_51_surround";
 
-    static final String RESOLUTION_PREF_STRING = "list_resolution";
-    static final String FPS_PREF_STRING = "list_fps";
+    static final String RESET_BITRATE_STRING = "checkbox_enable_reset_bitrate";
+    public static final String RESOLUTION_PREF_STRING = "list_resolution";
+    public static final String FPS_PREF_STRING = "list_fps";
     static final String BITRATE_PREF_STRING = "seekbar_bitrate_kbps";
     private static final String BITRATE_PREF_OLD_STRING = "seekbar_bitrate";
     private static final String STRETCH_PREF_STRING = "checkbox_stretch_video";
@@ -48,7 +49,8 @@ public class PreferenceConfiguration {
     private static final String LEGACY_DISABLE_FRAME_DROP_PREF_STRING = "checkbox_disable_frame_drop";
     private static final String ENABLE_HDR_PREF_STRING = "checkbox_enable_hdr";
     private static final String ENABLE_PIP_PREF_STRING = "checkbox_enable_pip";
-    private static final String ENABLE_PERF_OVERLAY_STRING = "checkbox_enable_perf_overlay";
+    static final String ENABLE_PERF_OVERLAY_STRING = "checkbox_enable_perf_overlay";
+    static final String ENABLE_MIN_PERF_OVERLAY_STRING = "checkbox_enable_min_perf_overlay";
     private static final String BIND_ALL_USB_STRING = "checkbox_usb_bind_all";
     private static final String MOUSE_EMULATION_STRING = "checkbox_mouse_emulation";
     private static final String ANALOG_SCROLLING_PREF_STRING = "analog_scrolling";
@@ -69,8 +71,9 @@ public class PreferenceConfiguration {
     private static final String GAMEPAD_MOTION_SENSORS_PREF_STRING = "checkbox_gamepad_motion_sensors";
     private static final String GAMEPAD_MOTION_FALLBACK_PREF_STRING = "checkbox_gamepad_motion_fallback";
 
-    static final String DEFAULT_RESOLUTION = "1280x720";
-    static final String DEFAULT_FPS = "60";
+    static final boolean DEFAULT_RESET_BITRATE = false;
+    public static final String DEFAULT_RESOLUTION = "1280x720";
+    public static final String DEFAULT_FPS = "60";
     private static final boolean DEFAULT_STRETCH = false;
     private static final boolean DEFAULT_SOPS = true;
     private static final boolean DEFAULT_DISABLE_TOASTS = false;
@@ -88,6 +91,7 @@ public class PreferenceConfiguration {
     private static final boolean DEFAULT_ENABLE_HDR = false;
     private static final boolean DEFAULT_ENABLE_PIP = false;
     private static final boolean DEFAULT_ENABLE_PERF_OVERLAY = false;
+    private static final boolean DEFAULT_MIN_ENABLE_PERF_OVERLAY = false;
     private static final boolean DEFAULT_BIND_ALL_USB = false;
     private static final boolean DEFAULT_MOUSE_EMULATION = true;
     private static final String DEFAULT_ANALOG_STICK_FOR_SCROLLING = "right";
@@ -136,6 +140,7 @@ public class PreferenceConfiguration {
     public boolean enableHdr;
     public boolean enablePip;
     public boolean enablePerfOverlay;
+    public boolean enableMinPerfOverlay;
     public boolean enableLatencyToast;
     public boolean bindAllUsb;
     public boolean mouseEmulation;
@@ -584,6 +589,7 @@ public class PreferenceConfiguration {
         config.enableHdr = prefs.getBoolean(ENABLE_HDR_PREF_STRING, DEFAULT_ENABLE_HDR) && !isShieldAtvFirmwareWithBrokenHdr();
         config.enablePip = prefs.getBoolean(ENABLE_PIP_PREF_STRING, DEFAULT_ENABLE_PIP);
         config.enablePerfOverlay = prefs.getBoolean(ENABLE_PERF_OVERLAY_STRING, DEFAULT_ENABLE_PERF_OVERLAY);
+        config.enableMinPerfOverlay = prefs.getBoolean(ENABLE_MIN_PERF_OVERLAY_STRING, DEFAULT_MIN_ENABLE_PERF_OVERLAY);
         config.bindAllUsb = prefs.getBoolean(BIND_ALL_USB_STRING, DEFAULT_BIND_ALL_USB);
         config.mouseEmulation = prefs.getBoolean(MOUSE_EMULATION_STRING, DEFAULT_MOUSE_EMULATION);
         config.mouseNavButtons = prefs.getBoolean(MOUSE_NAV_BUTTONS_STRING, DEFAULT_MOUSE_NAV_BUTTONS);

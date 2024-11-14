@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
+import android.widget.Toast;
 
 import com.limelight.LimeLog;
 import com.limelight.PcView;
@@ -36,6 +37,7 @@ import com.limelight.utils.UiHelper;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class StreamSettings extends Activity {
     private PreferenceConfiguration previousPrefs;
@@ -250,6 +252,10 @@ public class StreamSettings extends Activity {
         }
 
         private void resetBitrateToDefault(SharedPreferences prefs, String res, String fps) {
+            if (!prefs.getBoolean(PreferenceConfiguration.RESET_BITRATE_STRING, PreferenceConfiguration.DEFAULT_RESET_BITRATE)) {
+                return;
+            }
+
             if (res == null) {
                 res = prefs.getString(PreferenceConfiguration.RESOLUTION_PREF_STRING, PreferenceConfiguration.DEFAULT_RESOLUTION);
             }
@@ -662,6 +668,32 @@ public class StreamSettings extends Activity {
 
                     // Write the new bitrate value
                     resetBitrateToDefault(prefs, null, valueStr);
+
+                    // Allow the original preference change to take place
+                    return true;
+                }
+            });
+            findPreference(PreferenceConfiguration.ENABLE_MIN_PERF_OVERLAY_STRING).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean b = (Boolean) newValue;
+                    if(b) {
+                        CheckBoxPreference cb = (CheckBoxPreference) findPreference(PreferenceConfiguration.ENABLE_PERF_OVERLAY_STRING);
+                        cb.setChecked(!b);
+                    }
+
+                    // Allow the original preference change to take place
+                    return true;
+                }
+            });
+            findPreference(PreferenceConfiguration.ENABLE_PERF_OVERLAY_STRING).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean b = (Boolean) newValue;
+                    if(b) {
+                        CheckBoxPreference cb = (CheckBoxPreference) findPreference(PreferenceConfiguration.ENABLE_MIN_PERF_OVERLAY_STRING);
+                        cb.setChecked(!b);
+                    }
 
                     // Allow the original preference change to take place
                     return true;

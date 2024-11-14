@@ -2,8 +2,25 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:seekbar="http://schemas.moonlight-stream.com/apk/res/seekbar">
 
+    <PreferenceCategory android:title="@string/category_pref_info"
+        android:key="category_pref_info">
+        <CheckBoxPreference
+            android:key="checkbox_enable_min_perf_overlay"
+            android:title="@string/title_enable_min_perf_overlay"
+            android:summary="@string/summary_enable_min_perf_overlay"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:key="checkbox_enable_perf_overlay"
+            android:title="@string/title_enable_perf_overlay"
+            android:summary="@string/summary_enable_perf_overlay"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/category_basic_settings"
         android:key="category_basic_settings">
+        <CheckBoxPreference
+            android:key="checkbox_enable_reset_bitrate"
+            android:title="@string/title_enable_reset_bitrate"
+            android:defaultValue="true"/>
         <ListPreference
             android:key="list_resolution"
             android:title="@string/title_resolution_list"
@@ -258,11 +275,6 @@
             android:title="@string/title_full_range"
             android:summary="@string/summary_full_range"
             android:defaultValue="false" />
-        <CheckBoxPreference
-            android:key="checkbox_enable_perf_overlay"
-            android:title="@string/title_enable_perf_overlay"
-            android:summary="@string/summary_enable_perf_overlay"
-            android:defaultValue="false"/>
         <CheckBoxPreference
             android:key="checkbox_enable_post_stream_toast"
             android:title="@string/title_enable_post_stream_toast"

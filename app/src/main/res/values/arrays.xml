@@ -131,4 +131,9 @@
         <item>right</item>
         <item>left</item>
     </string-array>
+    <string-array name="popular_resolutions">
+        <item>1920 1080 60Hz</item>
+        <item>1920 1080 120Hz</item>
+        <item>3840 2160 60Hz</item>
+    </string-array>
 </resources>

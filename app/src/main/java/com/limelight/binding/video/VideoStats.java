@@ -1,5 +1,6 @@
 package com.limelight.binding.video;
 
+import android.net.TrafficStats;
 import android.os.SystemClock;
 
 class VideoStats {
@@ -16,6 +17,7 @@ class VideoStats {
     int totalHostProcessingLatency;
     int framesWithHostProcessingLatency;
     long measurementStartTimestamp;
+    long measurementStartTotalRxBytes;
 
     void add(VideoStats other) {
         this.decoderTimeMs += other.decoderTimeMs;
@@ -55,6 +57,7 @@ class VideoStats {
         this.totalHostProcessingLatency = other.totalHostProcessingLatency;
         this.framesWithHostProcessingLatency = other.framesWithHostProcessingLatency;
         this.measurementStartTimestamp = other.measurementStartTimestamp;
+        this.measurementStartTotalRxBytes = other.measurementStartTotalRxBytes;
     }
 
     void clear() {
@@ -70,6 +73,7 @@ class VideoStats {
         this.totalHostProcessingLatency = 0;
         this.framesWithHostProcessingLatency = 0;
         this.measurementStartTimestamp = 0;
+        this.measurementStartTotalRxBytes = 0;
     }
 
     VideoStatsFps getFps() {
@@ -82,6 +86,15 @@ class VideoStats {
             fps.renderedFps = this.totalFramesRendered / elapsed;
         }
         return fps;
+    }
+
+    long getByteRate() {
+        if(this.measurementStartTotalRxBytes == 0) {
+            return 0;
+        }
+
+        float elapsed = (SystemClock.uptimeMillis() - this.measurementStartTimestamp) / (float) 1000;
+        return (long) ((TrafficStats.getTotalRxBytes() - this.measurementStartTotalRxBytes) / elapsed);
     }
 }
 

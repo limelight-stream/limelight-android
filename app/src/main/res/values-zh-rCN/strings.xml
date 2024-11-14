@@ -77,6 +77,7 @@
     <string name="perf_overlay_renderingfps">渲染帧数： %1$.2f FPS</string>
     <string name="perf_overlay_netdrops">网络丢失帧： %1$.2f%%</string>
     <string name="perf_overlay_dectime">平均解码时间： %1$.2f ms</string>
+    <string name="perf_overlay_bitrate">比特率: %1$s</string>
     <!-- AppList activity -->
     <string name="applist_connect_msg"> 正在连接电脑…… </string>
     <string name="applist_menu_resume"> 恢复串流 </string>
@@ -284,4 +285,8 @@
     <string name="summary_analog_scrolling">在鼠标模式下选择用哪个摇杆控制鼠标移动</string>
     <string name="summary_seekbar_vibrate_fallback_strength">增强或减弱设备的震动强度</string>
     <string name="analogscroll_none">默认 (两个摇杆都控制鼠标)</string>
+    <string name="title_enable_min_perf_overlay">" 启用简化的性能信息 "</string>
+    <string name="summary_enable_min_perf_overlay">" 在串流中显示简化的实时性能信息 "</string>
+    <string name="category_pref_info">性能信息</string>
+    <string name="title_enable_reset_bitrate">配置调整后重置比特率</string>
 </resources>

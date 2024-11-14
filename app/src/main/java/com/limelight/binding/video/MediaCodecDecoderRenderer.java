@@ -19,6 +19,7 @@ import com.limelight.R;
 import com.limelight.nvstream.av.video.VideoDecoderRenderer;
 import com.limelight.nvstream.jni.MoonBridge;
 import com.limelight.preferences.PreferenceConfiguration;
+import com.limelight.utils.StringUtils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -28,11 +29,13 @@ import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import android.media.MediaCodec.BufferInfo;
 import android.media.MediaCodec.CodecException;
+import android.net.TrafficStats;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Process;
 import android.os.SystemClock;
+import android.util.Log;
 import android.util.Range;
 import android.view.Choreographer;
 import android.view.SurfaceHolder;
@@ -1404,6 +1407,10 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
 
         if (lastFrameNumber == 0) {
             activeWindowVideoStats.measurementStartTimestamp = SystemClock.uptimeMillis();
+            if(prefs.enablePerfOverlay || prefs.enableMinPerfOverlay) {
+                activeWindowVideoStats.measurementStartTotalRxBytes = TrafficStats.getTotalRxBytes();
+            }
+
         } else if (frameNumber != lastFrameNumber && frameNumber != lastFrameNumber + 1) {
             // We can receive the same "frame" multiple times if it's an IDR frame.
             // In that case, each frame start NALU is submitted independently.
@@ -1423,48 +1430,69 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
 
         // Flip stats windows roughly every second
         if (SystemClock.uptimeMillis() >= activeWindowVideoStats.measurementStartTimestamp + 1000) {
-            if (prefs.enablePerfOverlay) {
+            if (prefs.enablePerfOverlay || prefs.enableMinPerfOverlay) {
                 VideoStats lastTwo = new VideoStats();
                 lastTwo.add(lastWindowVideoStats);
                 lastTwo.add(activeWindowVideoStats);
                 VideoStatsFps fps = lastTwo.getFps();
-                String decoder;
 
-                if ((videoFormat & MoonBridge.VIDEO_FORMAT_MASK_H264) != 0) {
-                    decoder = avcDecoder.getName();
-                } else if ((videoFormat & MoonBridge.VIDEO_FORMAT_MASK_H265) != 0) {
-                    decoder = hevcDecoder.getName();
-                } else if ((videoFormat & MoonBridge.VIDEO_FORMAT_MASK_AV1) != 0) {
-                    decoder = av1Decoder.getName();
+                if(prefs.enableMinPerfOverlay) {
+                    long rttInfo = MoonBridge.getEstimatedRttInfo();
+                    StringBuilder sb = new StringBuilder();
+
+                    if(fps.totalFps - fps.renderedFps > 5) {
+                        sb.append(String.format("%.0f/%.0f/%.0f FPS", fps.renderedFps, fps.receivedFps, fps.totalFps));
+                    } else {
+                        sb.append(String.format("%.0f FPS", fps.renderedFps));
+                    }
+                    sb.append(String.format("  %d ms", (int) (rttInfo >> 32)));
+                    sb.append(String.format("  %s", StringUtils.byteps2BpsStr(activeWindowVideoStats.getByteRate())));
+                    perfListener.onMinPerfUpdate(sb.toString());
+
                 } else {
-                    decoder = "(unknown)";
-                }
+                    String decoder;
 
-                float decodeTimeMs = (float)lastTwo.decoderTimeMs / lastTwo.totalFramesReceived;
-                long rttInfo = MoonBridge.getEstimatedRttInfo();
-                StringBuilder sb = new StringBuilder();
-                sb.append(context.getString(R.string.perf_overlay_streamdetails, initialWidth + "x" + initialHeight, fps.totalFps)).append('\n');
-                sb.append(context.getString(R.string.perf_overlay_decoder, decoder)).append('\n');
-                sb.append(context.getString(R.string.perf_overlay_incomingfps, fps.receivedFps)).append('\n');
-                sb.append(context.getString(R.string.perf_overlay_renderingfps, fps.renderedFps)).append('\n');
-                sb.append(context.getString(R.string.perf_overlay_netdrops,
-                        (float)lastTwo.framesLost / lastTwo.totalFrames * 100)).append('\n');
-                sb.append(context.getString(R.string.perf_overlay_netlatency,
-                        (int)(rttInfo >> 32), (int)rttInfo)).append('\n');
-                if (lastTwo.framesWithHostProcessingLatency > 0) {
-                    sb.append(context.getString(R.string.perf_overlay_hostprocessinglatency,
-                            (float)lastTwo.minHostProcessingLatency / 10,
-                            (float)lastTwo.maxHostProcessingLatency / 10,
-                            (float)lastTwo.totalHostProcessingLatency / 10 / lastTwo.framesWithHostProcessingLatency)).append('\n');
+                    if ((videoFormat & MoonBridge.VIDEO_FORMAT_MASK_H264) != 0) {
+                        decoder = avcDecoder.getName();
+                    } else if ((videoFormat & MoonBridge.VIDEO_FORMAT_MASK_H265) != 0) {
+                        decoder = hevcDecoder.getName();
+                    } else if ((videoFormat & MoonBridge.VIDEO_FORMAT_MASK_AV1) != 0) {
+                        decoder = av1Decoder.getName();
+                    } else {
+                        decoder = "(unknown)";
+                    }
+
+                    float decodeTimeMs = (float) lastTwo.decoderTimeMs / lastTwo.totalFramesReceived;
+                    long rttInfo = MoonBridge.getEstimatedRttInfo();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(context.getString(R.string.perf_overlay_streamdetails, initialWidth + "x" + initialHeight, fps.totalFps)).append('\n');
+                    sb.append(context.getString(R.string.perf_overlay_decoder, decoder)).append('\n');
+                    sb.append(context.getString(R.string.perf_overlay_incomingfps, fps.receivedFps)).append('\n');
+                    sb.append(context.getString(R.string.perf_overlay_renderingfps, fps.renderedFps)).append('\n');
+                    sb.append(context.getString(R.string.perf_overlay_netdrops,
+                            (float) lastTwo.framesLost / lastTwo.totalFrames * 100)).append('\n');
+                    sb.append(context.getString(R.string.perf_overlay_netlatency,
+                            (int) (rttInfo >> 32), (int) rttInfo)).append('\n');
+                    if (lastTwo.framesWithHostProcessingLatency > 0) {
+                        sb.append(context.getString(R.string.perf_overlay_hostprocessinglatency,
+                                (float) lastTwo.minHostProcessingLatency / 10,
+                                (float) lastTwo.maxHostProcessingLatency / 10,
+                                (float) lastTwo.totalHostProcessingLatency / 10 / lastTwo.framesWithHostProcessingLatency)).append('\n');
+                    }
+                    sb.append(context.getString(R.string.perf_overlay_dectime, decodeTimeMs)).append('\n');
+                    sb.append(context.getString(R.string.perf_overlay_bitrate, StringUtils.byteps2BpsStr(activeWindowVideoStats.getByteRate())));
+                    perfListener.onPerfUpdate(sb.toString());
+
                 }
-                sb.append(context.getString(R.string.perf_overlay_dectime, decodeTimeMs));
-                perfListener.onPerfUpdate(sb.toString());
             }
 
             globalVideoStats.add(activeWindowVideoStats);
             lastWindowVideoStats.copy(activeWindowVideoStats);
             activeWindowVideoStats.clear();
             activeWindowVideoStats.measurementStartTimestamp = SystemClock.uptimeMillis();
+            if(prefs.enablePerfOverlay || prefs.enableMinPerfOverlay) {
+                activeWindowVideoStats.measurementStartTotalRxBytes = TrafficStats.getTotalRxBytes();
+            }
         }
 
         boolean csdSubmittedForThisFrame = false;

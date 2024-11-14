@@ -23,7 +23,6 @@ import com.limelight.nvstream.StreamConfiguration;
 import com.limelight.nvstream.http.ComputerDetails;
 import com.limelight.nvstream.http.NvApp;
 import com.limelight.nvstream.http.NvHTTP;
-import com.limelight.nvstream.input.ControllerPacket;
 import com.limelight.nvstream.input.KeyboardPacket;
 import com.limelight.nvstream.input.MouseButtonPacket;
 import com.limelight.nvstream.jni.MoonBridge;
@@ -52,6 +51,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.hardware.input.InputManager;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
@@ -369,7 +369,7 @@ public class Game extends Activity implements SurfaceHolder.Callback,
         }
 
         // Check if the user has enabled performance stats overlay
-        if (prefConfig.enablePerfOverlay) {
+        if (prefConfig.enablePerfOverlay || prefConfig.enableMinPerfOverlay) {
             performanceOverlayView.setVisibility(View.VISIBLE);
         }
 
@@ -613,7 +613,7 @@ public class Game extends Activity implements SurfaceHolder.Callback,
                     virtualController.show();
                 }
 
-                if (prefConfig.enablePerfOverlay) {
+                if (prefConfig.enablePerfOverlay || prefConfig.enableMinPerfOverlay) {
                     performanceOverlayView.setVisibility(View.VISIBLE);
                 }
 
@@ -2638,6 +2638,16 @@ public class Game extends Activity implements SurfaceHolder.Callback,
 
     @Override
     public void onPerfUpdate(final String text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                performanceOverlayView.setText(text);
+            }
+        });
+    }
+
+    @Override
+    public void onMinPerfUpdate(final String text) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
