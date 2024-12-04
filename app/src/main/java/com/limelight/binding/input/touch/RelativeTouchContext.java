@@ -137,7 +137,7 @@ public class RelativeTouchContext implements TouchContext {
 
     private byte getMouseButtonIndex()
     {
-        if (actionIndex == 1) {
+        if (actionIndex == 1 && !prefConfig.twoFingerRightClick) {
             return MouseButtonPacket.BUTTON_RIGHT;
         }
         else {

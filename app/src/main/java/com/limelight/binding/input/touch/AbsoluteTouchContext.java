@@ -3,9 +3,11 @@ package com.limelight.binding.input.touch;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.content.Context;
 
 import com.limelight.nvstream.NvConnection;
 import com.limelight.nvstream.input.MouseButtonPacket;
+import com.limelight.preferences.PreferenceConfiguration;
 
 public class AbsoluteTouchContext implements TouchContext {
     private int lastTouchDownX = 0;
@@ -19,6 +21,7 @@ public class AbsoluteTouchContext implements TouchContext {
     private boolean cancelled;
     private boolean confirmedLongPress;
     private boolean confirmedTap;
+    private final PreferenceConfiguration prefConfig;
 
     private final Runnable longPressRunnable = new Runnable() {
         @Override
@@ -26,7 +29,7 @@ public class AbsoluteTouchContext implements TouchContext {
             // This timer should have already expired, but cancel it just in case
             cancelTapDownTimer();
 
-            // Switch from a left click to a right click after a long press
+            // Switch from a left click to a right click after a long press if double tap to right click is disabled
             confirmedLongPress = true;
             if (confirmedTap) {
                 conn.sendMouseButtonUp(MouseButtonPacket.BUTTON_LEFT);
@@ -66,12 +69,13 @@ public class AbsoluteTouchContext implements TouchContext {
     private static final int TOUCH_DOWN_DEAD_ZONE_TIME_THRESHOLD = 100;
     private static final int TOUCH_DOWN_DEAD_ZONE_DISTANCE_THRESHOLD = 20;
 
-    public AbsoluteTouchContext(NvConnection conn, int actionIndex, View view)
+    public AbsoluteTouchContext(NvConnection conn, int actionIndex, View view, PreferenceConfiguration prefConfig)
     {
         this.conn = conn;
         this.actionIndex = actionIndex;
         this.targetView = view;
         this.handler = new Handler(Looper.getMainLooper());
+        this.prefConfig = prefConfig;
     }
 
     @Override
@@ -96,7 +100,8 @@ public class AbsoluteTouchContext implements TouchContext {
         if (actionIndex == 0) {
             // Start the timers
             startTapDownTimer();
-            startLongPressTimer();
+            if (!prefConfig.twoFingerRightClick)
+                startLongPressTimer();
         }
 
         return true;

@@ -201,6 +201,8 @@
     <string name="summary_checkbox_absolute_mouse_mode">This can make mouse acceleration behave more naturally for remote desktop usage, but it is incompatible with many games.</string>
     <string name="title_checkbox_mouse_nav_buttons">Enable back and forward mouse buttons</string>
     <string name="summary_checkbox_mouse_nav_buttons">Enabling this option may break right clicking on some buggy devices</string>
+    <string name="title_double_tap_right_click">Double tap to right click</string>
+    <string name="summary_double_tap_right_click">Changes the right click action to tapping with two fingers. Useful if you need to hold down one finger for a long time and keep it as a left click.</string>
 
     <string name="category_on_screen_controls_settings">On-screen Controls Settings</string>
     <string name="title_checkbox_show_onscreen_controls">Show on-screen controls</string>
