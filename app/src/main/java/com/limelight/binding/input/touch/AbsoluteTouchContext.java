@@ -1,5 +1,6 @@
 package com.limelight.binding.input.touch;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -29,7 +30,13 @@ public class AbsoluteTouchContext implements TouchContext {
             // This timer should have already expired, but cancel it just in case
             cancelTapDownTimer();
 
+<<<<<<< HEAD
             // Switch from a left click to a right click after a long press if double tap to right click is disabled
+=======
+            // Switch from a left click to a right click after a long press if double tap
+            // to right click is disabled
+
+>>>>>>> 6ff914739a5141861a388e5758692c22155db5b8
             confirmedLongPress = true;
             if (confirmedTap) {
                 conn.sendMouseButtonUp(MouseButtonPacket.BUTTON_LEFT);
@@ -100,8 +107,14 @@ public class AbsoluteTouchContext implements TouchContext {
         if (actionIndex == 0) {
             // Start the timers
             startTapDownTimer();
+<<<<<<< HEAD
             if (!prefConfig.twoFingerRightClick)
                 startLongPressTimer();
+=======
+            if (!prefConfig.twoFingerRightClick) {
+                startLongPressTimer();
+            }
+>>>>>>> 6ff914739a5141861a388e5758692c22155db5b8
         }
 
         return true;
@@ -134,7 +147,7 @@ public class AbsoluteTouchContext implements TouchContext {
             cancelLongPressTimer();
             cancelTapDownTimer();
 
-            // Raise the mouse buttons that we currently have down
+            // Raise the mouse buttons that we currently have down.
             if (confirmedLongPress) {
                 conn.sendMouseButtonUp(MouseButtonPacket.BUTTON_RIGHT);
             }

@@ -2017,7 +2017,11 @@ public class Game extends Activity implements SurfaceHolder.Callback,
 
                 // Special handling for 2 finger right click, same as above
                 if (event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN &&
+<<<<<<< HEAD
                         event.getPointerCount() == 2) {
+=======
+                        event.getPointerCount() == 2 && prefConfig.twoFingerRightClick) {
+>>>>>>> 6ff914739a5141861a388e5758692c22155db5b8
                     twoFingerDownTime = event.getEventTime();
                     for (TouchContext aTouchContext : touchContextMap) {
                         aTouchContext.cancelTouch();
@@ -2063,9 +2067,14 @@ public class Game extends Activity implements SurfaceHolder.Callback,
 
                     if (event.getPointerCount() == 1 &&
                             (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || (event.getFlags() & MotionEvent.FLAG_CANCELED) == 0)) {
+<<<<<<< HEAD
                         // All fingers up
                         if (event.getEventTime() - twoFingerDownTime < TWO_FINGER_TAP_THRESHOLD) {
                             // This is a 3 finger tap to bring up the keyboard
+=======
+                        if (event.getEventTime() - twoFingerDownTime < TWO_FINGER_TAP_THRESHOLD) {
+                            // This is a 2 finger tap to right click
+>>>>>>> 6ff914739a5141861a388e5758692c22155db5b8
                             conn.sendMouseButtonDown(MouseButtonPacket.BUTTON_RIGHT);
                             conn.sendMouseButtonUp(MouseButtonPacket.BUTTON_RIGHT);
                             return true;

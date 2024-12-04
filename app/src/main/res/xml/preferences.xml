@@ -134,6 +134,12 @@
             android:title="@string/title_checkbox_touchscreen_trackpad"
             android:summary="@string/summary_checkbox_touchscreen_trackpad"
             android:defaultValue="true" />
+      <CheckBoxPreference
+            android:defaultValue="false"
+            android:disableDependentsState="false"
+            android:key="checkbox_two_right_click"
+            android:summary="@string/summary_double_tap_right_click"
+            android:title="@string/title_double_tap_right_click" />
         <CheckBoxPreference
             android:key="checkbox_two_right_click"
             android:title="@string/title_double_tap_right_click"
