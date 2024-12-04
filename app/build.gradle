@@ -1,7 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
+<<<<<<< HEAD
     ndkVersion "27.0.12077973"
+=======
+    ndkVersion '25.2.9519653'
+>>>>>>> 6ff914739a5141861a388e5758692c22155db5b8
 
     compileSdk 34
 

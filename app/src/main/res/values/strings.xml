@@ -168,6 +168,7 @@
     <string name="title_checkbox_enable_audiofx">Enable system equalizer support</string>
     <string name="summary_checkbox_enable_audiofx">Allows audio effects to function while streaming, but may increase audio latency</string>
 
+
     <string name="category_gamepad_settings">Gamepad Settings</string>
     <string name="title_checkbox_multi_controller">Automatic gamepad presence detection</string>
     <string name="summary_checkbox_multi_controller">Unchecking this option forces a gamepad to always be present</string>
@@ -201,6 +202,12 @@
     <string name="summary_checkbox_absolute_mouse_mode">This can make mouse acceleration behave more naturally for remote desktop usage, but it is incompatible with many games.</string>
     <string name="title_checkbox_mouse_nav_buttons">Enable back and forward mouse buttons</string>
     <string name="summary_checkbox_mouse_nav_buttons">Enabling this option may break right clicking on some buggy devices</string>
+    <string name="title_double_tap_right_click">Double tap to right click</string>
+<<<<<<< HEAD
+    <string name="summary_double_tap_right_click">Changes the right click action to tapping with two fingers. Useful if you need to hold down one finger for a long time and keep it as a left click.</string>
+=======
+    <string name="summary_double_tap_right_click">Changes the right click action to tapping with two fingers.</string>
+>>>>>>> 6ff914739a5141861a388e5758692c22155db5b8
 
     <string name="category_on_screen_controls_settings">On-screen Controls Settings</string>
     <string name="title_checkbox_show_onscreen_controls">Show on-screen controls</string>
