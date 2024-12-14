@@ -133,7 +133,16 @@ public class ControllerHandler implements InputManager.InputDeviceListener, UsbD
         this.conn = conn;
         this.gestures = gestures;
         this.prefConfig = prefConfig;
-        this.deviceVibrator = (Vibrator) activityContext.getSystemService(Context.VIBRATOR_SERVICE);
+		
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            this.deviceVibratorManager = (VibratorManager) activityContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
+            this.deviceVibrator = (Vibrator) this.deviceVibratorManager.getDefaultVibrator();
+        }
+        else {
+            this.deviceVibratorManager = null;
+            this.deviceVibrator = (Vibrator) activityContext.getSystemService(Context.VIBRATOR_SERVICE);
+        }
+		
         this.deviceSensorManager = (SensorManager) activityContext.getSystemService(Context.SENSOR_SERVICE);
         this.inputManager = (InputManager) activityContext.getSystemService(Context.INPUT_SERVICE);
         this.mainThreadHandler = new Handler(Looper.getMainLooper());
@@ -143,13 +152,6 @@ public class ControllerHandler implements InputManager.InputDeviceListener, UsbD
         this.backgroundHandlerThread = new HandlerThread("ControllerHandler");
         this.backgroundHandlerThread.start();
         this.backgroundThreadHandler = new Handler(backgroundHandlerThread.getLooper());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            this.deviceVibratorManager = (VibratorManager) activityContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
-        }
-        else {
-            this.deviceVibratorManager = null;
-        }
 
         this.sceManager = new SceManager(activityContext);
         this.sceManager.start();
