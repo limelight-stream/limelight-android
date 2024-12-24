@@ -22,7 +22,7 @@
             android:key="seekbar_bitrate_kbps"
             android:dialogMessage="@string/summary_seekbar_bitrate"
             seekbar:min="500"
-            android:max="150000"
+            android:max="900000"
             seekbar:step="500"
             seekbar:keyStep="1000"
             seekbar:divisor="1000"
