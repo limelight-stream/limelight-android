@@ -74,14 +74,6 @@ public class ControllerHandler implements InputManager.InputDeviceListener, UsbD
             Map.entry(KeyEvent.KEYCODE_BUTTON_B, ControllerPacket.B_FLAG),
             Map.entry(KeyEvent.KEYCODE_BUTTON_X, ControllerPacket.X_FLAG),
             Map.entry(KeyEvent.KEYCODE_BUTTON_Y, ControllerPacket.Y_FLAG),
-            Map.entry(KeyEvent.KEYCODE_DPAD_UP, ControllerPacket.UP_FLAG),
-            Map.entry(KeyEvent.KEYCODE_DPAD_DOWN, ControllerPacket.DOWN_FLAG),
-            Map.entry(KeyEvent.KEYCODE_DPAD_LEFT, ControllerPacket.LEFT_FLAG),
-            Map.entry(KeyEvent.KEYCODE_DPAD_RIGHT, ControllerPacket.RIGHT_FLAG),
-            Map.entry(KeyEvent.KEYCODE_DPAD_UP_LEFT, ControllerPacket.UP_FLAG | ControllerPacket.LEFT_FLAG),
-            Map.entry(KeyEvent.KEYCODE_DPAD_UP_RIGHT, ControllerPacket.UP_FLAG | ControllerPacket.RIGHT_FLAG),
-            Map.entry(KeyEvent.KEYCODE_DPAD_DOWN_LEFT, ControllerPacket.DOWN_FLAG | ControllerPacket.LEFT_FLAG),
-            Map.entry(KeyEvent.KEYCODE_DPAD_DOWN_RIGHT, ControllerPacket.DOWN_FLAG | ControllerPacket.RIGHT_FLAG),
             Map.entry(KeyEvent.KEYCODE_BUTTON_L1, ControllerPacket.LB_FLAG),
             Map.entry(KeyEvent.KEYCODE_BUTTON_R1, ControllerPacket.RB_FLAG),
             Map.entry(KeyEvent.KEYCODE_BUTTON_THUMBL, ControllerPacket.LS_CLK_FLAG),
@@ -357,8 +349,11 @@ public class ControllerHandler implements InputManager.InputDeviceListener, UsbD
             }
         }
 
+        //Check if the device is a TV remote control
+        boolean isDigitalPad = (device.getSources() & InputDevice.SOURCE_DPAD) == InputDevice.SOURCE_DPAD;
+
         // Otherwise, we'll try anything that claims to be a non-alphabetic keyboard
-        return device.getKeyboardType() != InputDevice.KEYBOARD_TYPE_ALPHABETIC;
+        return !isDigitalPad && device.getKeyboardType() != InputDevice.KEYBOARD_TYPE_ALPHABETIC;
     }
 
     public static short getAttachedControllerMask(Context context) {
@@ -1484,30 +1479,6 @@ public class ControllerHandler implements InputManager.InputDeviceListener, UsbD
             }
         }
 
-        if (context.hatXAxis == -1 &&
-                 context.hatYAxis == -1 &&
-                 /* FIXME: There's no good way to know for sure if xpad is bound
-                    to this device, so we won't use the name to validate if these
-                    scancodes should be mapped to DPAD
-
-                    context.isXboxController &&
-                  */
-                 event.getKeyCode() == KeyEvent.KEYCODE_UNKNOWN) {
-            // If there's not a proper Xbox controller mapping, we'll translate the raw d-pad
-            // scan codes into proper key codes
-            switch (event.getScanCode())
-            {
-            case 704:
-                return KeyEvent.KEYCODE_DPAD_LEFT;
-            case 705:
-                return KeyEvent.KEYCODE_DPAD_RIGHT;
-            case 706:
-                return KeyEvent.KEYCODE_DPAD_UP;
-            case 707:
-                return KeyEvent.KEYCODE_DPAD_DOWN;
-            }
-        }
-
         // Past here we can fixup the keycode and potentially trigger
         // another special case so we need to remember what keycode we're using
         int keyCode = event.getKeyCode();
@@ -2379,66 +2350,9 @@ public class ControllerHandler implements InputManager.InputDeviceListener, UsbD
         case KeyEvent.KEYCODE_BUTTON_SELECT:
             context.inputMap &= ~ControllerPacket.BACK_FLAG;
             break;
-        case KeyEvent.KEYCODE_DPAD_LEFT:
-            if (context.hatXAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap &= ~ControllerPacket.LEFT_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_RIGHT:
-            if (context.hatXAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap &= ~ControllerPacket.RIGHT_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_UP:
-            if (context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap &= ~ControllerPacket.UP_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_DOWN:
-            if (context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap &= ~ControllerPacket.DOWN_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_UP_LEFT:
-            if (context.hatXAxisUsed && context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap &= ~(ControllerPacket.UP_FLAG | ControllerPacket.LEFT_FLAG);
-            break;
-        case KeyEvent.KEYCODE_DPAD_UP_RIGHT:
-            if (context.hatXAxisUsed && context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap &= ~(ControllerPacket.UP_FLAG | ControllerPacket.RIGHT_FLAG);
-            break;
-        case KeyEvent.KEYCODE_DPAD_DOWN_LEFT:
-            if (context.hatXAxisUsed && context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap &= ~(ControllerPacket.DOWN_FLAG | ControllerPacket.LEFT_FLAG);
-            break;
-        case KeyEvent.KEYCODE_DPAD_DOWN_RIGHT:
-            if (context.hatXAxisUsed && context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap &= ~(ControllerPacket.DOWN_FLAG | ControllerPacket.RIGHT_FLAG);
-            break;
         case KeyEvent.KEYCODE_BUTTON_B:
             context.inputMap &= ~ControllerPacket.B_FLAG;
             break;
-        case KeyEvent.KEYCODE_DPAD_CENTER:
         case KeyEvent.KEYCODE_BUTTON_A:
             context.inputMap &= ~ControllerPacket.A_FLAG;
             break;
@@ -2593,66 +2507,9 @@ public class ControllerHandler implements InputManager.InputDeviceListener, UsbD
             context.hasSelect = true;
             context.inputMap |= ControllerPacket.BACK_FLAG;
             break;
-        case KeyEvent.KEYCODE_DPAD_LEFT:
-            if (context.hatXAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap |= ControllerPacket.LEFT_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_RIGHT:
-            if (context.hatXAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap |= ControllerPacket.RIGHT_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_UP:
-            if (context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap |= ControllerPacket.UP_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_DOWN:
-            if (context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap |= ControllerPacket.DOWN_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_UP_LEFT:
-            if (context.hatXAxisUsed && context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap |= ControllerPacket.UP_FLAG | ControllerPacket.LEFT_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_UP_RIGHT:
-            if (context.hatXAxisUsed && context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap |= ControllerPacket.UP_FLAG | ControllerPacket.RIGHT_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_DOWN_LEFT:
-            if (context.hatXAxisUsed && context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap |= ControllerPacket.DOWN_FLAG | ControllerPacket.LEFT_FLAG;
-            break;
-        case KeyEvent.KEYCODE_DPAD_DOWN_RIGHT:
-            if (context.hatXAxisUsed && context.hatYAxisUsed) {
-                // Suppress this duplicate event if we have a hat
-                return true;
-            }
-            context.inputMap |= ControllerPacket.DOWN_FLAG | ControllerPacket.RIGHT_FLAG;
-            break;
         case KeyEvent.KEYCODE_BUTTON_B:
             context.inputMap |= ControllerPacket.B_FLAG;
             break;
-        case KeyEvent.KEYCODE_DPAD_CENTER:
         case KeyEvent.KEYCODE_BUTTON_A:
             context.inputMap |= ControllerPacket.A_FLAG;
             break;
