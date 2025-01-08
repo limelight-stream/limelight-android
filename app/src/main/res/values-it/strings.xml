@@ -86,7 +86,7 @@
     <string name="msg_add_pc">Connessione al PC in corso…</string>
     <string name="addpc_fail">Impossibile connettersi al PC specificato. Assicurati che le porte nel firewall del PC siano configurate correttamente.</string>
     <string name="addpc_success">PC aggiunto con successo</string>
-    <string name="addpc_unknown_host">Impossibile risovere l\'indirizzo del PC. Assicurati di aver scritto correttamente l\'indirizzo.</string>
+    <string name="addpc_unknown_host">Impossibile risolvere l\'indirizzo del PC. Assicurati di aver scritto correttamente l\'indirizzo.</string>
     <string name="addpc_enter_ip">Devi inserire un indirizzo IP</string>
     <string name="addpc_wrong_sitelocal">Quell\'indirizzo non sembra corretto. È necessario utilizzare l\'indirizzo IP pubblico del router per lo streaming su Internet.</string>
     <!-- Preferences -->
@@ -178,7 +178,7 @@
     <string name="summary_checkbox_touchscreen_trackpad">Se abilitato, lo schermo touch si comporta come un trackpad. Se disabilitato, lo schermo touch controlla direttamente il cursore del mouse.</string>
     <string name="title_checkbox_vibrate_fallback">Emula il supporto per la vibrazione</string>
     <string name="title_checkbox_mouse_nav_buttons">Abilita i bottoni avanti e indietro del mouse</string>
-    <string name="title_osc_opacity">Cambia l\'opavità dei controlli a schermo</string>
+    <string name="title_osc_opacity">Cambia l\'opacità dei controlli a schermo</string>
     <string name="title_unlock_fps">Sblocca tutti i frame rate possibili</string>
     <string name="pacing_balanced">Bilanciato</string>
     <string name="pacing_latency">Preferisci ritardi minori</string>
@@ -229,7 +229,7 @@
 \n
 \nAssicurati di non avere nessun contenuto protetto da DRM aperto sul PC sorgente. Puoi anche provare a spengere e riaccendere il PC sorgente.</string>
     <string name="summary_unlock_fps">Trasmettere a 90 o 120 FPS potrebbe ridurre il ritardo su dispositivi di fascia alta, ma può provocare ritardi i instabilità sui dispositivi che non lo supportano</string>
-    <string name="summary_enable_post_stream_toast">Molstra un messaggio con informazioni sulla latenza dopo che la trasmissione è conclusa</string>
+    <string name="summary_enable_post_stream_toast">Mostra un messaggio con informazioni sulla latenza dopo che la trasmissione è conclusa</string>
     <string name="text_native_res_dialog">Le impostazioni di risoluzione nativa e/o di FPS possono non essere supportate dal server per lo streaming. Dovrai aggiungerle manualmente all\'interno delle impostazioni del PC o del server.
 \n
 \nSe scegli di create una risoluzione personalizzata nel Pannello di Controllo NVIDIA per copiare la risoluzione dello schermo, assicurati di aver letto e capito il messaggio di attenzione di NVIDIA a proposito dei possibili danni al monitor, all\'instabilità del PC e altri potenziali problemi.
