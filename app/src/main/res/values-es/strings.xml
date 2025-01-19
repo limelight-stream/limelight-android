@@ -48,9 +48,7 @@
     <string name="conn_terminated_msg">La conexión ha finalizado.</string>
     <!-- General strings -->
     <string name="ip_hint">Dirección IP del host del ordenador</string>
-    <string name="searching_pc">Buscando el hostal del PC en tu red local...
-\n
-\n Asegúrate de que Sunshine se está ejecutando en el PC anfitrión o de que GameStream está activado en los ajustes de GeForce Experience SHIELD.</string>
+    <string name="searching_pc">Buscando anfitriones en tu red local...\n\n Asegúrate de que Sunshine se está ejecutando en el PC anfitrión o de que GameStream está activado en los ajustes de GeForce Experience SHIELD.</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
     <string name="lost_connection">Conexión perdida</string>
@@ -130,7 +128,7 @@
 \nSe han bloqueado los siguientes puertos de red:
 \n</string>
     <string name="title_decoding_error">Falló el Decodificador de Video</string>
-    <string name="scut_deleted_pc">PC eliminado</string>
+    <string name="scut_deleted_pc">PC borrado</string>
     <string name="scut_pc_not_found">PC no encontrado</string>
     <string name="help_loading_msg">Cargando página de ayuda…</string>
     <string name="pcview_menu_header_offline">Fuera de línea</string>
@@ -262,7 +260,7 @@
     <string name="title_checkbox_reduce_refresh_rate">Permitir reducción de la tasa de refresco</string>
     <string name="title_full_range">Forzar video de rango completo (Experimental)</string>
     <string name="summary_full_range">Esto provocará la pérdida de detalles en las áreas claras y oscuras si su dispositivo no muestra correctamente el contenido de video de rango completo.</string>
-    <string name="pair_pairing_help">Si el hostal del ordenador ejecuta Sunshine, navegue a la interfaz de usuario web de Sunshine para ingresar el PIN.</string>
+    <string name="pair_pairing_help">Si el ordenador anfitrión está ejecutando Sunshine, navegue a la interfaz web de Sunshine para ingresar el PIN.</string>
     <string name="pcview_menu_eol">Fin de servicio de NVIDIA GameStream</string>
     <string name="fps_suffix_fps">FPS</string>
     <string name="title_native_fps_dialog">Advertencia sobre FPS nativos</string>
