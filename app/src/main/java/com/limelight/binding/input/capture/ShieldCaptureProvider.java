@@ -22,7 +22,7 @@ public class ShieldCaptureProvider extends InputCaptureProvider {
     private static int AXIS_RELATIVE_X;
     private static int AXIS_RELATIVE_Y;
 
-    private Context context;
+    private final Context context;
 
     static {
         try {
@@ -62,14 +62,14 @@ public class ShieldCaptureProvider extends InputCaptureProvider {
     }
 
     @Override
-    public void enableCapture() {
-        super.enableCapture();
+    public void hideCursor() {
+        super.hideCursor();
         setCursorVisibility(false);
     }
 
     @Override
-    public void disableCapture() {
-        super.disableCapture();
+    public void showCursor() {
+        super.showCursor();
         setCursorVisibility(true);
     }
 

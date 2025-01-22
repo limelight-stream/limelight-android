@@ -39,6 +39,7 @@ public class Xbox360Controller extends AbstractXboxController {
             0x20d6, // PowerA
             0x24c6, // PowerA
             0x2f24, // GameSir
+            0x2dc8, // 8BitDo
     };
 
     public static boolean canClaimDevice(UsbDevice device) {

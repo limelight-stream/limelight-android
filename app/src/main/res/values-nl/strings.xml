@@ -221,7 +221,6 @@
     <string name="perf_overlay_netdrops">Frames overgeslagen door uw netwerkverbinding: %1$.2f%%</string>
     <string name="perf_overlay_dectime">Gemiddelde decodeertijd: %1$.2f ms</string>
     <string name="applist_menu_tv_channel">Toevoegen aan Kanaal</string>
-
     <!-- Array strings -->
     <string name="videoformat_hevcalways">Gebruik HEVC altijd (mogelijkheid tot crashes)</string>
 </resources>

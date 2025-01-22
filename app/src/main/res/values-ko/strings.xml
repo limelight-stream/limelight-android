@@ -23,7 +23,7 @@
     <string name="pair_already_in_progress">페어링이 이미 진행중입니다</string>
     <!-- WOL messages -->
     <string name="wol_pc_online">컴퓨터가 온라인 상태입니다</string>
-    <string name="wol_no_mac">Geforce Experience가 MAC 주소를 보내지 않아 PC를 켤 수 없습니다.</string>
+    <string name="wol_no_mac">저장된 MAC 주소가 없기 때문에 PC를 켤 수 없습니다.</string>
     <string name="wol_waking_pc">PC를 깨우는 중…</string>
     <string name="wol_waking_msg">PC를 켜는 데에 약간의 시간이 걸립니다. PC가 켜지지 않으면, Wake-On-Lan이 설정되어있는지 확인하세요.</string>
     <string name="wol_fail">Wake-On-LAN 패킷을 보내는 데에 실패했습니다</string>
@@ -52,9 +52,10 @@
     <string name="conn_terminated_title">연결 종료 됨</string>
     <string name="conn_terminated_msg">연결이 종료되었습니다</string>
     <!-- General strings -->
-    <string name="ip_hint">GeForce PC의 IP 주소</string>
-    <string name="searching_pc">GameStream이 실행중인 PC를 검색중…\n\n
-        GameStream이 Geforce Experience 설정에서 활성화되어있는지 확인하세요.</string>
+    <string name="ip_hint">호스트 PC의 IP 주소</string>
+    <string name="searching_pc">로컬 네트워크의 호스트 PC를 검색중…
+\n
+\n 호스트 PC에서 Sunshine이 실행 중인지 또는 GeForce Experience SHIELD 설정에서 GameStream이 활성화되어 있는지 확인하십시오.</string>
     <string name="yes">예</string>
     <string name="no">아니오</string>
     <string name="lost_connection">PC 연결 끊김</string>
@@ -90,8 +91,8 @@
     <string name="title_checkbox_disable_warnings">경고 메세지 끄기</string>
     <string name="summary_checkbox_disable_warnings">화면 상의 연결 경고 메세지를 스트리밍 중에 비활성화합니다.</string>
     <string name="category_audio_settings">오디오 설정</string>
-    <string name="title_checkbox_multi_controller">다중 컨트롤러 지원</string>
-    <string name="summary_checkbox_multi_controller">이 옵션을 선택하지 않으면 모든 컨트롤러가 하나로 표시됩니다</string>
+    <string name="title_checkbox_multi_controller">자동 컨트롤러 유무 감지</string>
+    <string name="summary_checkbox_multi_controller">이 옵션을 선택 취소하면 컨트롤러가 항상 표시됩니다</string>
     <string name="title_seekbar_deadzone">아날로그 스틱 데드존 설정</string>
     <string name="suffix_seekbar_deadzone">%</string>
     <string name="title_checkbox_xb1_driver">Xbox 360/One 컨트롤러 드라이버</string>
@@ -110,11 +111,11 @@
     <string name="title_checkbox_host_audio">PC에서 소리 재생</string>
     <string name="summary_checkbox_host_audio">이 장치와 컴퓨터에서 소리를 재생합니다.</string>
     <string name="category_advanced_settings">고급 설정</string>
-    <string name="title_video_format">HEVC 설정 변경</string>
-    <string name="summary_video_format">HEVC는 낮은 대역폭으로 더 좋은 화질을 볼 수 있게 해주지만 최신 장치가 필요합니다.</string>
+    <string name="title_video_format">코덱 설정 변경</string>
+    <string name="summary_video_format">최신 코덱은 장치에서 지원하는 경우 비디오 대역폭 요구 사항을 낮출 수 있습니다. 호스트 소프트웨어 또는 GPU에서 지원하지 않는 경우 코덱 선택을 무시할 수 있습니다.</string>
     <string name="suffix_osc_opacity">%</string>
     <string name="title_checkbox_enable_pip">PIP모드 활성화</string>
-    <string name="summary_checkbox_vibrate_fallback">게임 패드가 진동을 지원하지 않는 경우 장치를 진동 시켜 진동을 활성화합니다</string>
+    <string name="summary_checkbox_vibrate_fallback">컨트롤러가 진동을 지원하지 않는 경우 장치를 진동 시켜 진동을 활성화합니다</string>
     <string name="title_checkbox_vibrate_fallback">게임패드 진동을 장치에서 사용하기</string>
     <string name="summary_checkbox_touchscreen_trackpad">활성화시 터치 스크린이 트랙 패드처럼 작동합니다. 비활성화 된 경우 터치 스크린처럼 작동합니다.</string>
     <string name="title_checkbox_touchscreen_trackpad">터치 스크린을 트랙 패드로 사용하기</string>
@@ -124,13 +125,13 @@
     <string name="resolution_prefix_native">네이티브</string>
     <string name="summary_fps_list">높을수록 화면이 더 부드러워집니다. 저사양 기기에서는 낮추는것이 좋습니다.</string>
     <string name="title_fps_list">FPS 설정</string>
-    <string name="text_native_res_dialog">1. 네이티브 해상도 모드는 GeForce Experience에서 공식적으로 지원되지 않으므로 호스트PC의 디스플레이 해상도는 변경되지 않습니다. 따라서 스트리밍 중에 수동으로 해상도를 변경해야합니다.
+    <string name="text_native_res_dialog">네이티브 해상도 및 FPS는 스트리밍 서버에서 지원하지 않을 수 있습니다. 호스트 PC에 대해 일치하는 사용자 지정 디스플레이 모드를 수동으로 구성해야 할 수 있습니다.
 \n
-\n2. 장치 해상도와 일치하도록 NVIDIA 제어판에서 사용자 정의 해상도를 생성 할 경우 호스트 PC의 모니터 손상, 기타 잠재적 문제에 대한 NVIDIA의 경고를 읽고 이해했는지 확인하십시오.
-\n 
-\n3. Moonlight는 PC에서 사용자 정의 해상도를 생성하여 발생하는 문제에 대해 책임을 지지 않습니다.
+\n화면 설정과 일치하도록 NVIDIA 제어판에서 사용자 정의 해상도를 생성 할 경우 모니터 손상, PC 불안정 및 기타 잠재적인 문제에 대한 NVIDIA의 경고를 읽고 이해했는지 확인하십시오.
 \n
-\n4. 장치 또는 호스트 PC가 네이티브 해상도의 스트리밍을 지원하지 않을 수 있습니다.</string>
+\nMoonlight는 PC에서 사용자 지정 해상도를 생성하여 발생하는 문제에 대해 책임을 지지 않습니다.
+\n
+\n모니터가 필요한 디스플레이 구성을 지원하지 않을 경우 가상 모니터 설정을 시도할 수 있습니다. 장치나 호스트 PC가 특정 해상도나 새로 고침 빈도로 스트리밍을 지원하지 않을 수 있습니다.</string>
     <string name="title_native_res_dialog">네이티브 해상도 주의사항</string>
     <string name="addpc_wrong_sitelocal">주소가 잘못된 것 같습니다. 인터넷을 통해 스트리밍하려면 라우터의 공용 IP 주소를 사용해야합니다.</string>
     <string name="applist_details_id">앱 ID:</string>
@@ -151,16 +152,14 @@
     <string name="check_ports_msg">다음 포트의 방화벽 및 포트 포워딩 설정을 확인하십시오:</string>
     <string name="early_termination_error">스트림을 시작할 때 호스트 PC에서 문제가 발생했습니다.
 \n
-\n호스트 PC에 DRM으로 보호 된 콘텐츠가 열려 있지 않은지 확인하거나 호스트 PC를 재부팅하십시오 .
-\n
-\n문제가 지속되면 GPU 드라이버와 GeForce Experience를 다시 설치해보십시오.</string>
+\n호스트 PC에 DRM으로 보호 된 콘텐츠가 열려 있지 않은지 확인하거나 호스트 PC를 재부팅하십시오 .</string>
     <string name="no_frame_received_error">네트워크 연결이 불안정합니다. 비트레이트를 낮추거나 더 빠른 네트워크에 연결하십시오.</string>
     <string name="no_video_received_error">호스트로부터 비디오를 받지 못했습니다.</string>
     <string name="video_decoder_init_failed">비디오 디코더를 실행하지 못했습니다. 이 장치가 선택한 해상도 또는 프레임 속도를 지원하지 않을 수 있습니다.</string>
     <string name="error_usb_prohibited">기기 관리자에 의해 USB 액세스가 차단되었습니다. Knox 또는 MDM 설정을 확인하십시오.</string>
     <string name="message_decoding_reset">선택한 스트리밍 설정에서 장치의 비디오 디코더가 계속 문제가 발생합니다. 스트리밍 설정이 기본값으로 재설정되었습니다.</string>
     <string name="title_decoding_reset">비디오 설정 초기화</string>
-    <string name="message_decoding_error">이 장치의 비디오 디코더와 호환되지 않아 Moonlight에서 오류가 발생했습니다. GeForce Experience가 PC의 최신 버전으로 업데이트되었는지 확인하십시오. 충돌이 계속되면 스트리밍 설정을 조정 해보십시오.</string>
+    <string name="message_decoding_error">이 장치의 비디오 디코더와 호환되지 않아 Moonlight에서 오류가 발생했습니다. 충돌이 계속되면 스트리밍 설정을 조정 해보십시오.</string>
     <string name="title_decoding_error">비디오 디코더 오류</string>
     <string name="nettest_text_blocked">기기의 현재 네트워크가 Moonlight를 차단하고 있습니다. 이 네트워크에 연결되어 있으면 인터넷을 통한 스트리밍이 작동하지 않을 수 있습니다.</string>
     <string name="nettest_text_failure">기기의 현재 네트워크가 Moonlight를 차단하는 것 같습니다. 이 네트워크에 연결되어 있으면 인터넷을 통한 스트리밍이 작동하지 않을 수 있습니다.
@@ -172,7 +171,7 @@
 \n
 \n인터넷을 통해 연결하려는 경우 PC에 Moonlight Internet Hosting Tool을 설치하고 Internet Streaming Tester를 실행하여 PC의 인터넷 연결을 확인하십시오.</string>
     <string name="nettest_title_done">네트워크 연결 테스트 완료</string>
-    <string name="nettest_text_waiting">NVIDIA GameStream이 차단되었는지 확인하기 위해 네트워크 연결을 테스트하고 있습니다.
+    <string name="nettest_text_waiting">Moonlight는 필요한 포트가 차단되었는지 확인하기 위해 네트워크 연결을 테스트하고 있습니다.
 \n
 \n잠시 기다려 주세요…</string>
     <string name="pcview_menu_header_unknown">상태 확인중</string>
@@ -190,7 +189,7 @@
     <string name="title_enable_post_stream_toast">스트리밍 후 지연시간 정보 표시</string>
     <string name="title_enable_perf_overlay">스트리밍 중 성능 정보 표시</string>
     <string name="summary_enable_perf_overlay">스트리밍하는 동안 실시간 스트림 성능 정보 표시</string>
-    <string name="summary_enable_hdr">게임 및 PC의 GPU가 HDR을 지원하는 경우 HDR을 활성화합니다. HDR에는 GTX 1000 시리즈 또는 그 이상의 GPU가 필요합니다.</string>
+    <string name="summary_enable_hdr">게임 및 PC의 GPU가 HDR을 지원하는 경우 HDR을 활성화합니다. HDR에는 HEVC Main 10 인코딩을 지원하는 GPU가 필요합니다.</string>
     <string name="title_enable_hdr">HDR활성화 (실험용)</string>
     <string name="summary_disable_frame_drop">일부 장치에서 미세한 끊김 현상을 줄일 수 있지만 지연 시간이 늘어날 수 있습니다.</string>
     <string name="title_disable_frame_drop">프레임드랍 최적화</string>
@@ -207,16 +206,16 @@
     <string name="title_reset_osc">가상 컨트롤러 배치 초기화</string>
     <string name="summary_only_l3r3">L3 및 R3을 제외한 모든 가상 버튼을 숨깁니다</string>
     <string name="title_only_l3r3">L3와 R3버튼만 표시하기</string>
-    <string name="summary_checkbox_flip_face_buttons">게임 패드 및 가상 컨트롤러의 A / B 와 X / Y 버튼을 바꿉니다</string>
+    <string name="summary_checkbox_flip_face_buttons">컨트롤러 및 가상 컨트롤러의 A / B 와 X / Y 버튼을 바꿉니다</string>
     <string name="summary_checkbox_vibrate_osc">가상 컨트롤러에서 장치를 진동하여 게임패드 진동을 구현합니다</string>
     <string name="title_checkbox_vibrate_osc">진동 활성화</string>
     <string name="title_checkbox_flip_face_buttons">버튼 바꾸기</string>
     <string name="summary_checkbox_mouse_nav_buttons">이 옵션을 활성화하면 일부 장치에서 오른쪽 클릭에 문제가 있을 수 있습니다</string>
     <string name="title_checkbox_mouse_nav_buttons">마우스 사이드버튼 활성화</string>
-    <string name="summary_checkbox_mouse_emulation">패드의 Start 버튼을 길게 누르면 게임 패드가 마우스 모드로 전환됩니다</string>
-    <string name="summary_checkbox_usb_bind_all">Xbox 컨트롤러를 기본으로 지원하는 경우에도 지원되는 모든 게임 패드에 Moonlight의 USB 드라이버를 사용합니다</string>
-    <string name="title_checkbox_usb_bind_all">기본 Xbox 게임 패드 지원 무시</string>
-    <string name="title_checkbox_mouse_emulation">게임패드를 마우스처럼 사용하기</string>
+    <string name="summary_checkbox_mouse_emulation">패드의 Start 버튼을 길게 누르면 컨트롤러가 마우스 모드로 전환됩니다</string>
+    <string name="summary_checkbox_usb_bind_all">Xbox 컨트롤러를 기본으로 지원하는 경우에도 지원되는 모든 컨트롤러에 Moonlight의 USB 드라이버를 사용합니다</string>
+    <string name="title_checkbox_usb_bind_all">기본 Xbox 컨트롤러 지원 무시</string>
+    <string name="title_checkbox_mouse_emulation">컨트롤러를 마우스처럼 사용하기</string>
     <string name="perf_overlay_streamdetails">비디오 스트림 : %1$s %2$.2f FPS</string>
     <string name="unable_to_pin_shortcut">현재 런처에서는 바로가기 생성이 불가능합니다.</string>
     <string name="resolution_prefix_native_fullscreen">네이티브 (전체화면)</string>
@@ -263,4 +262,20 @@
 \nHDR 모드를 비활성화하거나 스트리밍 해상도를 변경하거나 호스트 PC의 디스플레이 해상도를 변경해 보십시오.</string>
     <string name="summary_full_range">밝기범위를 \"전체(0~255)\"로 설정합니다. 장치의 디스플레이가 \"제한(16~235)\" 범위로 출력하는 경우 밝기가 제대로 표현되지 않습니다.</string>
     <string name="title_full_range">전체 범위 비디오 활성화 (실험용)</string>
+    <string name="title_checkbox_gamepad_motion_sensors">컨트롤러 모션 센서 사용 허용</string>
+    <string name="summary_checkbox_gamepad_motion_sensors">모션 센서가 있는 컨트롤러를 에뮬레이션할 때 지원되는 호스트가 모션 센서 데이터를 요청할 수 있습니다. 비활성화하면 게임에서 동작 센서를 사용하지 않는 경우 전원 및 네트워크 사용량이 약간 줄어들 수 있습니다.</string>
+    <string name="summary_checkbox_gamepad_touchpad_as_mouse">터치패드로 컨트롤러를 에뮬레이션하는 경우에도 호스트 마우스를 제어하기 위해 컨트롤러 터치패드 입력을 강제합니다.</string>
+    <string name="pcview_menu_eol">NVIDIA GameStream 지원 종료</string>
+    <string name="pair_pairing_help">호스트 PC에서 Sunshine을 실행 중인 경우 Sunshine 웹 UI로 이동하여 PIN을 입력합니다.</string>
+    <string name="perf_overlay_hostprocessinglatency">호스트 처리 대기 시간 최소/최대/평균: %1$.1f/%2$.1f/%3$.1f ms</string>
+    <string name="fps_suffix_fps">FPS</string>
+    <string name="title_native_fps_dialog">네이티브 FPS 주의사항</string>
+    <string name="category_gamepad_settings">컨트롤러 설정</string>
+    <string name="title_checkbox_gamepad_touchpad_as_mouse">항상 터치패드로 마우스 제어</string>
+    <string name="videoformat_av1always">AV1 선호 (실험용)</string>
+    <string name="videoformat_h264always">H.264 선호</string>
+    <string name="toast_controller_type_changed">모션 센서 에뮬레이션으로 인해 컨트롤러 유형이 변경될 수 있습니다</string>
+    <string name="summary_checkbox_gamepad_motion_fallback">연결된 컨트롤러 또는 기기의 Android 버전에서 컨트롤러 센서가 지원되지 않는 경우 장치에 내장된 모션 센서를 사용합니다.
+\n참고: 이 옵션을 활성화하면 사용 중인 컨트롤러가 호스트에서 PlayStation 컨트롤러로 나타날 수 있습니다.</string>
+    <string name="title_checkbox_gamepad_motion_fallback">컨트롤러의 모션 센서 에뮬레이션 지원</string>
 </resources>

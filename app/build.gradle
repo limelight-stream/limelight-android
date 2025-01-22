@@ -1,18 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    ndkVersion "23.2.8568313"
+    ndkVersion "27.0.12077973"
 
     compileSdk 34
 
     namespace 'com.limelight'
 
     defaultConfig {
-        minSdk 16
+        minSdk 21
         targetSdk 34
 
-        versionName "11.0"
-        versionCode = 306
+        versionName "12.1"
+        versionCode = 314
 
         // Generate native debug symbols to allow Google Play to symbolicate our native crashes
         ndk.debugSymbolLevel = 'FULL'
@@ -136,12 +136,10 @@ android {
 }
 
 dependencies {
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
-    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
-    implementation 'org.jcodec:jcodec:0.2.3'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.13'
-    implementation 'com.squareup.okio:okio:1.17.5'
-    // 3.5.8 requires minSdk 19, uses StandardCharsets.UTF_8 internally
-    implementation 'org.jmdns:jmdns:3.5.7'
-    implementation 'com.github.cgutman:ShieldControllerExtensions:1.0'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.77'
+    implementation 'org.bouncycastle:bcpkix-jdk18on:1.77'
+    implementation 'org.jcodec:jcodec:0.2.5'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'org.jmdns:jmdns:3.5.9'
+    implementation 'com.github.cgutman:ShieldControllerExtensions:1.0.1'
 }

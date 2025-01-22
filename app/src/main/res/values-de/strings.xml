@@ -79,7 +79,7 @@
     <string name="conn_terminated_title">Verbindung beendet</string>
     <string name="conn_terminated_msg">Die Verbindung wurde beendet</string>
     <!-- General strings -->
-    <string name="ip_hint">IP-Adresse des GeForce Host</string>
+    <string name="ip_hint">IP-Adresse des GeForce Hosts</string>
     <string name="searching_pc">Suche nach Hosts auf denen GeForce Experience aktiv ist…
 \n
 \nStelle sicher, dass GameStream in den GeForce Experience SHIELD-Einstellungen aktiviert ist.</string>
@@ -261,4 +261,18 @@
     <string name="frame_conversion_error">Der Host-PC hat einen schwerwiegenden Videocodierungsfehler gemeldet.
 \n
 \nVersuchen Sie, den HDR-Modus zu deaktivieren, die Streaming-Auflösung zu ändern oder die Bildschirmauflösung des Host-PCs zu ändern.</string>
+    <string name="title_native_fps_dialog">Native FPS Warnung</string>
+    <string name="videoformat_av1always">Immer AV1 verwenden (Experimentell)</string>
+    <string name="title_checkbox_gamepad_motion_sensors">Erlaube Benutzen von Gamepad Bewegungssensoren</string>
+    <string name="videoformat_h264always">Immer H.264 verwenden</string>
+    <string name="fps_suffix_fps">FPS</string>
+    <string name="category_gamepad_settings">Gamepad Einstellungen</string>
+    <string name="pair_pairing_help">Wenn dein Host PC Sunshine verwendet, navigiere zur Sunshine Web UI und gebe dort die PIN ein.</string>
+    <string name="title_checkbox_gamepad_touchpad_as_mouse">Die Maus immer mit dem Touchpad steuern</string>
+    <string name="perf_overlay_hostprocessinglatency">Host Verarbeitungslatenz min/max/avg: %1$.1f/%2$.1f/%3$.1f ms</string>
+    <string name="title_analog_scrolling">Verwenden Sie zum Scrollen einen Analogstick</string>
+    <string name="summary_analog_scrolling">Wählen Sie einen Analogstick aus, der zum scrollen im Mausemulationsmodus verwendet werden soll</string>
+    <string name="analogscroll_none">Keine (beide Sticks bewegen die Maus)</string>
+    <string name="analogscroll_right">Rechter Analogstick</string>
+    <string name="analogscroll_left">Linker Analogstick</string>
 </resources>

@@ -21,7 +21,6 @@ public class WebLauncherPreference extends Preference {
         initialize(attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public WebLauncherPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initialize(attrs);

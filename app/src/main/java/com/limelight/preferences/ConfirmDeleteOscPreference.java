@@ -13,7 +13,6 @@ import com.limelight.R;
 import static com.limelight.binding.input.virtual_controller.VirtualControllerConfigurationLoader.OSC_PREFERENCE;
 
 public class ConfirmDeleteOscPreference extends DialogPreference {
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public ConfirmDeleteOscPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
@@ -26,7 +25,6 @@ public class ConfirmDeleteOscPreference extends DialogPreference {
         super(context, attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public ConfirmDeleteOscPreference(Context context) {
         super(context);
     }

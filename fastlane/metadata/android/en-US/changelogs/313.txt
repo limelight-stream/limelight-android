@@ -1,0 +1,3 @@
+- Fixed connection issue with some hosts running GeForce Experience and older Sunshine versions
+- Fixed native frame rate streaming support on older versions of Android
+- Stability improvements

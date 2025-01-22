@@ -59,7 +59,7 @@
     <string name="conn_error_title">Fogningsfel</string>
     <string name="conn_error_msg">Misslyckades att börja</string>
     <string name="conn_terminated_title">Fogning förstörd</string>
-    <string name="conn_terminated_msg">Fogningen har förstörts</string>
+    <string name="conn_terminated_msg">Förbindelsen avbröts.</string>
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
     <string name="lost_connection">Tappade fogning till dator</string>
@@ -217,13 +217,13 @@
     <string name="perf_overlay_netlatency">Genomsnittlig nätverksfördröjning: %1$d ms (varians: %2$d ms)</string>
     <string name="applist_quit_fail">Misslyckades att avsluta</string>
     <string name="title_native_res_dialog">Varning för ursprunglig upplösning</string>
-    <string name="text_native_res_dialog">Lägen med native upplösning stöds inte officiellt av GeForce Experience, så det kommer inte att ställa in upplösningen på värdskärmen själv. Du måste ställa in den manuellt i spelet.
+    <string name="text_native_res_dialog">Inbyggd upplösning och/eller FPS kanske inte stöds av streamingservern. Du kommer förmodligen att behöva konfigurera ett matchande anpassat visningsläge för värddatorn manuellt.
 \n
-\nOm du väljer att skapa en anpassad upplösning i NVIDIA Control Panel för att matcha enhetens upplösning ska du se till att du har läst och förstått NVIDIAs varning om möjliga skador på skärmen, instabilitet i datorn och andra potentiella problem.
+\nOm du väljer att skapa en anpassad upplösning i NVIDIAs kontrollpanel för att matcha dina skärminställningar, se till att du har läst och förstått NVIDIAs varning om möjlig bildskärmsskada, PC-instabilitet och andra potentiella problem.
 \n
-\nVi är inte ansvariga för eventuella problem som uppstår till följd av att du skapar en anpassad upplösning på din dator.
+\nVi är inte ansvariga för eventuella problem som uppstår av att skapa en anpassad upplösning på din PC.
 \n
-\nSlutligen kan det hända att din enhet eller värddator inte stöder streaming i den ursprungliga upplösningen. Om det inte fungerar på din enhet har du tyvärr bara otur.</string>
+\nDet kan vara så att din bildskärm inte stöder en nödvändig bildskärmskonfiguration. Om så är fallet kan du försöka ställa in en virtuell skärm. Slutligen, om din enhet eller värddator inte stöder streaming med en specifik upplösning eller uppdateringsfrekvens, har du tyvärr ingen tur.</string>
     <string name="summary_seekbar_bitrate">Öka för bättre bildkvalitet. Minska för att förbättra prestandan på långsammare anslutningar.</string>
     <string name="title_checkbox_stretch_video">Sträck ut videon till helskärm</string>
     <string name="summary_audio_config_list">Aktivera 5.1 eller 7.1 surroundljud för hemmabiosystem</string>
@@ -259,4 +259,17 @@
     <string name="title_checkbox_gamepad_touchpad_as_mouse">Styr alltid musen med pekplatta</string>
     <string name="summary_checkbox_gamepad_touchpad_as_mouse">Tvingar indata från spelkontroll pekplattan att styra värdmusen, även när man emulerar en spelkontroll med en pekplatta.</string>
     <string name="summary_checkbox_gamepad_motion_sensors">Aktiverar stöd för värden att begära rörelsesensor data när du emulerar en spelkontroll med rörelsesensorer. Inaktivering kan minska ström och nätverksanvändningen något om rörelsesensorer inte används i spelet.</string>
+    <string name="toast_controller_type_changed">Spelkontroll-typ kan ändras på grund av rörelsesensoremulering</string>
+    <string name="summary_checkbox_gamepad_motion_fallback">Använder enhetens inbyggda rörelsesensorer om spelkontrollsensorer inte stöds av din anslutna spelkontroll eller din Android-version.
+\nObs: Om du aktiverar det här alternativet kan din spelkontroll visas som en PlayStation-kontroller på värden.</string>
+    <string name="title_checkbox_gamepad_motion_fallback">Emulera spelkontroll rörelsesensor stöd</string>
+    <string name="error_code_prefix">Felkod:</string>
+    <string name="summary_analog_scrolling">Välj en analog spak för att scrolla när du är i musemuleringsläge</string>
+    <string name="analogscroll_none">Ingen (båda spakarna flyttar musen)</string>
+    <string name="analogscroll_left">Vänster analogspak</string>
+    <string name="title_seekbar_vibrate_fallback_strength">Justera intensiteten på emulerat skakande</string>
+    <string name="summary_seekbar_vibrate_fallback_strength">Förstärk eller reducera vibrationsintensiteten på din enhet</string>
+    <string name="analogscroll_right">Höger analogspak</string>
+    <string name="suffix_seekbar_vibrate_fallback_strength">%</string>
+    <string name="title_analog_scrolling">Använd en analog spak för att bläddra</string>
 </resources>

@@ -17,6 +17,12 @@ public class PreferenceConfiguration {
         FORCE_H264,
     };
 
+    public enum AnalogStickForScrolling {
+        NONE,
+        RIGHT,
+        LEFT
+    }
+
     private static final String LEGACY_RES_FPS_PREF_STRING = "list_resolution_fps";
     private static final String LEGACY_ENABLE_51_SURROUND_PREF_STRING = "checkbox_51_surround";
 
@@ -38,16 +44,19 @@ public class PreferenceConfiguration {
     private static final String VIDEO_FORMAT_PREF_STRING = "video_format";
     private static final String ONSCREEN_CONTROLLER_PREF_STRING = "checkbox_show_onscreen_controls";
     private static final String ONLY_L3_R3_PREF_STRING = "checkbox_only_show_L3R3";
+    private static final String SHOW_GUIDE_BUTTON_PREF_STRING = "checkbox_show_guide_button";
     private static final String LEGACY_DISABLE_FRAME_DROP_PREF_STRING = "checkbox_disable_frame_drop";
     private static final String ENABLE_HDR_PREF_STRING = "checkbox_enable_hdr";
     private static final String ENABLE_PIP_PREF_STRING = "checkbox_enable_pip";
     private static final String ENABLE_PERF_OVERLAY_STRING = "checkbox_enable_perf_overlay";
     private static final String BIND_ALL_USB_STRING = "checkbox_usb_bind_all";
     private static final String MOUSE_EMULATION_STRING = "checkbox_mouse_emulation";
+    private static final String ANALOG_SCROLLING_PREF_STRING = "analog_scrolling";
     private static final String MOUSE_NAV_BUTTONS_STRING = "checkbox_mouse_nav_buttons";
     static final String UNLOCK_FPS_STRING = "checkbox_unlock_fps";
     private static final String VIBRATE_OSC_PREF_STRING = "checkbox_vibrate_osc";
     private static final String VIBRATE_FALLBACK_PREF_STRING = "checkbox_vibrate_fallback";
+    private static final String VIBRATE_FALLBACK_STRENGTH_PREF_STRING = "seekbar_vibrate_fallback_strength";
     private static final String FLIP_FACE_BUTTONS_PREF_STRING = "checkbox_flip_face_buttons";
     private static final String TOUCHSCREEN_TRACKPAD_PREF_STRING = "checkbox_touchscreen_trackpad";
     private static final String LATENCY_TOAST_PREF_STRING = "checkbox_enable_post_stream_toast";
@@ -58,6 +67,7 @@ public class PreferenceConfiguration {
     private static final String FULL_RANGE_PREF_STRING = "checkbox_full_range";
     private static final String GAMEPAD_TOUCHPAD_AS_MOUSE_PREF_STRING = "checkbox_gamepad_touchpad_as_mouse";
     private static final String GAMEPAD_MOTION_SENSORS_PREF_STRING = "checkbox_gamepad_motion_sensors";
+    private static final String GAMEPAD_MOTION_FALLBACK_PREF_STRING = "checkbox_gamepad_motion_fallback";
 
     static final String DEFAULT_RESOLUTION = "1280x720";
     static final String DEFAULT_FPS = "60";
@@ -74,15 +84,18 @@ public class PreferenceConfiguration {
 
     private static final boolean ONSCREEN_CONTROLLER_DEFAULT = false;
     private static final boolean ONLY_L3_R3_DEFAULT = false;
+    private static final boolean SHOW_GUIDE_BUTTON_DEFAULT = true;
     private static final boolean DEFAULT_ENABLE_HDR = false;
     private static final boolean DEFAULT_ENABLE_PIP = false;
     private static final boolean DEFAULT_ENABLE_PERF_OVERLAY = false;
     private static final boolean DEFAULT_BIND_ALL_USB = false;
     private static final boolean DEFAULT_MOUSE_EMULATION = true;
+    private static final String DEFAULT_ANALOG_STICK_FOR_SCROLLING = "right";
     private static final boolean DEFAULT_MOUSE_NAV_BUTTONS = false;
     private static final boolean DEFAULT_UNLOCK_FPS = false;
     private static final boolean DEFAULT_VIBRATE_OSC = true;
     private static final boolean DEFAULT_VIBRATE_FALLBACK = false;
+    private static final int DEFAULT_VIBRATE_FALLBACK_STRENGTH = 100;
     private static final boolean DEFAULT_FLIP_FACE_BUTTONS = false;
     private static final boolean DEFAULT_TOUCHSCREEN_TRACKPAD = true;
     private static final String DEFAULT_AUDIO_CONFIG = "2"; // Stereo
@@ -94,6 +107,7 @@ public class PreferenceConfiguration {
     private static final boolean DEFAULT_FULL_RANGE = false;
     private static final boolean DEFAULT_GAMEPAD_TOUCHPAD_AS_MOUSE = false;
     private static final boolean DEFAULT_GAMEPAD_MOTION_SENSORS = true;
+    private static final boolean DEFAULT_GAMEPAD_MOTION_FALLBACK = false;
 
     public static final int FRAME_PACING_MIN_LATENCY = 0;
     public static final int FRAME_PACING_BALANCED = 1;
@@ -118,16 +132,19 @@ public class PreferenceConfiguration {
     public boolean smallIconMode, multiController, usbDriver, flipFaceButtons;
     public boolean onscreenController;
     public boolean onlyL3R3;
+    public boolean showGuideButton;
     public boolean enableHdr;
     public boolean enablePip;
     public boolean enablePerfOverlay;
     public boolean enableLatencyToast;
     public boolean bindAllUsb;
     public boolean mouseEmulation;
+    public AnalogStickForScrolling analogStickForScrolling;
     public boolean mouseNavButtons;
     public boolean unlockFps;
     public boolean vibrateOsc;
     public boolean vibrateFallbackToDevice;
+    public int vibrateFallbackToDeviceStrength;
     public boolean touchscreenTrackpad;
     public MoonBridge.AudioConfiguration audioConfiguration;
     public int framePacing;
@@ -137,6 +154,7 @@ public class PreferenceConfiguration {
     public boolean fullRange;
     public boolean gamepadMotionSensors;
     public boolean gamepadTouchpadAsMouse;
+    public boolean gamepadMotionSensorsFallbackToDevice;
 
     public static boolean isNativeResolution(int width, int height) {
         // It's not a native resolution if it matches an existing resolution option
@@ -243,33 +261,62 @@ public class PreferenceConfiguration {
         int height = getHeightFromResolutionString(resString);
         int fps = Integer.parseInt(fpsString);
 
-        // This table prefers 16:10 resolutions because they are
-        // only slightly more pixels than the 16:9 equivalents, so
-        // we don't want to bump those 16:10 resolutions up to the
-        // next 16:9 slot.
-        //
         // This logic is shamelessly stolen from Moonlight Qt:
         // https://github.com/moonlight-stream/moonlight-qt/blob/master/app/settings/streamingpreferences.cpp
 
-        if (width * height <= 640 * 360) {
-            return (int)(1000 * (fps / 30.0));
+        // Don't scale bitrate linearly beyond 60 FPS. It's definitely not a linear
+        // bitrate increase for frame rate once we get to values that high.
+        double frameRateFactor = (fps <= 60 ? fps : (Math.sqrt(fps / 60.f) * 60.f)) / 30.f;
+
+        // TODO: Collect some empirical data to see if these defaults make sense.
+        // We're just using the values that the Shield used, as we have for years.
+        int[] pixelVals = {
+            640 * 360,
+            854 * 480,
+            1280 * 720,
+            1920 * 1080,
+            2560 * 1440,
+            3840 * 2160,
+            -1,
+        };
+        int[] factorVals = {
+            1,
+            2,
+            5,
+            10,
+            20,
+            40,
+            -1
+        };
+
+        // Calculate the resolution factor by linear interpolation of the resolution table
+        float resolutionFactor;
+        int pixels = width * height;
+        for (int i = 0; ; i++) {
+            if (pixels == pixelVals[i]) {
+                // We can bail immediately for exact matches
+                resolutionFactor = factorVals[i];
+                break;
+            }
+            else if (pixels < pixelVals[i]) {
+                if (i == 0) {
+                    // Never go below the lowest resolution entry
+                    resolutionFactor = factorVals[i];
+                }
+                else {
+                    // Interpolate between the entry greater than the chosen resolution (i) and the entry less than the chosen resolution (i-1)
+                    resolutionFactor = ((float)(pixels - pixelVals[i-1]) / (pixelVals[i] - pixelVals[i-1])) * (factorVals[i] - factorVals[i-1]) + factorVals[i-1];
+                }
+                break;
+            }
+            else if (pixelVals[i] == -1) {
+                // Never go above the highest resolution entry
+                resolutionFactor = factorVals[i-1];
+                break;
+            }
         }
-        else if (width * height <= 854 * 480) {
-            return (int)(1500 * (fps / 30.0));
-        }
-        // This covers 1280x720 and 1280x800 too
-        else if (width * height <= 1366 * 768) {
-            return (int)(5000 * (fps / 30.0));
-        }
-        else if (width * height <= 1920 * 1200) {
-            return (int)(10000 * (fps / 30.0));
-        }
-        else if (width * height <= 2560 * 1600) {
-            return (int)(20000 * (fps / 30.0));
-        }
-        else /* if (width * height <= 3840 * 2160) */ {
-            return (int)(40000 * (fps / 30.0));
-        }
+
+        return (int)Math.round(resolutionFactor * frameRateFactor) * 1000;
     }
 
     public static boolean getDefaultSmallMode(Context context) {
@@ -349,6 +396,21 @@ public class PreferenceConfiguration {
         else {
             // Should never get here
             return FRAME_PACING_MIN_LATENCY;
+        }
+    }
+
+    private static AnalogStickForScrolling getAnalogStickForScrollingValue(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        String str = prefs.getString(ANALOG_SCROLLING_PREF_STRING, DEFAULT_ANALOG_STICK_FOR_SCROLLING);
+        if (str.equals("right")) {
+            return AnalogStickForScrolling.RIGHT;
+        }
+        else if (str.equals("left")) {
+            return AnalogStickForScrolling.LEFT;
+        }
+        else {
+            return AnalogStickForScrolling.NONE;
         }
     }
 
@@ -471,6 +533,15 @@ public class PreferenceConfiguration {
             prefs.edit().putBoolean(SMALL_ICONS_PREF_STRING, getDefaultSmallMode(context)).apply();
         }
 
+        if (!prefs.contains(GAMEPAD_MOTION_SENSORS_PREF_STRING) && Build.VERSION.SDK_INT == Build.VERSION_CODES.S) {
+            // Android 12 has a nasty bug that causes crashes when the app touches the InputDevice's
+            // associated InputDeviceSensorManager (just calling getSensorManager() is enough).
+            // As a workaround, we will override the default value for the gamepad motion sensor
+            // option to disabled on Android 12 to reduce the impact of this bug.
+            // https://cs.android.com/android/_/android/platform/frameworks/base/+/8970010a5e9f3dc5c069f56b4147552accfcbbeb
+            prefs.edit().putBoolean(GAMEPAD_MOTION_SENSORS_PREF_STRING, false).apply();
+        }
+
         // This must happen after the preferences migration to ensure the preferences are populated
         config.bitrate = prefs.getInt(BITRATE_PREF_STRING, prefs.getInt(BITRATE_PREF_OLD_STRING, 0) * 1000);
         if (config.bitrate == 0) {
@@ -491,6 +562,8 @@ public class PreferenceConfiguration {
         config.videoFormat = getVideoFormatValue(context);
         config.framePacing = getFramePacingValue(context);
 
+        config.analogStickForScrolling = getAnalogStickForScrollingValue(context);
+
         config.deadzonePercentage = prefs.getInt(DEADZONE_PREF_STRING, DEFAULT_DEADZONE);
 
         config.oscOpacity = prefs.getInt(OSC_OPACITY_PREF_STRING, DEFAULT_OPACITY);
@@ -507,6 +580,7 @@ public class PreferenceConfiguration {
         config.usbDriver = prefs.getBoolean(USB_DRIVER_PREF_SRING, DEFAULT_USB_DRIVER);
         config.onscreenController = prefs.getBoolean(ONSCREEN_CONTROLLER_PREF_STRING, ONSCREEN_CONTROLLER_DEFAULT);
         config.onlyL3R3 = prefs.getBoolean(ONLY_L3_R3_PREF_STRING, ONLY_L3_R3_DEFAULT);
+        config.showGuideButton = prefs.getBoolean(SHOW_GUIDE_BUTTON_PREF_STRING, SHOW_GUIDE_BUTTON_DEFAULT);
         config.enableHdr = prefs.getBoolean(ENABLE_HDR_PREF_STRING, DEFAULT_ENABLE_HDR) && !isShieldAtvFirmwareWithBrokenHdr();
         config.enablePip = prefs.getBoolean(ENABLE_PIP_PREF_STRING, DEFAULT_ENABLE_PIP);
         config.enablePerfOverlay = prefs.getBoolean(ENABLE_PERF_OVERLAY_STRING, DEFAULT_ENABLE_PERF_OVERLAY);
@@ -516,6 +590,7 @@ public class PreferenceConfiguration {
         config.unlockFps = prefs.getBoolean(UNLOCK_FPS_STRING, DEFAULT_UNLOCK_FPS);
         config.vibrateOsc = prefs.getBoolean(VIBRATE_OSC_PREF_STRING, DEFAULT_VIBRATE_OSC);
         config.vibrateFallbackToDevice = prefs.getBoolean(VIBRATE_FALLBACK_PREF_STRING, DEFAULT_VIBRATE_FALLBACK);
+        config.vibrateFallbackToDeviceStrength = prefs.getInt(VIBRATE_FALLBACK_STRENGTH_PREF_STRING, DEFAULT_VIBRATE_FALLBACK_STRENGTH);
         config.flipFaceButtons = prefs.getBoolean(FLIP_FACE_BUTTONS_PREF_STRING, DEFAULT_FLIP_FACE_BUTTONS);
         config.touchscreenTrackpad = prefs.getBoolean(TOUCHSCREEN_TRACKPAD_PREF_STRING, DEFAULT_TOUCHSCREEN_TRACKPAD);
         config.enableLatencyToast = prefs.getBoolean(LATENCY_TOAST_PREF_STRING, DEFAULT_LATENCY_TOAST);
@@ -525,6 +600,7 @@ public class PreferenceConfiguration {
         config.fullRange = prefs.getBoolean(FULL_RANGE_PREF_STRING, DEFAULT_FULL_RANGE);
         config.gamepadTouchpadAsMouse = prefs.getBoolean(GAMEPAD_TOUCHPAD_AS_MOUSE_PREF_STRING, DEFAULT_GAMEPAD_TOUCHPAD_AS_MOUSE);
         config.gamepadMotionSensors = prefs.getBoolean(GAMEPAD_MOTION_SENSORS_PREF_STRING, DEFAULT_GAMEPAD_MOTION_SENSORS);
+        config.gamepadMotionSensorsFallbackToDevice = prefs.getBoolean(GAMEPAD_MOTION_FALLBACK_PREF_STRING, DEFAULT_GAMEPAD_MOTION_FALLBACK);
 
         return config;
     }

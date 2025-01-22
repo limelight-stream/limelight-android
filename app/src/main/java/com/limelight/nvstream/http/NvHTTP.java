@@ -50,6 +50,7 @@ import com.limelight.BuildConfig;
 import com.limelight.LimeLog;
 import com.limelight.nvstream.ConnectionContext;
 import com.limelight.nvstream.http.PairingManager.PairState;
+import com.limelight.nvstream.jni.MoonBridge;
 
 import okhttp3.ConnectionPool;
 import okhttp3.HttpUrl;
@@ -402,16 +403,7 @@ public class NvHTTP {
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(new KeyManager[] { keyManager }, new TrustManager[] { trustManager }, new SecureRandom());
-
-            // TLS 1.2 is not enabled by default prior to Android 5.0, so we'll need a custom
-            // SSLSocketFactory in order to connect to GFE 3.20.4 which requires TLSv1.2 or later.
-            // We don't just always use TLSv12SocketFactory because explicitly specifying TLS versions
-            // prevents later TLS versions from being negotiated even if client and server otherwise
-            // support them.
-            return client.newBuilder().sslSocketFactory(
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
-                            sc.getSocketFactory() : new TLSv12SocketFactory(sc),
-                    trustManager).build();
+            return client.newBuilder().sslSocketFactory(sc.getSocketFactory(), trustManager).build();
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             throw new RuntimeException(e);
         }
@@ -594,6 +586,12 @@ public class NvHTTP {
         }
     }
 
+    /**
+     * Get an app by ID
+     * @param appId The ID of the app
+     * @see #getAppByName(String) for alternative.
+     * @return app details, or null if no app with that ID exists
+     */
     public NvApp getAppById(int appId) throws IOException, XmlPullParserException {
         LinkedList<NvApp> appList = getAppList();
         for (NvApp appFromList : appList) {
@@ -603,11 +601,16 @@ public class NvHTTP {
         }
         return null;
     }
-    
-    /* NOTE: Only use this function if you know what you're doing.
-     * It's totally valid to have two apps named the same thing,
-     * or even nothing at all! Look apps up by ID if at all possible
-     * using the above function */
+
+    /**
+     * Get an app by name
+     * NOTE: It is perfectly valid for multiple apps to have the same name,
+     * this function will only return the first one it finds.
+     * Consider using getAppById instead.
+     * @param appName The name of the app
+     * @see #getAppById(int) for alternative.
+     * @return app details, or null if no app with that name exists
+     */
     public NvApp getAppByName(String appName) throws IOException, XmlPullParserException {
         LinkedList<NvApp> appList = getAppList();
         for (NvApp appFromList : appList) {
@@ -784,7 +787,8 @@ public class NvHTTP {
             "&surroundAudioInfo=" + context.streamConfig.getAudioConfiguration().getSurroundAudioInfo() +
             "&remoteControllersBitmap=" + context.streamConfig.getAttachedGamepadMask() +
             "&gcmap=" + context.streamConfig.getAttachedGamepadMask() +
-            "&gcpersist="+(context.streamConfig.getPersistGamepadsAfterDisconnect() ? 1 : 0));
+            "&gcpersist="+(context.streamConfig.getPersistGamepadsAfterDisconnect() ? 1 : 0) +
+            MoonBridge.getLaunchUrlQueryParameters());
         if ((verb.equals("launch") && !getXmlString(xmlStr, "gamesession", true).equals("0") ||
                 (verb.equals("resume") && !getXmlString(xmlStr, "resume", true).equals("0")))) {
             // sessionUrl0 will be missing for older GFE versions
@@ -811,63 +815,5 @@ public class NvHTTP {
         }
 
         return true;
-    }
-
-    // Based on example code from https://blog.dev-area.net/2015/08/13/android-4-1-enable-tls-1-1-and-tls-1-2/
-    private static class TLSv12SocketFactory extends SSLSocketFactory {
-        private SSLSocketFactory internalSSLSocketFactory;
-
-        public TLSv12SocketFactory(SSLContext context) {
-            internalSSLSocketFactory = context.getSocketFactory();
-        }
-
-        @Override
-        public String[] getDefaultCipherSuites() {
-            return internalSSLSocketFactory.getDefaultCipherSuites();
-        }
-
-        @Override
-        public String[] getSupportedCipherSuites() {
-            return internalSSLSocketFactory.getSupportedCipherSuites();
-        }
-
-        @Override
-        public Socket createSocket() throws IOException {
-            return enableTLSv12OnSocket(internalSSLSocketFactory.createSocket());
-        }
-
-        @Override
-        public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
-            return enableTLSv12OnSocket(internalSSLSocketFactory.createSocket(s, host, port, autoClose));
-        }
-
-        @Override
-        public Socket createSocket(String host, int port) throws IOException {
-            return enableTLSv12OnSocket(internalSSLSocketFactory.createSocket(host, port));
-        }
-
-        @Override
-        public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
-            return enableTLSv12OnSocket(internalSSLSocketFactory.createSocket(host, port, localHost, localPort));
-        }
-
-        @Override
-        public Socket createSocket(InetAddress host, int port) throws IOException {
-            return enableTLSv12OnSocket(internalSSLSocketFactory.createSocket(host, port));
-        }
-
-        @Override
-        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
-            return enableTLSv12OnSocket(internalSSLSocketFactory.createSocket(address, port, localAddress, localPort));
-        }
-
-        private Socket enableTLSv12OnSocket(Socket socket) {
-            if (socket instanceof SSLSocket) {
-                // TLS 1.2 is not enabled by default prior to Android 5.0. We must enable it
-                // explicitly to ensure we can communicate with GFE 3.20.4 which blocks TLS 1.0.
-                ((SSLSocket)socket).setEnabledProtocols(new String[] {"TLSv1.2"});
-            }
-            return socket;
-        }
     }
 }

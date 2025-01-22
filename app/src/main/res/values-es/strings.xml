@@ -45,7 +45,7 @@
     <string name="conn_error_title">Error de conexión</string>
     <string name="conn_error_msg">Fallo al iniciar</string>
     <string name="conn_terminated_title">Conexión finalizada</string>
-    <string name="conn_terminated_msg">La conexión ha finalizando</string>
+    <string name="conn_terminated_msg">La conexión ha finalizado.</string>
     <!-- General strings -->
     <string name="ip_hint">Dirección IP del host del ordenador</string>
     <string name="searching_pc">Buscando el hostal del PC en tu red local...
@@ -274,4 +274,17 @@
     <string name="summary_checkbox_gamepad_touchpad_as_mouse">Fuerza la entrada del touchpad del gamepad para controlar el ratón del host, incluso cuando se emula un gamepad con touchpad.</string>
     <string name="title_checkbox_gamepad_touchpad_as_mouse">Controla siempre el ratón con el touchpad</string>
     <string name="summary_checkbox_gamepad_motion_sensors">Permite a los hosts compatibles solicitar datos de los sensores de movimiento al emular un gamepad con los sensores de movimiento. La desactivación puede reducir ligeramente el consumo de energía y el uso de la red si los sensores de movimiento no se utilizan en el juego.</string>
+    <string name="toast_controller_type_changed">El tipo del Gamepad puede cambiar debido a la emulación del sensor de movimiento</string>
+    <string name="summary_checkbox_gamepad_motion_fallback">Utiliza los sensores de movimiento integrados de tu dispositivo si el gamepad conectado o tu versión de Android no admiten los sensores del gamepad.
+\nNota: Activar esta opción puede hacer que tu gamepad aparezca como un mando de PlayStation en el host.</string>
+    <string name="title_checkbox_gamepad_motion_fallback">Emular el sensor de movimiento del gamepad</string>
+    <string name="analogscroll_none">Ninguno (ambos joysticks mueven el mouse)</string>
+    <string name="analogscroll_right">Joystick analógico derecho</string>
+    <string name="analogscroll_left">Joystick analógico izquierdo</string>
+    <string name="title_analog_scrolling">Usa un joystick analógico para hacer scroll</string>
+    <string name="summary_analog_scrolling">Selecciona un joystick analógico para scroll cuando la emulación del mouse está habilitada</string>
+    <string name="error_code_prefix">Código del error:</string>
+    <string name="title_seekbar_vibrate_fallback_strength">Ajustar la intensidad del ruido emulado</string>
+    <string name="summary_seekbar_vibrate_fallback_strength">Amplifica o reduce la intensidad de la vibración de tu dispositivo</string>
+    <string name="suffix_seekbar_vibrate_fallback_strength">%</string>
 </resources>

@@ -249,4 +249,9 @@
     <string name="resolution_480p">480p</string>
     <string name="resolution_720p">720p</string>
     <string name="summary_frame_pacing">Especifique o equilíbrio entre latência e suavidade do vídeo</string>
+    <string name="analogscroll_none">Nenhum (ambos os sticks movem o rato)</string>
+    <string name="analogscroll_right">Stick analógico direito</string>
+    <string name="analogscroll_left">Stick analógico esquerdo</string>
+    <string name="title_analog_scrolling">Usar um stick analógico para fazer scroll</string>
+    <string name="summary_analog_scrolling">Selecciona um stick analógico para fazer scroll quando a emulação de rato está ativada</string>
 </resources>

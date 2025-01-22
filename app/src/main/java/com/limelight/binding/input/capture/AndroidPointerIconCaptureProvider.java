@@ -4,14 +4,13 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.view.MotionEvent;
 import android.view.PointerIcon;
 import android.view.View;
 
 @TargetApi(Build.VERSION_CODES.N)
 public class AndroidPointerIconCaptureProvider extends InputCaptureProvider {
-    private View targetView;
-    private Context context;
+    private final View targetView;
+    private final Context context;
 
     public AndroidPointerIconCaptureProvider(Activity activity, View targetView) {
         this.context = activity;
@@ -23,14 +22,14 @@ public class AndroidPointerIconCaptureProvider extends InputCaptureProvider {
     }
 
     @Override
-    public void enableCapture() {
-        super.enableCapture();
+    public void hideCursor() {
+        super.hideCursor();
         targetView.setPointerIcon(PointerIcon.getSystemIcon(context, PointerIcon.TYPE_NULL));
     }
 
     @Override
-    public void disableCapture() {
-        super.disableCapture();
+    public void showCursor() {
+        super.showCursor();
         targetView.setPointerIcon(null);
     }
 }

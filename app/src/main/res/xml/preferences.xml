@@ -85,11 +85,27 @@
             android:title="@string/title_checkbox_mouse_emulation"
             android:summary="@string/summary_checkbox_mouse_emulation"
             android:defaultValue="true" />
+        <ListPreference
+            android:key="analog_scrolling"
+            android:dependency="checkbox_mouse_emulation"
+            android:title="@string/title_analog_scrolling"
+            android:summary="@string/summary_analog_scrolling"
+            android:entries="@array/analog_scrolling_names"
+            android:entryValues="@array/analog_scrolling_values"
+            android:defaultValue="right" />
         <CheckBoxPreference
             android:key="checkbox_vibrate_fallback"
             android:title="@string/title_checkbox_vibrate_fallback"
             android:summary="@string/summary_checkbox_vibrate_fallback"
             android:defaultValue="false" />
+        <com.limelight.preferences.SeekBarPreference
+            android:key="seekbar_vibrate_fallback_strength"
+            android:dependency="checkbox_vibrate_fallback"
+            android:defaultValue="100"
+            android:max="200"
+            android:summary="@string/summary_seekbar_vibrate_fallback_strength"
+            android:text="@string/suffix_seekbar_vibrate_fallback_strength"
+            android:title="@string/title_seekbar_vibrate_fallback_strength"/>
         <CheckBoxPreference
             android:key="checkbox_flip_face_buttons"
             android:title="@string/title_checkbox_flip_face_buttons"
@@ -105,7 +121,11 @@
             android:title="@string/title_checkbox_gamepad_motion_sensors"
             android:summary="@string/summary_checkbox_gamepad_motion_sensors"
             android:defaultValue="true" />
-
+        <CheckBoxPreference
+            android:key="checkbox_gamepad_motion_fallback"
+            android:title="@string/title_checkbox_gamepad_motion_fallback"
+            android:summary="@string/summary_checkbox_gamepad_motion_fallback"
+            android:defaultValue="false" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/category_input_settings"
         android:key="category_input_settings">
@@ -144,6 +164,14 @@
             android:key="checkbox_only_show_L3R3"
             android:summary="@string/summary_only_l3r3"
             android:title="@string/title_only_l3r3" />
+        <CheckBoxPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:dependency="checkbox_show_onscreen_controls"
+            android:key="checkbox_show_guide_button"
+            android:summary="@string/summary_show_guide_button"
+            android:title="@string/title_show_guide_button" />
         <com.limelight.preferences.SeekBarPreference
             android:key="seekbar_osc_opacity"
             android:dependency="checkbox_show_onscreen_controls"

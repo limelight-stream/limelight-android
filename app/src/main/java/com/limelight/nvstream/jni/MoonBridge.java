@@ -22,10 +22,6 @@ public class MoonBridge {
     public static final int VIDEO_FORMAT_MASK_AV1 = 0xF000;
     public static final int VIDEO_FORMAT_MASK_10BIT = 0x2200;
 
-    public static final int ENCFLG_NONE = 0;
-    public static final int ENCFLG_AUDIO = 1;
-    public static final int ENCFLG_ALL = 0xFFFFFFFF;
-
     public static final int BUFFER_TYPE_PICDATA = 0;
     public static final int BUFFER_TYPE_SPS = 1;
     public static final int BUFFER_TYPE_PPS = 2;
@@ -347,10 +343,7 @@ public class MoonBridge {
                                               int width, int height, int fps,
                                               int bitrate, int packetSize, int streamingRemotely,
                                               int audioConfiguration, int supportedVideoFormats,
-                                              int hevcBitratePercentageMultiplier,
-                                              int av1BitratePercentageMultiplier,
                                               int clientRefreshRateX100,
-                                              int encryptionFlags,
                                               byte[] riAesKey, byte[] riAesIv,
                                               int videoCapabilities,
                                               int colorSpace, int colorRange);
@@ -414,6 +407,8 @@ public class MoonBridge {
 
     // The RTT is in the top 32 bits, and the RTT variance is in the bottom 32 bits
     public static native long getEstimatedRttInfo();
+
+    public static native String getLaunchUrlQueryParameters();
 
     public static native byte guessControllerType(int vendorId, int productId);
 

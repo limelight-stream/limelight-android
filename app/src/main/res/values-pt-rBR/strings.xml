@@ -249,4 +249,9 @@
 \n
 \nTente desativar o modo HDR, alterar a resolução de streaming ou alterar a resolução do PC host.</string>
     <string name="summary_full_range">Isso causará perda de detalhes em áreas claras e escuras se o seu dispositivo não exibir corretamente todo o conteúdo de vídeo em cores.</string>
+    <string name="analogscroll_none">Nenhum (ambos os sticks movem o rato)</string>
+    <string name="analogscroll_right">Stick analógico direito</string>
+    <string name="analogscroll_left">Stick analógico esquerdo</string>
+    <string name="title_analog_scrolling">Usar um stick analógico para fazer scroll</string>
+    <string name="summary_analog_scrolling">Selecciona um stick analógico para fazer scroll quando a emulação de rato está ativada</string>
 </resources>

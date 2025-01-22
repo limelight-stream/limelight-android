@@ -58,7 +58,7 @@
     <string name="conn_error_title"> 连接错误 </string>
     <string name="conn_error_msg"> 启动失败 </string>
     <string name="conn_terminated_title"> 连接终结 </string>
-    <string name="conn_terminated_msg"> 连接已被终结 </string>
+    <string name="conn_terminated_msg">连接已被终结.</string>
     <!-- General strings -->
     <string name="ip_hint">串流电脑的IP地址</string>
     <string name="searching_pc">在你的本地网络中搜索串流主机PC...
@@ -165,8 +165,8 @@
     <string name="category_advanced_settings"> 高级设置 </string>
     <string name="title_disable_frame_drop"> 永不掉帧 </string>
     <string name="summary_disable_frame_drop"> 可能会减少在一些设备上的卡顿，但会增加延迟 </string>
-    <string name="title_video_format"> 更改HEVC设置 </string>
-    <string name="summary_video_format">HEVC能降低视频带宽需求，但需要较新的设备才能支持</string>
+    <string name="title_video_format">更改编解码器设置</string>
+    <string name="summary_video_format">如果您的设备支持较新的编解码器，则可以降低视频带宽要求。如果主机软件或显卡不支持编解码器选择，则可能会忽略编解码器选择。</string>
     <string name="title_enable_hdr">启用 HDR (实验性)</string>
     <string name="summary_enable_hdr">当游戏和显卡支持时以HDR模式串流。 HDR需要显卡支持 HEVC Main 10 编码。</string>
     <string name="title_enable_perf_overlay"> 启用性能信息 </string>
@@ -196,13 +196,13 @@
     <string name="pcview_menu_header_online">在线</string>
     <string name="resolution_prefix_native">本地</string>
     <string name="suffix_seekbar_bitrate_mbps">Mbps</string>
-    <string name="text_native_res_dialog">本地分辨率模式不受GFE的官方支持，因此不会自动设置主机的显示分辨率。您需要在游戏中手动进行设置。
+    <string name="text_native_res_dialog">流媒体服务器可能不支持原始分辨率或者 FPS。您可能需要手动为主机配置匹配的自定义显示模式。
 \n
-\n如果您选择在NVIDIA控制面板中创建自定义分辨率以匹配设备分辨率，请确保您已阅读并理解NVIDIA关于可能导致显示器损坏和电脑不稳定以及其他潜在问题的警告。
+\n如果您选择在 NVIDIA 控制面板中创建与屏幕设置相匹配的自定义分辨率，请确保您已阅读并理解 NVIDIA 关于显示器可能损坏、电脑不稳定和其他潜在问题的警告。
 \n
-\n对于您在您的电脑上创建自定义分辨率而导致的任何问题，我们概不负责。
+\n我们不对因在电脑上创建自定义分辨率而导致的任何问题负责。
 \n
-\n最后，您的设备或主机电脑可能不支持以本地分辨率串流。如果此模式无法在您的设备上正常运行，那很遗憾您运气欠佳。</string>
+\n您的显示器可能不支持必要的显示配置。如果是这样，您可以尝试设置虚拟显示器。最后，如果您的设备或主机不支持以特定分辨率或刷新率进行流式传输，那就很不幸了。</string>
     <string name="title_native_res_dialog">本地分辨率警告</string>
     <string name="applist_menu_hide_app">隐藏游戏</string>
     <string name="check_ports_msg">请检查您的防火墙和端口转发规则中的端口：</string>
@@ -261,4 +261,27 @@
     <string name="title_full_range">强制完全动态范围视频 (实验性)</string>
     <string name="pair_pairing_help">如果你的主机运行的是 Sunshine，那请前往Sunshine的网页界面输入PIN码。</string>
     <string name="pcview_menu_eol">NVIDIA GameStream 终止服务</string>
+    <string name="perf_overlay_hostprocessinglatency">主机处理延迟最小值/最大值/平均值: %1$.1f/%2$.1f/%3$.1f ms</string>
+    <string name="fps_suffix_fps">FPS</string>
+    <string name="title_native_fps_dialog">原生 FPS 警告</string>
+    <string name="category_gamepad_settings">手柄设置</string>
+    <string name="title_checkbox_gamepad_touchpad_as_mouse">始终使用触摸板控制鼠标</string>
+    <string name="summary_checkbox_gamepad_touchpad_as_mouse">强制使用手柄触摸板来控制主机鼠标，即使在使用触摸板模拟游戏板时也是如此。</string>
+    <string name="title_checkbox_gamepad_motion_sensors">允许使用手柄的运动传感器</string>
+    <string name="summary_checkbox_gamepad_motion_sensors">使支持的主机能够在模拟具有运动传感器的游戏手柄时请求运动传感器数据。如果在游戏中未使用运动传感器，禁用可能会略微降低电源和网络使用量。</string>
+    <string name="videoformat_av1always">首选 AV1（实验性）</string>
+    <string name="videoformat_h264always">首选 H.264</string>
+    <string name="toast_controller_type_changed">游戏手柄类型可能会因运动传感器模拟而改变</string>
+    <string name="summary_checkbox_gamepad_motion_fallback">如果你连接的游戏手柄或 Android 版本不支持游戏手柄传感器，请使用设备的内置运动传感器。
+\n注意：启用此选项可能会导致您的游戏手柄在主机上被识别为 PlayStation 4控制器。</string>
+    <string name="title_checkbox_gamepad_motion_fallback">模拟游戏手柄运动传感器支持</string>
+    <string name="error_code_prefix">错误代码:</string>
+    <string name="title_seekbar_vibrate_fallback_strength">调整模拟震动强度</string>
+    <string name="suffix_seekbar_vibrate_fallback_strength">％</string>
+    <string name="title_analog_scrolling">使用摇杆控制鼠标移动</string>
+    <string name="analogscroll_left">左摇杆</string>
+    <string name="analogscroll_right">右摇杆</string>
+    <string name="summary_analog_scrolling">在鼠标模式下选择用哪个摇杆控制鼠标移动</string>
+    <string name="summary_seekbar_vibrate_fallback_strength">增强或减弱设备的震动强度</string>
+    <string name="analogscroll_none">默认 (两个摇杆都控制鼠标)</string>
 </resources>

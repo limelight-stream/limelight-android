@@ -120,4 +120,15 @@
         <item>cap-fps</item>
         <item>smoothness</item>
     </string-array>
+
+    <string-array name="analog_scrolling_names">
+        <item>@string/analogscroll_none</item>
+        <item>@string/analogscroll_right</item>
+        <item>@string/analogscroll_left</item>
+    </string-array>
+    <string-array name="analog_scrolling_values" translatable="false">
+        <item>none</item>
+        <item>right</item>
+        <item>left</item>
+    </string-array>
 </resources>

@@ -8,6 +8,8 @@
 #include <opus_multistream.h>
 #include <android/log.h>
 
+#include <cpu-features.h>
+
 static OpusMSDecoder* Decoder;
 static OPUS_MULTISTREAM_CONFIGURATION OpusConfig;
 
@@ -426,6 +428,29 @@ static CONNECTION_LISTENER_CALLBACKS BridgeConnListenerCallbacks = {
         .setControllerLED = BridgeClSetControllerLED,
 };
 
+static bool
+hasFastAes() {
+    if (android_getCpuCount() <= 2) {
+        return false;
+    }
+
+    switch (android_getCpuFamily()) {
+        case ANDROID_CPU_FAMILY_ARM:
+            return !!(android_getCpuFeatures() & ANDROID_CPU_ARM_FEATURE_AES);
+        case ANDROID_CPU_FAMILY_ARM64:
+            return !!(android_getCpuFeatures() & ANDROID_CPU_ARM64_FEATURE_AES);
+        case ANDROID_CPU_FAMILY_X86:
+        case ANDROID_CPU_FAMILY_X86_64:
+            return !!(android_getCpuFeatures() & ANDROID_CPU_X86_FEATURE_AES_NI);
+        case ANDROID_CPU_FAMILY_MIPS:
+        case ANDROID_CPU_FAMILY_MIPS64:
+            return false;
+        default:
+            // Assume new architectures will all have crypto acceleration (RISC-V will)
+            return true;
+    }
+}
+
 JNIEXPORT jint JNICALL
 Java_com_limelight_nvstream_jni_MoonBridge_startConnection(JNIEnv *env, jclass clazz,
                                                            jstring address, jstring appVersion, jstring gfeVersion,
@@ -433,10 +458,7 @@ Java_com_limelight_nvstream_jni_MoonBridge_startConnection(JNIEnv *env, jclass c
                                                            jint width, jint height, jint fps,
                                                            jint bitrate, jint packetSize, jint streamingRemotely,
                                                            jint audioConfiguration, jint supportedVideoFormats,
-                                                           jint hevcBitratePercentageMultiplier,
-                                                           jint av1BitratePercentageMultiplier,
                                                            jint clientRefreshRateX100,
-                                                           jint encryptionFlags,
                                                            jbyteArray riAesKey, jbyteArray riAesIv,
                                                            jint videoCapabilities,
                                                            jint colorSpace, jint colorRange) {
@@ -456,10 +478,8 @@ Java_com_limelight_nvstream_jni_MoonBridge_startConnection(JNIEnv *env, jclass c
             .streamingRemotely = streamingRemotely,
             .audioConfiguration = audioConfiguration,
             .supportedVideoFormats = supportedVideoFormats,
-            .hevcBitratePercentageMultiplier = hevcBitratePercentageMultiplier,
-            .av1BitratePercentageMultiplier = av1BitratePercentageMultiplier,
             .clientRefreshRateX100 = clientRefreshRateX100,
-            .encryptionFlags = encryptionFlags,
+            .encryptionFlags = ENCFLG_AUDIO,
             .colorSpace = colorSpace,
             .colorRange = colorRange
     };
@@ -473,6 +493,11 @@ Java_com_limelight_nvstream_jni_MoonBridge_startConnection(JNIEnv *env, jclass c
     (*env)->ReleaseByteArrayElements(env, riAesIv, riAesIvBuf, JNI_ABORT);
 
     BridgeVideoRendererCallbacks.capabilities = videoCapabilities;
+
+    // Enable all encryption features if the platform has fast AES support
+    if (hasFastAes()) {
+        streamConfig.encryptionFlags = ENCFLG_ALL;
+    }
 
     int ret = LiStartConnection(&serverInfo,
                                 &streamConfig,

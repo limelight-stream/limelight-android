@@ -596,45 +596,39 @@ public class MediaCodecHelper {
 
     public static boolean decoderSupportsFusedIdrFrame(MediaCodecInfo decoderInfo, String mimeType) {
         // If adaptive playback is supported, we can submit new CSD together with a keyframe
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            try {
-                if (decoderInfo.getCapabilitiesForType(mimeType).
-                        isFeatureSupported(CodecCapabilities.FEATURE_AdaptivePlayback))
-                {
-                    LimeLog.info("Decoder supports fused IDR frames (FEATURE_AdaptivePlayback)");
-                    return true;
-                }
-            } catch (Exception e) {
-                // Tolerate buggy codecs
-                e.printStackTrace();
+        try {
+            if (decoderInfo.getCapabilitiesForType(mimeType).
+                    isFeatureSupported(CodecCapabilities.FEATURE_AdaptivePlayback)) {
+                LimeLog.info("Decoder supports fused IDR frames (FEATURE_AdaptivePlayback)");
+                return true;
             }
+        } catch (Exception e) {
+            // Tolerate buggy codecs
+            e.printStackTrace();
         }
 
         return false;
     }
 
     public static boolean decoderSupportsAdaptivePlayback(MediaCodecInfo decoderInfo, String mimeType) {
-        // Possibly enable adaptive playback on KitKat and above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (isDecoderInList(blacklistedAdaptivePlaybackPrefixes, decoderInfo.getName())) {
-                LimeLog.info("Decoder blacklisted for adaptive playback");
-                return false;
-            }
-
-            try {
-                if (decoderInfo.getCapabilitiesForType(mimeType).
-                        isFeatureSupported(CodecCapabilities.FEATURE_AdaptivePlayback))
-                {
-                    // This will make getCapabilities() return that adaptive playback is supported
-                    LimeLog.info("Adaptive playback supported (FEATURE_AdaptivePlayback)");
-                    return true;
-                }
-            } catch (Exception e) {
-                // Tolerate buggy codecs
-                e.printStackTrace();
-            }
+        if (isDecoderInList(blacklistedAdaptivePlaybackPrefixes, decoderInfo.getName())) {
+            LimeLog.info("Decoder blacklisted for adaptive playback");
+            return false;
         }
-        
+
+        try {
+            if (decoderInfo.getCapabilitiesForType(mimeType).
+                    isFeatureSupported(CodecCapabilities.FEATURE_AdaptivePlayback))
+            {
+                // This will make getCapabilities() return that adaptive playback is supported
+                LimeLog.info("Adaptive playback supported (FEATURE_AdaptivePlayback)");
+                return true;
+            }
+        } catch (Exception e) {
+            // Tolerate buggy codecs
+            e.printStackTrace();
+        }
+
         return false;
     }
 
@@ -709,13 +703,6 @@ public class MediaCodecHelper {
     }
 
     public static boolean decoderIsWhitelistedForHevc(MediaCodecInfo decoderInfo) {
-        // Google didn't have official support for HEVC (or more importantly, a CTS test) until
-        // Lollipop. I've seen some MediaTek devices on 4.4 crash when attempting to use HEVC,
-        // so I'm restricting HEVC usage to Lollipop and higher.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return false;
-        }
-
         //
         // Software decoders are terrible and we never want to use them.
         // We want to catch decoders like:
@@ -784,17 +771,10 @@ public class MediaCodecHelper {
     @SuppressLint("NewApi")
     private static LinkedList<MediaCodecInfo> getMediaCodecList() {
         LinkedList<MediaCodecInfo> infoList = new LinkedList<>();
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            MediaCodecList mcl = new MediaCodecList(MediaCodecList.REGULAR_CODECS);
-            Collections.addAll(infoList, mcl.getCodecInfos());
-        }
-        else {
-            for (int i = 0; i < MediaCodecList.getCodecCount(); i++) {
-                infoList.add(MediaCodecList.getCodecInfoAt(i));
-            }   
-        }
-        
+
+        MediaCodecList mcl = new MediaCodecList(MediaCodecList.REGULAR_CODECS);
+        Collections.addAll(infoList, mcl.getCodecInfos());
+
         return infoList;
     }
     

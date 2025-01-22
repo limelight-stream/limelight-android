@@ -29,6 +29,12 @@
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.sensor.gyroscope"
+        android:required="false" />
 
     <!-- Disable legacy input emulation on ChromeOS -->
     <uses-feature
@@ -44,7 +50,6 @@
         android:banner="@drawable/atv_banner"
         android:appCategory="game"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher"
         android:installLocation="auto"
         android:gwpAsanMode="always"
         android:localeConfig="@xml/locales_config"
@@ -71,6 +76,11 @@
         <meta-data
             android:name="com.android.graphics.intervention.wm.allowDownscale"
             android:value="false"/>
+        
+        <!-- Game Mode configuration -->
+        <meta-data
+            android:name="android.game_mode_config"
+            android:resource="@xml/game_mode_config" />
 
         <!-- Samsung DeX support requires explicit placement of android:resizeableActivity="true"
              in each activity even though it is implied by targeting API 24+ -->
@@ -81,6 +91,10 @@
             android:resizeableActivity="true"
             android:enableOnBackInvokedCallback="true"
             android:configChanges="mcc|mnc|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection">
+
+            <meta-data android:name="WindowManagerPreference:FreeformWindowSize" android:value="system-default" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowOrientation" android:value="landscape" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -98,18 +112,16 @@
             android:resizeableActivity="true"
             android:enableOnBackInvokedCallback="true"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.limelight.PcView" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowSize" android:value="system-default" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowOrientation" android:value="landscape" />
         </activity>
         <activity
             android:name=".AppView"
             android:resizeableActivity="true"
             android:enableOnBackInvokedCallback="true"
             android:configChanges="mcc|mnc|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.limelight.PcView" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowSize" android:value="system-default" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowOrientation" android:value="landscape" />
         </activity>
         <activity
             android:name=".preferences.StreamSettings"
@@ -117,9 +129,8 @@
             android:enableOnBackInvokedCallback="true"
             android:configChanges="mcc|mnc|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
             android:label="Streaming Settings">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.limelight.PcView" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowSize" android:value="system-default" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowOrientation" android:value="landscape" />
         </activity>
         <activity
             android:name=".preferences.AddComputerManually"
@@ -128,9 +139,8 @@
             android:enableOnBackInvokedCallback="true"
             android:configChanges="mcc|mnc|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection"
             android:label="Add Computer Manually">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.limelight.PcView" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowSize" android:value="system-default" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowOrientation" android:value="landscape" />
         </activity>
         <activity
             android:name=".Game"
@@ -143,9 +153,9 @@
             android:excludeFromRecents="true"
             android:theme="@style/StreamTheme"
             android:preferMinimalPostProcessing="true">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.limelight.AppView" />
+
+            <meta-data android:name="WindowManagerPreference:FreeformWindowSize" android:value="system-default" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowOrientation" android:value="landscape" />
 
             <!-- Special metadata for NVIDIA Shield devices to prevent input buffering
                  and most importantly, opt out of mouse acceleration while streaming -->
@@ -172,9 +182,8 @@
             android:resizeableActivity="true"
             android:enableOnBackInvokedCallback="true"
             android:configChanges="mcc|mnc|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize|layoutDirection">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.limelight.PcView" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowSize" android:value="system-default" />
+            <meta-data android:name="WindowManagerPreference:FreeformWindowOrientation" android:value="landscape" />
         </activity>
     </application>
 

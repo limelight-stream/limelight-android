@@ -26,51 +26,41 @@ public class AndroidAudioRenderer implements AudioRenderer {
     }
 
     private AudioTrack createAudioTrack(int channelConfig, int sampleRate, int bufferSize, boolean lowLatency) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return new AudioTrack(AudioManager.STREAM_MUSIC,
-                    sampleRate,
-                    channelConfig,
-                    AudioFormat.ENCODING_PCM_16BIT,
-                    bufferSize,
-                    AudioTrack.MODE_STREAM);
+        AudioAttributes.Builder attributesBuilder = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME);
+        AudioFormat format = new AudioFormat.Builder()
+                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                .setSampleRate(sampleRate)
+                .setChannelMask(channelConfig)
+                .build();
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            // Use FLAG_LOW_LATENCY on L through N
+            if (lowLatency) {
+                attributesBuilder.setFlags(AudioAttributes.FLAG_LOW_LATENCY);
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            AudioTrack.Builder trackBuilder = new AudioTrack.Builder()
+                    .setAudioFormat(format)
+                    .setAudioAttributes(attributesBuilder.build())
+                    .setTransferMode(AudioTrack.MODE_STREAM)
+                    .setBufferSizeInBytes(bufferSize);
+
+            // Use PERFORMANCE_MODE_LOW_LATENCY on O and later
+            if (lowLatency) {
+                trackBuilder.setPerformanceMode(AudioTrack.PERFORMANCE_MODE_LOW_LATENCY);
+            }
+
+            return trackBuilder.build();
         }
         else {
-            AudioAttributes.Builder attributesBuilder = new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_GAME);
-            AudioFormat format = new AudioFormat.Builder()
-                    .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                    .setSampleRate(sampleRate)
-                    .setChannelMask(channelConfig)
-                    .build();
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                // Use FLAG_LOW_LATENCY on L through N
-                if (lowLatency) {
-                    attributesBuilder.setFlags(AudioAttributes.FLAG_LOW_LATENCY);
-                }
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                AudioTrack.Builder trackBuilder = new AudioTrack.Builder()
-                        .setAudioFormat(format)
-                        .setAudioAttributes(attributesBuilder.build())
-                        .setTransferMode(AudioTrack.MODE_STREAM)
-                        .setBufferSizeInBytes(bufferSize);
-
-                // Use PERFORMANCE_MODE_LOW_LATENCY on O and later
-                if (lowLatency) {
-                    trackBuilder.setPerformanceMode(AudioTrack.PERFORMANCE_MODE_LOW_LATENCY);
-                }
-
-                return trackBuilder.build();
-            }
-            else {
-                return new AudioTrack(attributesBuilder.build(),
-                        format,
-                        bufferSize,
-                        AudioTrack.MODE_STREAM,
-                        AudioManager.AUDIO_SESSION_ID_GENERATE);
-            }
+            return new AudioTrack(attributesBuilder.build(),
+                    format,
+                    bufferSize,
+                    AudioTrack.MODE_STREAM,
+                    AudioManager.AUDIO_SESSION_ID_GENERATE);
         }
     }
 
@@ -91,20 +81,10 @@ public class AndroidAudioRenderer implements AudioRenderer {
                 channelConfig = AudioFormat.CHANNEL_OUT_5POINT1;
                 break;
             case 8:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    // AudioFormat.CHANNEL_OUT_7POINT1_SURROUND isn't available until Android 6.0,
-                    // yet the CHANNEL_OUT_SIDE_LEFT and CHANNEL_OUT_SIDE_RIGHT constants were added
-                    // in 5.0, so just hardcode the constant so we can work on Lollipop.
-                    channelConfig = 0x000018fc; // AudioFormat.CHANNEL_OUT_7POINT1_SURROUND
-                }
-                else {
-                    // On KitKat and lower, creation of the AudioTrack will fail if we specify
-                    // CHANNEL_OUT_SIDE_LEFT or CHANNEL_OUT_SIDE_RIGHT. That leaves us with
-                    // the old CHANNEL_OUT_7POINT1 which uses left-of-center and right-of-center
-                    // speakers instead of side-left and side-right. This non-standard layout
-                    // is probably not what the user wants, but we don't really have a choice.
-                    channelConfig = AudioFormat.CHANNEL_OUT_7POINT1;
-                }
+                // AudioFormat.CHANNEL_OUT_7POINT1_SURROUND isn't available until Android 6.0,
+                // yet the CHANNEL_OUT_SIDE_LEFT and CHANNEL_OUT_SIDE_RIGHT constants were added
+                // in 5.0, so just hardcode the constant so we can work on Lollipop.
+                channelConfig = 0x000018fc; // AudioFormat.CHANNEL_OUT_7POINT1_SURROUND
                 break;
             default:
                 LimeLog.severe("Decoder returned unhandled channel count");

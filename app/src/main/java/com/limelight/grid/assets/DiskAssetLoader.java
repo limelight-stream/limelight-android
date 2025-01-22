@@ -28,14 +28,8 @@ public class DiskAssetLoader {
 
     public DiskAssetLoader(Context context) {
         this.cacheDir = context.getCacheDir();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            this.isLowRamDevice =
-                    ((ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE)).isLowRamDevice();
-        }
-        else {
-            // Use conservative low RAM behavior on very old devices
-            this.isLowRamDevice = true;
-        }
+        this.isLowRamDevice =
+                ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).isLowRamDevice();
     }
 
     public boolean checkCacheExists(CachedAppAssetLoader.LoaderTuple tuple) {

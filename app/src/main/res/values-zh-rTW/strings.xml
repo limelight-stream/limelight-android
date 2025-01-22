@@ -166,8 +166,8 @@
     <string name="category_advanced_settings">進階設定</string>
     <string name="title_disable_frame_drop">永不丟失影格</string>
     <string name="summary_disable_frame_drop">可能會減少在一些裝置上的卡頓，但會增加延時</string>
-    <string name="title_video_format">變更 HEVC 設定</string>
-    <string name="summary_video_format">HEVC 能降低視訊頻寬需求，但需要較新的裝置才能支援</string>
+    <string name="title_video_format">變更轉碼器設定</string>
+    <string name="summary_video_format">較新的轉碼器可以降低視訊頻寬需求 (若您的裝置支援)。如果主機軟體或 GPU 不支援，轉碼器選取項目可能會被忽略。</string>
     <string name="title_enable_hdr">啟用 HDR (實驗性)</string>
     <string name="summary_enable_hdr">在遊戲和 GPU 支援時以 HDR 模式串流，HDR 模式需要支援 HEVC Main 10 編碼的 GPU。</string>
     <string name="title_enable_perf_overlay">串流時顯示效能資訊</string>
@@ -179,15 +179,15 @@
     <string name="suffix_osc_opacity">%</string>
     <string name="summary_osc_opacity">使螢幕控制按钮變得更透明/更不透明</string>
     <string name="suffix_seekbar_bitrate_mbps">Mbps</string>
-    <string name="resolution_prefix_native">本機</string>
-    <string name="text_native_res_dialog">本機解析度模式不受 GFE 的官方支援，因此不會自動設定主機的顯示解析度。您需要在遊戲中手動進行設定。
+    <string name="resolution_prefix_native">原生</string>
+    <string name="text_native_res_dialog">原生解析度或 FPS 可能不受串流伺服器支援，您可能需要為主機手動設定相符的自訂顯示模式。
 \n
-\n如果您選擇在 NVIDIA 控制面板中建立自訂解析度以符合裝置解析度，請確保您已閱讀並理解 NVIDIA 關於可能導致監視器損毀和電腦不穩定以及其他潛在問題的警告。
+\n如果您選擇在 NVIDIA 控制面板中建立自訂解析度以符合您的螢幕設定，請確保您已閱讀並理解 NVIDIA 關於可能導致監視器損毀和電腦不穩定以及其他潛在問題的警告。
 \n
 \n對於您在您的電腦上建立自訂解析度而導致的任何問題，我們概不負責。
 \n
-\n最後，您的裝置或主機電腦可能不支援以本機解析度串流。如果此模式在您的裝置上無法正常執行，只能說您運氣欠佳了。</string>
-    <string name="title_native_res_dialog">本機解析度警告</string>
+\n您的顯示器可能不支援必要的顯示組態。如果是這樣，您可以嘗試設定虛擬監視器。最后，如果您的裝置或主機不支援以特定解析度或重新整理速率串流，只能說您運氣欠佳了。</string>
+    <string name="title_native_res_dialog">原生解析度警告</string>
     <string name="applist_menu_hide_app">隱藏遊戲</string>
     <string name="check_ports_msg">檢查您的防火牆和通訊埠轉送規則中的通訊埠：</string>
     <string name="early_termination_error">您的主機電腦在開始串流時出了點問題。
@@ -216,7 +216,7 @@
     <string name="pcview_menu_header_online">線上</string>
     <string name="perf_overlay_netlatency">平均網路延時：%1$d ms (抖動：%2$d ms)</string>
     <string name="perf_overlay_streamdetails">視訊串流：%1$s %2$.2f FPS</string>
-    <string name="resolution_prefix_native_fullscreen">本機全螢幕</string>
+    <string name="resolution_prefix_native_fullscreen">原生全螢幕</string>
     <!-- Array strings -->
     <string name="audioconf_stereo">立體聲</string>
     <string name="audioconf_51surround">5.1 環場音效</string>
@@ -262,4 +262,18 @@
     <string name="summary_full_range">若您的裝置無法正確地顯示全範圍視訊內容，將會導致淺色區域和深色區域的細節遺失。</string>
     <string name="pair_pairing_help">若您的主機電腦正在執行 Sunshine，請導覽至 Sunshine 網頁 UI 並輸入 PIN 碼。</string>
     <string name="pcview_menu_eol">NVIDIA GameStream 終止服務</string>
+    <string name="fps_suffix_fps">FPS</string>
+    <string name="title_native_fps_dialog">原生 FPS 警告</string>
+    <string name="category_gamepad_settings">手把設定</string>
+    <string name="title_checkbox_gamepad_touchpad_as_mouse">一律使用觸摸板控制滑鼠</string>
+    <string name="summary_checkbox_gamepad_motion_sensors">在使用動態感測器模擬手把時啟用支援的主機以要求動態感測器資料，若動態感測器未在遊戲中使用，停用後可能會輕微降低電力和網路使用量。</string>
+    <string name="videoformat_h264always">偏好 H.264</string>
+    <string name="perf_overlay_hostprocessinglatency">主機處理延遲最小值/最大值/平均值：%1$.1f/%2$.1f/%3$.1f ms</string>
+    <string name="summary_checkbox_gamepad_touchpad_as_mouse">強制手把觸摸板輸入以控制主機滑鼠，即使在使用觸摸板模擬手把時。</string>
+    <string name="title_checkbox_gamepad_motion_sensors">一律使用手把動態感測器</string>
+    <string name="videoformat_av1always">偏好 AV1 (實驗性)</string>
+    <string name="toast_controller_type_changed">手把類型可能會因動態感測器模擬而變更</string>
+    <string name="summary_checkbox_gamepad_motion_fallback">如果您連線的手把或 Android 版本不支援手把感測器，請使用裝置內建的動態感測器。
+\n注意：啟用此選項可能會導致您的手把在主機被辨識為 PlayStation 控制器。</string>
+    <string name="title_checkbox_gamepad_motion_fallback">模擬手把動態感測器支援</string>
 </resources>

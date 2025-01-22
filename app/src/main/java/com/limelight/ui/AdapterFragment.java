@@ -30,6 +30,6 @@ public class AdapterFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        callbacks.receiveAbsListView((AbsListView) getView().findViewById(R.id.fragmentView));
+        callbacks.receiveAbsListView(getView().findViewById(R.id.fragmentView));
     }
 }

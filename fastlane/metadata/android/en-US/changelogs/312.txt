@@ -1,0 +1,5 @@
+- Added Select+L1 gamepad button combo to act as the touchpad button when emulating a PS4 controller using built-in device motion sensors
+- Disabled gamepad motion sensors by default on Android 12 as a workaround for an Android 12 bug that randomly crashes Moonlight
+- Fixed analog sticks not centering properly in rare cases
+- Adjusted bitrate handling of AV1 to be consistent with HEVC
+- Fixed handling of some unusual H.264 and HEVC streams

@@ -23,7 +23,7 @@
     <string name="pair_already_in_progress">Accoppiamento già in corso</string>
     <!-- WOL messages -->
     <string name="wol_pc_online">PC già avviato</string>
-    <string name="wol_no_mac">Impossibile risvegliare il PC perché GFE non ha inviato nessun indirizzo MAC</string>
+    <string name="wol_no_mac">Impossibile risvegliare il PC perché non è stato salvato nessun indirizzo MAC</string>
     <string name="wol_waking_pc">Risveglio PC…</string>
     <string name="wol_waking_msg">Il PC potrebbe impiegare qualche secondo per risvegliarsi.
         Se non succede niente, assicurati che l\'opzione Wake-On-LAN sia configurata correttamente.
@@ -33,7 +33,7 @@
     <string name="unpairing">Disaccoppiamento…</string>
     <string name="unpair_success">Disaccoppiato con successo</string>
     <string name="unpair_fail">Disaccoppiamento fallito</string>
-    <string name="unpair_error">PC non accoppiato</string>
+    <string name="unpair_error">Il dispositivo non è stato accoppiato</string>
     <!-- Errors -->
     <string name="error_pc_offline">PC offline</string>
     <string name="error_manager_not_running">Il servizio ComputerManager non è avviato. Attendi qualche secondo o riavvia l\'applicazione.</string>
@@ -60,8 +60,9 @@
     <string name="conn_terminated_msg">La connessione è stata interrotta</string>
     <!-- General strings -->
     <string name="ip_hint">Indirizzo IP del PC</string>
-    <string name="searching_pc">Ricerca di PC con GameStream avviato…\n\n
-        Assicurati che GameStream sia abilitato nelle impostazioni SHIELD di GeForce Experience.</string>
+    <string name="searching_pc">Ricerca di PC nella rete locale…
+\n
+\n Assicurati che Sunshine sia avviato o che GameStream sia abilitato nelle impostazioni SHIELD di GeForce Experience.</string>
     <string name="yes">Sì</string>
     <string name="no">No</string>
     <string name="lost_connection">Connessione con il PC persa</string>
@@ -90,7 +91,7 @@
     <string name="addpc_wrong_sitelocal">Quell\'indirizzo non sembra corretto. È necessario utilizzare l\'indirizzo IP pubblico del router per lo streaming su Internet.</string>
     <!-- Preferences -->
     <string name="category_basic_settings">Impostazioni generali</string>
-    <string name="title_resolution_list">Risoluzione e FPS</string>
+    <string name="title_resolution_list">Risoluzione video</string>
     <string name="summary_resolution_list">Aumentare per migliorare la nitidezza dell\'immagine. Diminuire per aumentare le prestazioni su dispositivi di fascia più bassa e reti più lente.</string>
     <string name="title_seekbar_bitrate">Velocità di trasmissione video</string>
     <string name="summary_seekbar_bitrate">Aumentare per migliorare la qualità dell\'immagine. Diminuire per aumentare le prestazioni su reti più lente.</string>
@@ -133,10 +134,10 @@
     <string name="category_advanced_settings">Impostazioni avanzate</string>
     <string name="title_disable_frame_drop">Non saltare i fotogrammi</string>
     <string name="summary_disable_frame_drop">Potrebbe ridurre il micro-stuttering su alcuni dispositivi, ma può aumentare la latenza</string>
-    <string name="title_video_format">Modifica impostazioni HEVC</string>
-    <string name="summary_video_format">HEVC riduce i requisiti di larghezza di banda video ma richiede un dispositivo molto recente</string>
+    <string name="title_video_format">Modifica impostazioni del codec</string>
+    <string name="summary_video_format">I nuovi codec possono ridurre i requisiti di larghezza di banda video se il tuo dispositivo li supporta. La scelta del codec può essere ignorata se non è supportato dal software dell\'host o dalla GPU.</string>
     <string name="title_enable_hdr">Abilita HDR (sperimentale)</string>
-    <string name="summary_enable_hdr">Utilizza l\'HDR quando il gioco e la scheda video del PC lo supportano. L\'HDR richiede una scheda video serie GTX 1000 o sucessive.</string>
+    <string name="summary_enable_hdr">Utilizza l\'HDR quando il gioco e la scheda video del PC lo supportano. L\'HDR richiede una scheda video col supporto dell\'encoding HEVC Main 10.</string>
     <string name="suffix_osc_opacity">%</string>
     <string name="pcview_menu_header_online">Online</string>
     <string name="scut_pc_not_found">PC non trovato</string>
@@ -161,7 +162,7 @@
     <string name="perf_overlay_dectime">Tempo medio di decodifica: %1$.2f ms</string>
     <string name="perf_overlay_streamdetails">Flusso video: %1$s %2$.2f FPS</string>
     <string name="nettest_title_waiting">Prova della Connessione di Rete</string>
-    <string name="nettest_text_waiting">Moonlight sta testando la tua connessione di rete per controllare se NVIDIA GameStream sia bloccato.
+    <string name="nettest_text_waiting">Moonlight sta testando la tua connessione di rete per controllare se ogni porta richiesta sia bloccata.
 \n
 \nPotrebbero volerci alcuni secondi…</string>
     <string name="nettest_title_done">Test della Rete Completato</string>
@@ -226,18 +227,16 @@
     <string name="no_frame_received_error">La tua connessione di rete non sta funzionando bene. Riduci il bitrate video o prova ad usare una connessione più veloce.</string>
     <string name="early_termination_error">Qualcosa è andato storto sul PC sorgente mentre la trasmissione veniva avviata.
 \n
-\nAssicurati di non avere nessun contenuto protetto da DRM aperto sul PC sorgente. Puoi anche provare a spengere e riaccendere il PC sorgente.
-\n
-\nSe il problema persiste, prova a installare di nuovo i driver della scheda video e GeForce Experience.</string>
+\nAssicurati di non avere nessun contenuto protetto da DRM aperto sul PC sorgente. Puoi anche provare a spengere e riaccendere il PC sorgente.</string>
     <string name="summary_unlock_fps">Trasmettere a 90 o 120 FPS potrebbe ridurre il ritardo su dispositivi di fascia alta, ma può provocare ritardi i instabilità sui dispositivi che non lo supportano</string>
     <string name="summary_enable_post_stream_toast">Molstra un messaggio con informazioni sulla latenza dopo che la trasmissione è conclusa</string>
-    <string name="text_native_res_dialog">Le impostazioni di risoluzione nativa non sono ufficialmente supportate da GeForce Experience, quindi non cambierà automaticamente la risoluzione del monitor del computer sorgente. Dovrai cambiarla manualmente all\'interno del gioco.
+    <string name="text_native_res_dialog">Le impostazioni di risoluzione nativa e/o di FPS possono non essere supportate dal server per lo streaming. Dovrai aggiungerle manualmente all\'interno delle impostazioni del PC o del server.
 \n
-\nSe scegli di create una risoluzione personalizzata nel Pannello di Controllo NVIDIA per copiare la risoluzione del tuo dispositivo, assicurati di aver letto e capito il messaggio di attenzione di NVIDIA a proposito dei possibili danni al monitor, all\'instabilità del PC e altri potenziali problemi.
+\nSe scegli di create una risoluzione personalizzata nel Pannello di Controllo NVIDIA per copiare la risoluzione dello schermo, assicurati di aver letto e capito il messaggio di attenzione di NVIDIA a proposito dei possibili danni al monitor, all\'instabilità del PC e altri potenziali problemi.
 \n
 \nNon saremo responsabili per qualsiasi problema risultante dalla creazione di una risoluzione personalizzata sul tuo PC.
 \n
-\nInfine, il tuo dispositivo o PC sorgente potrebbero non supportare la trasmissione alla risoluzione nativa. Se ciò non funzionasse sul tuo dispositivo, sfortunatamente non ci sono altre soluzioni.</string>
+\nPuò capitare che il tuo monitor potrebbe non supportare una risoluzione dello schermo richiesta. In questo caso, prova a impostare un monitor virtuale. Infine, se il tuo dispositivo o PC sorgente non supportano la trasmissione ad una specifica risoluzione dello schermo o della frequenza di aggiornamento, sfortunatamente non ci sono altre soluzioni.</string>
     <string name="perf_overlay_incomingfps">Frame rate in ingresso dalla rete: %1$.2f FPS</string>
     <string name="perf_overlay_renderingfps">Frame rate renderizzato: %1$.2f FPS</string>
     <string name="perf_overlay_netdrops">Frame scartati dalla tua connessione di rete: %1$.2f%%</string>
@@ -264,4 +263,20 @@
     <string name="title_checkbox_reduce_refresh_rate">Consenti riduzione della frequenza di aggiornamento</string>
     <string name="summary_full_range">Ciò causerà la perdita di dettagli in aree chiare e scure se il dispositivo non visualizza correttamente i contenuti video a gamma completa.</string>
     <string name="title_full_range">Forza video full range (sperimentale)</string>
+    <string name="title_native_fps_dialog">Avviso FPS nativi</string>
+    <string name="videoformat_av1always">Preferisci AV1 (Sperimentale)</string>
+    <string name="pcview_menu_eol">Terminazione del servizio NVIDIA GameStream</string>
+    <string name="title_checkbox_gamepad_motion_sensors">Permetti l\'uso dei sensori giroscopici del gamepad</string>
+    <string name="summary_checkbox_gamepad_touchpad_as_mouse">Forza l\'input del touchpad del gamepad a controllare il mouse dell\'host, anche quando si sta emulando un gamepad col touchpad.</string>
+    <string name="toast_controller_type_changed">Il tipo di gamepad potrebbe cambiare se è attiva l\'emulazione dei sensori giroscopici</string>
+    <string name="summary_checkbox_gamepad_motion_sensors">Abilita per gli host supportati la trasmissione dei dati dai sensori giroscopici quando si simula un gamepad con sensori giroscopici. Disabilitandolo può ridurre il consumo di batteria e la rete richiesta per lo stream se i sensori giroscopici non vengono utilizzati nel gioco.</string>
+    <string name="summary_checkbox_gamepad_motion_fallback">Usa i sensori giroscopici integrati nel tuo dispositivo se il tuo gamepad non possiede i sensori giroscopici o non sono compatibili con la tua versione Android.
+\nNota: Abilitare questa opzione farà apparire il tuo gamepad come un controller Playstation all\'host.</string>
+    <string name="videoformat_h264always">Preferisci H.264</string>
+    <string name="fps_suffix_fps">FPS</string>
+    <string name="category_gamepad_settings">Impostazioni del gamepad</string>
+    <string name="title_checkbox_gamepad_motion_fallback">Emula il supporto dei sensori giroscopici del gamepad</string>
+    <string name="pair_pairing_help">Se il tuo PC host sta eseguendo Sunshine, vai nella pagina web locale di Sunshine ed inserisci il PIN.</string>
+    <string name="title_checkbox_gamepad_touchpad_as_mouse">Controlla sempre il mouse col touchpad</string>
+    <string name="perf_overlay_hostprocessinglatency">Latenza di codifica da parte dell\'host min/max/average: %1$.1f/%2$.1f/%3$.1f ms</string>
 </resources>

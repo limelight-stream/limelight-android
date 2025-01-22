@@ -3,6 +3,7 @@ package com.limelight.binding.video;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -48,11 +49,10 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
     private MediaCodecInfo hevcDecoder;
     private MediaCodecInfo av1Decoder;
 
-    private byte[] vpsBuffer;
-    private byte[] spsBuffer;
-    private byte[] ppsBuffer;
+    private final ArrayList<byte[]> vpsBuffers = new ArrayList<>();
+    private final ArrayList<byte[]> spsBuffers = new ArrayList<>();
+    private final ArrayList<byte[]> ppsBuffers = new ArrayList<>();
     private boolean submittedCsd;
-    private boolean submitCsdNextCall;
     private byte[] currentHdrMetadata;
 
     private int nextInputBufferIndex = -1;
@@ -471,9 +471,8 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
             videoFormat.setInteger(MediaFormat.KEY_FRAME_RATE, refreshRate);
         }
 
-        // Adaptive playback can also be enabled by the whitelist on pre-KitKat devices
-        // so we don't fill these pre-KitKat
-        if (adaptivePlayback && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        // Populate keys for adaptive playback
+        if (adaptivePlayback) {
             videoFormat.setInteger(MediaFormat.KEY_MAX_WIDTH, initialWidth);
             videoFormat.setInteger(MediaFormat.KEY_MAX_HEIGHT, initialHeight);
         }
@@ -486,7 +485,7 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
 
             // If the stream is HDR-capable, the decoder will detect transitions in color standards
             // rather than us hardcoding them into the MediaFormat.
-            if (getActiveVideoFormat() != MoonBridge.VIDEO_FORMAT_H265_MAIN10) {
+            if ((getActiveVideoFormat() & MoonBridge.VIDEO_FORMAT_MASK_10BIT) == 0) {
                 // Set color format keys when not in HDR mode, since we know they won't change
                 videoFormat.setInteger(MediaFormat.KEY_COLOR_TRANSFER, MediaFormat.COLOR_TRANSFER_SDR_VIDEO);
                 switch (getPreferredColorSpace()) {
@@ -544,10 +543,9 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
 
         // After reconfiguration, we must resubmit CSD buffers
         submittedCsd = false;
-        submitCsdNextCall = false;
-        vpsBuffer = null;
-        spsBuffer = null;
-        ppsBuffer = null;
+        vpsBuffers.clear();
+        spsBuffers.clear();
+        ppsBuffers.clear();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // This will contain the actual accepted input format attributes
@@ -1414,6 +1412,13 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
             activeWindowVideoStats.frameLossEvents++;
         }
 
+        // Reset CSD data for each IDR frame
+        if (lastFrameNumber != frameNumber && frameType == MoonBridge.FRAME_TYPE_IDR) {
+            vpsBuffers.clear();
+            spsBuffers.clear();
+            ppsBuffers.clear();
+        }
+
         lastFrameNumber = frameNumber;
 
         // Flip stats windows roughly every second
@@ -1462,249 +1467,269 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
             activeWindowVideoStats.measurementStartTimestamp = SystemClock.uptimeMillis();
         }
 
-        long timestampUs;
-        int codecFlags = 0;
+        boolean csdSubmittedForThisFrame = false;
 
-        // H264 SPS
-        if (decodeUnitType == MoonBridge.BUFFER_TYPE_SPS && (videoFormat & MoonBridge.VIDEO_FORMAT_MASK_H264) != 0) {
-            numSpsIn++;
+        // IDR frames require special handling for CSD buffer submission
+        if (frameType == MoonBridge.FRAME_TYPE_IDR) {
+            // H264 SPS
+            if (decodeUnitType == MoonBridge.BUFFER_TYPE_SPS && (videoFormat & MoonBridge.VIDEO_FORMAT_MASK_H264) != 0) {
+                numSpsIn++;
 
-            ByteBuffer spsBuf = ByteBuffer.wrap(decodeUnitData);
-            int startSeqLen = decodeUnitData[2] == 0x01 ? 3 : 4;
+                ByteBuffer spsBuf = ByteBuffer.wrap(decodeUnitData);
+                int startSeqLen = decodeUnitData[2] == 0x01 ? 3 : 4;
 
-            // Skip to the start of the NALU data
-            spsBuf.position(startSeqLen + 1);
+                // Skip to the start of the NALU data
+                spsBuf.position(startSeqLen + 1);
 
-            // The H264Utils.readSPS function safely handles
-            // Annex B NALUs (including NALUs with escape sequences)
-            SeqParameterSet sps = H264Utils.readSPS(spsBuf);
+                // The H264Utils.readSPS function safely handles
+                // Annex B NALUs (including NALUs with escape sequences)
+                SeqParameterSet sps = H264Utils.readSPS(spsBuf);
 
-            // Some decoders rely on H264 level to decide how many buffers are needed
-            // Since we only need one frame buffered, we'll set the level as low as we can
-            // for known resolution combinations. Reference frame invalidation may need
-            // these, so leave them be for those decoders.
-            if (!refFrameInvalidationActive) {
-                if (initialWidth <= 720 && initialHeight <= 480 && refreshRate <= 60) {
-                    // Max 5 buffered frames at 720x480x60
-                    LimeLog.info("Patching level_idc to 31");
-                    sps.levelIdc = 31;
-                }
-                else if (initialWidth <= 1280 && initialHeight <= 720 && refreshRate <= 60) {
-                    // Max 5 buffered frames at 1280x720x60
-                    LimeLog.info("Patching level_idc to 32");
-                    sps.levelIdc = 32;
-                }
-                else if (initialWidth <= 1920 && initialHeight <= 1080 && refreshRate <= 60) {
-                    // Max 4 buffered frames at 1920x1080x64
-                    LimeLog.info("Patching level_idc to 42");
-                    sps.levelIdc = 42;
-                }
-                else {
-                    // Leave the profile alone (currently 5.0)
-                }
-            }
-
-            // TI OMAP4 requires a reference frame count of 1 to decode successfully. Exynos 4
-            // also requires this fixup.
-            //
-            // I'm doing this fixup for all devices because I haven't seen any devices that
-            // this causes issues for. At worst, it seems to do nothing and at best it fixes
-            // issues with video lag, hangs, and crashes.
-            //
-            // It does break reference frame invalidation, so we will not do that for decoders
-            // where we've enabled reference frame invalidation.
-            if (!refFrameInvalidationActive) {
-                LimeLog.info("Patching num_ref_frames in SPS");
-                sps.numRefFrames = 1;
-            }
-
-            // GFE 2.5.11 changed the SPS to add additional extensions. Some devices don't like these
-            // so we remove them here on old devices unless these devices also support HEVC.
-            // See getPreferredColorSpace() for further information.
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O &&
-                    sps.vuiParams != null &&
-                    hevcDecoder == null &&
-                    av1Decoder == null) {
-                sps.vuiParams.videoSignalTypePresentFlag = false;
-                sps.vuiParams.colourDescriptionPresentFlag = false;
-                sps.vuiParams.chromaLocInfoPresentFlag = false;
-            }
-
-            // Some older devices used to choke on a bitstream restrictions, so we won't provide them
-            // unless explicitly whitelisted. For newer devices, leave the bitstream restrictions present.
-            if (needsSpsBitstreamFixup || isExynos4 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // The SPS that comes in the current H264 bytestream doesn't set bitstream_restriction_flag
-                // or max_dec_frame_buffering which increases decoding latency on Tegra.
-
-                // If the encoder didn't include VUI parameters in the SPS, add them now
-                if (sps.vuiParams == null) {
-                    LimeLog.info("Adding VUI parameters");
-                    sps.vuiParams = new VUIParameters();
+                // Some decoders rely on H264 level to decide how many buffers are needed
+                // Since we only need one frame buffered, we'll set the level as low as we can
+                // for known resolution combinations. Reference frame invalidation may need
+                // these, so leave them be for those decoders.
+                if (!refFrameInvalidationActive) {
+                    if (initialWidth <= 720 && initialHeight <= 480 && refreshRate <= 60) {
+                        // Max 5 buffered frames at 720x480x60
+                        LimeLog.info("Patching level_idc to 31");
+                        sps.levelIdc = 31;
+                    }
+                    else if (initialWidth <= 1280 && initialHeight <= 720 && refreshRate <= 60) {
+                        // Max 5 buffered frames at 1280x720x60
+                        LimeLog.info("Patching level_idc to 32");
+                        sps.levelIdc = 32;
+                    }
+                    else if (initialWidth <= 1920 && initialHeight <= 1080 && refreshRate <= 60) {
+                        // Max 4 buffered frames at 1920x1080x64
+                        LimeLog.info("Patching level_idc to 42");
+                        sps.levelIdc = 42;
+                    }
+                    else {
+                        // Leave the profile alone (currently 5.0)
+                    }
                 }
 
-                // GFE 2.5.11 started sending bitstream restrictions
-                if (sps.vuiParams.bitstreamRestriction == null) {
-                    LimeLog.info("Adding bitstream restrictions");
-                    sps.vuiParams.bitstreamRestriction = new VUIParameters.BitstreamRestriction();
-                    sps.vuiParams.bitstreamRestriction.motionVectorsOverPicBoundariesFlag = true;
-                    sps.vuiParams.bitstreamRestriction.maxBytesPerPicDenom = 2;
-                    sps.vuiParams.bitstreamRestriction.maxBitsPerMbDenom = 1;
-                    sps.vuiParams.bitstreamRestriction.log2MaxMvLengthHorizontal = 16;
-                    sps.vuiParams.bitstreamRestriction.log2MaxMvLengthVertical = 16;
-                    sps.vuiParams.bitstreamRestriction.numReorderFrames = 0;
-                }
-                else {
-                    LimeLog.info("Patching bitstream restrictions");
-                }
-
-                // Some devices throw errors if maxDecFrameBuffering < numRefFrames
-                sps.vuiParams.bitstreamRestriction.maxDecFrameBuffering = sps.numRefFrames;
-
-                // These values are the defaults for the fields, but they are more aggressive
-                // than what GFE sends in 2.5.11, but it doesn't seem to cause picture problems.
-                // We'll leave these alone for "modern" devices just in case they care.
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                    sps.vuiParams.bitstreamRestriction.maxBytesPerPicDenom = 2;
-                    sps.vuiParams.bitstreamRestriction.maxBitsPerMbDenom = 1;
+                // TI OMAP4 requires a reference frame count of 1 to decode successfully. Exynos 4
+                // also requires this fixup.
+                //
+                // I'm doing this fixup for all devices because I haven't seen any devices that
+                // this causes issues for. At worst, it seems to do nothing and at best it fixes
+                // issues with video lag, hangs, and crashes.
+                //
+                // It does break reference frame invalidation, so we will not do that for decoders
+                // where we've enabled reference frame invalidation.
+                if (!refFrameInvalidationActive) {
+                    LimeLog.info("Patching num_ref_frames in SPS");
+                    sps.numRefFrames = 1;
                 }
 
-                // log2_max_mv_length_horizontal and log2_max_mv_length_vertical are set to more
-                // conservative values by GFE 2.5.11. We'll let those values stand.
-            }
-            else if (sps.vuiParams != null) {
-                // Devices that didn't/couldn't get bitstream restrictions before GFE 2.5.11
-                // will continue to not receive them now
-                sps.vuiParams.bitstreamRestriction = null;
-            }
-
-            // If we need to hack this SPS to say we're baseline, do so now
-            if (needsBaselineSpsHack) {
-                LimeLog.info("Hacking SPS to baseline");
-                sps.profileIdc = 66;
-                savedSps = sps;
-            }
-
-            // Patch the SPS constraint flags
-            doProfileSpecificSpsPatching(sps);
-
-            // The H264Utils.writeSPS function safely handles
-            // Annex B NALUs (including NALUs with escape sequences)
-            ByteBuffer escapedNalu = H264Utils.writeSPS(sps, decodeUnitLength);
-
-            // Batch this to submit together with PPS
-            spsBuffer = new byte[startSeqLen + 1 + escapedNalu.limit()];
-            System.arraycopy(decodeUnitData, 0, spsBuffer, 0, startSeqLen + 1);
-            escapedNalu.get(spsBuffer, startSeqLen + 1, escapedNalu.limit());
-            return MoonBridge.DR_OK;
-        }
-        else if (decodeUnitType == MoonBridge.BUFFER_TYPE_VPS) {
-            numVpsIn++;
-
-            // Batch this to submit together with SPS and PPS per AOSP docs
-            vpsBuffer = new byte[decodeUnitLength];
-            System.arraycopy(decodeUnitData, 0, vpsBuffer, 0, decodeUnitLength);
-            return MoonBridge.DR_OK;
-        }
-        // Only the HEVC SPS hits this path (H.264 is handled above)
-        else if (decodeUnitType == MoonBridge.BUFFER_TYPE_SPS) {
-            numSpsIn++;
-
-            // Batch this to submit together with VPS and PPS per AOSP docs
-            spsBuffer = new byte[decodeUnitLength];
-            System.arraycopy(decodeUnitData, 0, spsBuffer, 0, decodeUnitLength);
-            return MoonBridge.DR_OK;
-        }
-        else if (decodeUnitType == MoonBridge.BUFFER_TYPE_PPS) {
-            numPpsIn++;
-
-            // If this is the first CSD blob or we aren't supporting
-            // fused IDR frames, we will submit the CSD blob in a
-            // separate input buffer.
-            if (!submittedCsd || !fusedIdrFrame) {
-                if (!fetchNextInputBuffer()) {
-                    return MoonBridge.DR_NEED_IDR;
+                // GFE 2.5.11 changed the SPS to add additional extensions. Some devices don't like these
+                // so we remove them here on old devices unless these devices also support HEVC.
+                // See getPreferredColorSpace() for further information.
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O &&
+                        sps.vuiParams != null &&
+                        hevcDecoder == null &&
+                        av1Decoder == null) {
+                    sps.vuiParams.videoSignalTypePresentFlag = false;
+                    sps.vuiParams.colourDescriptionPresentFlag = false;
+                    sps.vuiParams.chromaLocInfoPresentFlag = false;
                 }
 
-                // When we get the PPS, submit the VPS and SPS together with
-                // the PPS, as required by AOSP docs on use of MediaCodec.
-                if (vpsBuffer != null) {
-                    nextInputBuffer.put(vpsBuffer);
+                // Some older devices used to choke on a bitstream restrictions, so we won't provide them
+                // unless explicitly whitelisted. For newer devices, leave the bitstream restrictions present.
+                if (needsSpsBitstreamFixup || isExynos4 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    // The SPS that comes in the current H264 bytestream doesn't set bitstream_restriction_flag
+                    // or max_dec_frame_buffering which increases decoding latency on Tegra.
+
+                    // If the encoder didn't include VUI parameters in the SPS, add them now
+                    if (sps.vuiParams == null) {
+                        LimeLog.info("Adding VUI parameters");
+                        sps.vuiParams = new VUIParameters();
+                    }
+
+                    // GFE 2.5.11 started sending bitstream restrictions
+                    if (sps.vuiParams.bitstreamRestriction == null) {
+                        LimeLog.info("Adding bitstream restrictions");
+                        sps.vuiParams.bitstreamRestriction = new VUIParameters.BitstreamRestriction();
+                        sps.vuiParams.bitstreamRestriction.motionVectorsOverPicBoundariesFlag = true;
+                        sps.vuiParams.bitstreamRestriction.maxBytesPerPicDenom = 2;
+                        sps.vuiParams.bitstreamRestriction.maxBitsPerMbDenom = 1;
+                        sps.vuiParams.bitstreamRestriction.log2MaxMvLengthHorizontal = 16;
+                        sps.vuiParams.bitstreamRestriction.log2MaxMvLengthVertical = 16;
+                        sps.vuiParams.bitstreamRestriction.numReorderFrames = 0;
+                    }
+                    else {
+                        LimeLog.info("Patching bitstream restrictions");
+                    }
+
+                    // Some devices throw errors if maxDecFrameBuffering < numRefFrames
+                    sps.vuiParams.bitstreamRestriction.maxDecFrameBuffering = sps.numRefFrames;
+
+                    // These values are the defaults for the fields, but they are more aggressive
+                    // than what GFE sends in 2.5.11, but it doesn't seem to cause picture problems.
+                    // We'll leave these alone for "modern" devices just in case they care.
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                        sps.vuiParams.bitstreamRestriction.maxBytesPerPicDenom = 2;
+                        sps.vuiParams.bitstreamRestriction.maxBitsPerMbDenom = 1;
+                    }
+
+                    // log2_max_mv_length_horizontal and log2_max_mv_length_vertical are set to more
+                    // conservative values by GFE 2.5.11. We'll let those values stand.
                 }
-                if (spsBuffer != null) {
-                    nextInputBuffer.put(spsBuffer);
+                else if (sps.vuiParams != null) {
+                    // Devices that didn't/couldn't get bitstream restrictions before GFE 2.5.11
+                    // will continue to not receive them now
+                    sps.vuiParams.bitstreamRestriction = null;
                 }
 
-                // This is the CSD blob
-                codecFlags |= MediaCodec.BUFFER_FLAG_CODEC_CONFIG;
-                timestampUs = 0;
-            }
-            else {
-                // Batch this to submit together with the next I-frame
-                ppsBuffer = new byte[decodeUnitLength];
-                System.arraycopy(decodeUnitData, 0, ppsBuffer, 0, decodeUnitLength);
+                // If we need to hack this SPS to say we're baseline, do so now
+                if (needsBaselineSpsHack) {
+                    LimeLog.info("Hacking SPS to baseline");
+                    sps.profileIdc = 66;
+                    savedSps = sps;
+                }
 
-                // Next call will be I-frame data
-                submitCsdNextCall = true;
+                // Patch the SPS constraint flags
+                doProfileSpecificSpsPatching(sps);
 
+                // The H264Utils.writeSPS function safely handles
+                // Annex B NALUs (including NALUs with escape sequences)
+                ByteBuffer escapedNalu = H264Utils.writeSPS(sps, decodeUnitLength);
+
+                // Construct the patched SPS
+                byte[] naluBuffer = new byte[startSeqLen + 1 + escapedNalu.limit()];
+                System.arraycopy(decodeUnitData, 0, naluBuffer, 0, startSeqLen + 1);
+                escapedNalu.get(naluBuffer, startSeqLen + 1, escapedNalu.limit());
+
+                // Batch this to submit together with other CSD per AOSP docs
+                spsBuffers.add(naluBuffer);
                 return MoonBridge.DR_OK;
             }
-        }
-        else {
-            if (frameHostProcessingLatency != 0) {
-                if (activeWindowVideoStats.minHostProcessingLatency != 0) {
-                    activeWindowVideoStats.minHostProcessingLatency = (char) Math.min(activeWindowVideoStats.minHostProcessingLatency, frameHostProcessingLatency);
-                } else {
-                    activeWindowVideoStats.minHostProcessingLatency = frameHostProcessingLatency;
+            else if (decodeUnitType == MoonBridge.BUFFER_TYPE_VPS) {
+                numVpsIn++;
+
+                // Batch this to submit together with other CSD per AOSP docs
+                byte[] naluBuffer = new byte[decodeUnitLength];
+                System.arraycopy(decodeUnitData, 0, naluBuffer, 0, decodeUnitLength);
+                vpsBuffers.add(naluBuffer);
+                return MoonBridge.DR_OK;
+            }
+            // Only the HEVC SPS hits this path (H.264 is handled above)
+            else if (decodeUnitType == MoonBridge.BUFFER_TYPE_SPS) {
+                numSpsIn++;
+
+                // Batch this to submit together with other CSD per AOSP docs
+                byte[] naluBuffer = new byte[decodeUnitLength];
+                System.arraycopy(decodeUnitData, 0, naluBuffer, 0, decodeUnitLength);
+                spsBuffers.add(naluBuffer);
+                return MoonBridge.DR_OK;
+            }
+            else if (decodeUnitType == MoonBridge.BUFFER_TYPE_PPS) {
+                numPpsIn++;
+
+                // Batch this to submit together with other CSD per AOSP docs
+                byte[] naluBuffer = new byte[decodeUnitLength];
+                System.arraycopy(decodeUnitData, 0, naluBuffer, 0, decodeUnitLength);
+                ppsBuffers.add(naluBuffer);
+                return MoonBridge.DR_OK;
+            }
+            else if ((videoFormat & (MoonBridge.VIDEO_FORMAT_MASK_H264 | MoonBridge.VIDEO_FORMAT_MASK_H265)) != 0) {
+                // If this is the first CSD blob or we aren't supporting fused IDR frames, we will
+                // submit the CSD blob in a separate input buffer for each IDR frame.
+                if (!submittedCsd || !fusedIdrFrame) {
+                    if (!fetchNextInputBuffer()) {
+                        return MoonBridge.DR_NEED_IDR;
+                    }
+
+                    // Submit all CSD when we receive the first non-CSD blob in an IDR frame
+                    for (byte[] vpsBuffer : vpsBuffers) {
+                        nextInputBuffer.put(vpsBuffer);
+                    }
+                    for (byte[] spsBuffer : spsBuffers) {
+                        nextInputBuffer.put(spsBuffer);
+                    }
+                    for (byte[] ppsBuffer : ppsBuffers) {
+                        nextInputBuffer.put(ppsBuffer);
+                    }
+
+                    if (!queueNextInputBuffer(0, MediaCodec.BUFFER_FLAG_CODEC_CONFIG)) {
+                        return MoonBridge.DR_NEED_IDR;
+                    }
+
+                    // Remember that we already submitted CSD for this frame, so we don't do it
+                    // again in the fused IDR case below.
+                    csdSubmittedForThisFrame = true;
+
+                    // Remember that we submitted CSD globally for this MediaCodec instance
+                    submittedCsd = true;
+
+                    if (needsBaselineSpsHack) {
+                        needsBaselineSpsHack = false;
+
+                        if (!replaySps()) {
+                            return MoonBridge.DR_NEED_IDR;
+                        }
+
+                        LimeLog.info("SPS replay complete");
+                    }
                 }
-                activeWindowVideoStats.framesWithHostProcessingLatency += 1;
             }
-            activeWindowVideoStats.maxHostProcessingLatency = (char) Math.max(activeWindowVideoStats.maxHostProcessingLatency, frameHostProcessingLatency);
-            activeWindowVideoStats.totalHostProcessingLatency += frameHostProcessingLatency;
+        }
 
-            activeWindowVideoStats.totalFramesReceived++;
-            activeWindowVideoStats.totalFrames++;
-
-            if (!FRAME_RENDER_TIME_ONLY) {
-                // Count time from first packet received to enqueue time as receive time
-                // We will count DU queue time as part of decoding, because it is directly
-                // caused by a slow decoder.
-                activeWindowVideoStats.totalTimeMs += enqueueTimeMs - receiveTimeMs;
+        if (frameHostProcessingLatency != 0) {
+            if (activeWindowVideoStats.minHostProcessingLatency != 0) {
+                activeWindowVideoStats.minHostProcessingLatency = (char) Math.min(activeWindowVideoStats.minHostProcessingLatency, frameHostProcessingLatency);
+            } else {
+                activeWindowVideoStats.minHostProcessingLatency = frameHostProcessingLatency;
             }
+            activeWindowVideoStats.framesWithHostProcessingLatency += 1;
+        }
+        activeWindowVideoStats.maxHostProcessingLatency = (char) Math.max(activeWindowVideoStats.maxHostProcessingLatency, frameHostProcessingLatency);
+        activeWindowVideoStats.totalHostProcessingLatency += frameHostProcessingLatency;
 
-            if (!fetchNextInputBuffer()) {
-                return MoonBridge.DR_NEED_IDR;
-            }
+        activeWindowVideoStats.totalFramesReceived++;
+        activeWindowVideoStats.totalFrames++;
 
-            if (submitCsdNextCall) {
-                if (vpsBuffer != null) {
+        if (!FRAME_RENDER_TIME_ONLY) {
+            // Count time from first packet received to enqueue time as receive time
+            // We will count DU queue time as part of decoding, because it is directly
+            // caused by a slow decoder.
+            activeWindowVideoStats.totalTimeMs += enqueueTimeMs - receiveTimeMs;
+        }
+
+        if (!fetchNextInputBuffer()) {
+            return MoonBridge.DR_NEED_IDR;
+        }
+
+        int codecFlags = 0;
+
+        if (frameType == MoonBridge.FRAME_TYPE_IDR) {
+            codecFlags |= MediaCodec.BUFFER_FLAG_SYNC_FRAME;
+
+            // If we are using fused IDR frames, submit the CSD with each IDR frame
+            if (fusedIdrFrame && !csdSubmittedForThisFrame) {
+                for (byte[] vpsBuffer : vpsBuffers) {
                     nextInputBuffer.put(vpsBuffer);
                 }
-                if (spsBuffer != null) {
+                for (byte[] spsBuffer : spsBuffers) {
                     nextInputBuffer.put(spsBuffer);
                 }
-                if (ppsBuffer != null) {
+                for (byte[] ppsBuffer : ppsBuffers) {
                     nextInputBuffer.put(ppsBuffer);
                 }
-
-                submitCsdNextCall = false;
             }
-
-            if (frameType == MoonBridge.FRAME_TYPE_IDR) {
-                codecFlags |= MediaCodec.BUFFER_FLAG_SYNC_FRAME;
-            }
-
-            timestampUs = enqueueTimeMs * 1000;
-
-            if (timestampUs <= lastTimestampUs) {
-                // We can't submit multiple buffers with the same timestamp
-                // so bump it up by one before queuing
-                timestampUs = lastTimestampUs + 1;
-            }
-
-            lastTimestampUs = timestampUs;
-
-            numFramesIn++;
         }
+
+        long timestampUs = enqueueTimeMs * 1000;
+        if (timestampUs <= lastTimestampUs) {
+            // We can't submit multiple buffers with the same timestamp
+            // so bump it up by one before queuing
+            timestampUs = lastTimestampUs + 1;
+        }
+        lastTimestampUs = timestampUs;
+
+        numFramesIn++;
 
         if (decodeUnitLength > nextInputBuffer.limit() - nextInputBuffer.position()) {
             IllegalArgumentException exception = new IllegalArgumentException(
@@ -1721,20 +1746,6 @@ public class MediaCodecDecoderRenderer extends VideoDecoderRenderer implements C
 
         if (!queueNextInputBuffer(timestampUs, codecFlags)) {
             return MoonBridge.DR_NEED_IDR;
-        }
-
-        if ((codecFlags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
-            submittedCsd = true;
-
-            if (needsBaselineSpsHack) {
-                needsBaselineSpsHack = false;
-
-                if (!replaySps()) {
-                    return MoonBridge.DR_NEED_IDR;
-                }
-
-                LimeLog.info("SPS replay complete");
-            }
         }
 
         return MoonBridge.DR_OK;

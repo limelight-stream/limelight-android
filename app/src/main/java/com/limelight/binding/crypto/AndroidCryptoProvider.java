@@ -12,12 +12,12 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Calendar;
@@ -48,7 +48,7 @@ public class AndroidCryptoProvider implements LimelightCryptoProvider {
     private final File keyFile;
 
     private X509Certificate cert;
-    private RSAPrivateKey key;
+    private PrivateKey key;
     private byte[] pemCertBytes;
 
     private static final Object globalCryptoLock = new Object();
@@ -94,7 +94,7 @@ public class AndroidCryptoProvider implements LimelightCryptoProvider {
             cert = (X509Certificate) certFactory.generateCertificate(new ByteArrayInputStream(certBytes));
             pemCertBytes = certBytes;
             KeyFactory keyFactory = KeyFactory.getInstance("RSA", bcProvider);
-            key = (RSAPrivateKey) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
+            key = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
         } catch (CertificateException e) {
             // May happen if the cert is corrupt
             LimeLog.warning("Corrupted certificate");
@@ -144,7 +144,7 @@ public class AndroidCryptoProvider implements LimelightCryptoProvider {
         try {
             ContentSigner sigGen = new JcaContentSignerBuilder("SHA256withRSA").setProvider(bcProvider).build(keyPair.getPrivate());
             cert = new JcaX509CertificateConverter().setProvider(bcProvider).getCertificate(certBuilder.build(sigGen));
-            key = (RSAPrivateKey) keyPair.getPrivate();
+            key = keyPair.getPrivate();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -215,7 +215,7 @@ public class AndroidCryptoProvider implements LimelightCryptoProvider {
         }
     }
 
-    public RSAPrivateKey getClientPrivateKey() {
+    public PrivateKey getClientPrivateKey() {
         // Use a lock here to ensure only one guy will be generating or loading
         // the certificate and key at a time
         synchronized (globalCryptoLock) {

@@ -1,0 +1,9 @@
+- Adjusted bitrate calculation logic to provide consistency across codecs, HDR settings, and local/remote streaming
+- Added support for full end-to-end stream encryption with Sunshine*
+- Fixed immediate connection termination error when streaming over some Internet connections*
+- Added option to adjust emulated rumble intensity
+- Added option to scroll in controller mouse emulation mode
+- Improved connection reliability during temporary network interruptions
+- Fixed pass-through of special Sunshine key combos to the host
+
+* Requires upcoming Sunshine v0.22.0 release or the latest Sunshine nightly build

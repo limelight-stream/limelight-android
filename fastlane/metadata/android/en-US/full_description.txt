@@ -7,11 +7,12 @@ Streaming performance may vary based on your client device and network setup. HD
 * Streams games purchased from any store
 * Works on your home network or over the Internet/LTE
 * Up to 4K 120 FPS HDR streaming with 7.1 surround sound
+* H.264, HEVC, and AV1 codec support (AV1 requires Sunshine and a supported host GPU)
 * Keyboard and mouse support (best with Android 8.0 or later)
 * Stylus/S-Pen support
 * Supports PS3/4/5, Xbox 360/One/Series, and Android gamepads
-* Force feedback support
-* Local co-op with up to 4 connected controllers
+* Local co-op with up to 16 connected controllers (max of 4 controllers with GFE)
+* Force feedback and gamepad motion sensor support
 * Mouse control via gamepad by long-pressing Start
 
 '''Quick Setup Host Instructions for GeForce Experience (NVIDIA-only)'''

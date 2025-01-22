@@ -1,0 +1,16 @@
+- Added option to stream at device native FPS
+- Added native PS4/PS5 controller support with motion events, LED, battery, and touchpad**
+- Added support for using device gyros to emulate gamepad motion sensors*
+- Added support for automatic controller type detection*
+- Added native stylus input passthrough*
+- Added experimental AV1 support*
+- Added host process latency to performance stats*
+- Increased gamepad limit to 16*
+- Added Ctrl+Alt+Shift+C key combo to toggle local mouse cursor
+- Added Ctrl+Alt+Shift+Q key combo to quit via keyboard
+- Fixed rumble support for devices with internal controllers (such as the Logitech G Cloud)
+- Fixed CVE-2023-42799, CVE-2023-42800, and CVE-2023-42801
+- Android 14 and ChromeOS support improvements
+
+Items marked with * require Sunshine nightly builds (or v0.21, when released)
+Items marked with ** also require Android 12 or later and a recent Linux kernel for support.

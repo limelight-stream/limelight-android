@@ -6,11 +6,9 @@
     <string name="scut_pc_not_found">PC negăsit</string>
     <string name="scut_invalid_uuid">PC-ul este invalid</string>
     <string name="scut_invalid_app_id">Aplicația este invalidă</string>
-
     <!-- Help strings -->
     <string name="help_loading_title">Ajutor</string>
     <string name="help_loading_msg">Se încarcă pagina de ajutor…</string>
-
     <!-- PC view menu entries -->
     <string name="pcview_menu_app_list">Vezi lista de jocuri</string>
     <string name="pcview_menu_pair_pc">Împerechează PC-ul</string>
@@ -18,7 +16,6 @@
     <string name="pcview_menu_send_wol">Trimite o cerere Wake-On-LAN</string>
     <string name="pcview_menu_delete_pc">Șterge PC</string>
     <string name="pcview_menu_details">Vezi detalii</string>
-
     <!-- Pair messages -->
     <string name="pairing">Se împerechează…</string>
     <string name="pair_pc_offline">PC-ul nu este accesibil</string>
@@ -28,20 +25,17 @@
     <string name="pair_incorrect_pin">PIN-ul este greșit</string>
     <string name="pair_fail">Împerecherea a eșuat</string>
     <string name="pair_already_in_progress">Împerecherea este deja în curs</string>
-
     <!-- WOL messages -->
     <string name="wol_pc_online">PC-ul este accesibil</string>
     <string name="wol_no_mac">Nu s-a putut porni PC-ul deoarece GFE nu a comunicat o adresa MAC</string>
     <string name="wol_waking_pc">Se pornește PC-ul…</string>
     <string name="wol_waking_msg">Poate dura puțin până PC-ul pornește. Dacă nu pornește, verifică dacă este configurat corect pentru Wake-On-LAN.</string>
     <string name="wol_fail">Nu s-au putut trimite pachetele Wake-On-LAN</string>
-
     <!-- Unpair messages -->
     <string name="unpairing">Desperecherechere…</string>
     <string name="unpair_success">Desperecherechere efectuată cu succes</string>
     <string name="unpair_fail">Desperecherea a eșuat</string>
     <string name="unpair_error">Dispozitivul nu este împerecheat</string>
-
     <!-- Errors -->
     <string name="error_pc_offline">PC-ul este inaccesibil</string>
     <string name="error_manager_not_running">Serviciul ComputerManager nu este pornit. Te rugăm să aștepți câteva secunde sau să repornești aplicația.</string>
@@ -56,7 +50,6 @@
     <string name="error_usb_prohibited">Accesul USB este interzis de către administratorul dispozitivului. Verifică setarile Knox sau MDM.</string>
     <string name="unable_to_pin_shortcut">Launcher-ul tău curent nu permite crearea de scurtături fixate.</string>
     <string name="video_decoder_init_failed">Inițializarea decodorului video a eșuat. Este posibil ca acest dispozitiv să nu suporte rezoluția sau rata cadrelor selectată.</string>
-
     <!-- Start application messages -->
     <string name="conn_establishing_title">Se stabilește conexiunea</string>
     <string name="conn_establishing_msg">Se pornește conexiunea</string>
@@ -69,7 +62,6 @@
     <string name="conn_error_msg">Pornirea a eșuat</string>
     <string name="conn_terminated_title">Conexiunea închisă</string>
     <string name="conn_terminated_msg">Conexiunea a fost terminată</string>
-
     <!-- General strings -->
     <string name="ip_hint">Adresa IP a PC-ului cu GFE</string>
     <string name="searching_pc">Se caută PC-uri cu GameStream activat…\n\n
@@ -87,7 +79,6 @@
     <string name="perf_overlay_renderingfps">Rata de afisare a cadrelor: %1$.2f FPS</string>
     <string name="perf_overlay_netdrops">Cadre pierdute de rețea: %1$.2f%%</string>
     <string name="perf_overlay_dectime">Timpul mediu de decodare: %1$.2f ms</string>
-
     <!-- AppList activity -->
     <string name="applist_connect_msg">Se conectează la PC…</string>
     <string name="applist_menu_resume">Continuă Sesiunea</string>
@@ -106,7 +97,6 @@
     <string name="applist_quit_fail">Nu s-a putut închide lista</string>
     <string name="applist_quit_confirmation">Sigur dorești să închizi aplicația curentă? Toate datele nesalvate vor fi pierdute.</string>
     <string name="applist_details_id">ID-ul aplicației:</string>
-
     <!-- Add computer manually activity -->
     <string name="title_add_pc">Adaugă PC manual</string>
     <string name="msg_add_pc">Conectare în curs…</string>
@@ -115,7 +105,6 @@
     <string name="addpc_unknown_host">Nu am putut identifica adresa PC-ului. Asigură-te că ai introdus-o corect.</string>
     <string name="addpc_enter_ip">Trebuie să introduci o adresa IP</string>
     <string name="addpc_wrong_sitelocal">Adresa introdusă nu pare corectă. Pentru conectare prin Internet, este nevoie de adresa publică a routerului.</string>
-
     <!-- Preferences -->
     <string name="category_basic_settings">Setări de bază</string>
     <string name="title_resolution_list">Rezolutia video</string>
@@ -131,11 +120,9 @@
     <string name="summary_checkbox_disable_warnings">Dezactivează mesajele de avertizare privind rețeaua în timpul conexiunii</string>
     <string name="title_checkbox_enable_pip">Activează modul Picture-In-Picture</string>
     <string name="summary_checkbox_enable_pip">Permite vizualizarea (dar nu și controlul) când efectuezi multitasking</string>
-
     <string name="category_audio_settings">Setări Audio</string>
     <string name="title_audio_config_list">Configurarea sunetului surround</string>
     <string name="summary_audio_config_list">Activeaza sunetul 5.1 sau 7.1 pentru sisteme home-theater</string>
-
     <string name="category_input_settings">Setări de control</string>
     <string name="title_checkbox_multi_controller">Detectează automat prezența controllerelor.</string>
     <string name="summary_checkbox_multi_controller">Dezactivarea acestei opțiuni implică prezența constantă a unui controller</string>
@@ -151,7 +138,6 @@
     <string name="summary_checkbox_mouse_emulation">Apăsarea lungă pe butonul Start schimba modul de operare a controllerului în modul mouse.</string>
     <string name="title_checkbox_mouse_nav_buttons">Activează butoanele de înainte și înapoi ale mousului</string>
     <string name="summary_checkbox_mouse_nav_buttons">Această opțiune poate afecta click dreapta pentru unele dispozitive problematice.</string>
-
     <string name="category_on_screen_controls_settings">Setări ale controalelor pe ecran</string>
     <string name="title_checkbox_show_onscreen_controls">Afișează controale pe ecran</string>
     <string name="summary_checkbox_show_onscreen_controls">Afișează un controller virtual pe ecran</string>
@@ -168,19 +154,16 @@
     <string name="summary_osc_opacity">Ajustează gradul de transparență al controalelor de pe ecran</string>
     <string name="dialog_title_osc_opacity">Modifică opacitatea</string>
     <string name="suffix_osc_opacity">%</string>
-
     <string name="category_ui_settings">Setari UI</string>
     <string name="title_language_list">Limba (Language)</string>
     <string name="summary_language_list">Limba folosită de către Moonlight</string>
     <string name="title_checkbox_small_icon_mode">Folosește iconițe mici</string>
     <string name="summary_checkbox_small_icon_mode">Iconițele folosite în grile vor fi mici pentru a încăpea mai multe odata</string>
-
     <string name="category_host_settings">Setările PC-ului gazdă</string>
     <string name="title_checkbox_enable_sops">Optimizarea setărilor de joc</string>
     <string name="summary_checkbox_enable_sops">Permite GFE să modifice setările jocurilor pentru experiența optimă</string>
     <string name="title_checkbox_host_audio">Redă audio si pe PC</string>
     <string name="summary_checkbox_host_audio">Sunetul se va auzi atat pe acest dispozitiv cât și pe PC</string>
-
     <string name="category_advanced_settings">Setări avansate</string>
     <string name="title_disable_frame_drop">Nu pierde cadre intenționat</string>
     <string name="summary_disable_frame_drop">Poate să reducă micro-stuttering pe anumite device-uri, dar s-ar putea să crească latența</string>
@@ -190,11 +173,9 @@
     <string name="summary_enable_hdr">Folosește HDR daca aplicația si placa video suportă. Necesită o placa video seria GTX 1000 sau mai nouă.</string>
     <string name="title_enable_perf_overlay">Activează statisticile de performanță</string>
     <string name="summary_enable_perf_overlay">Afișează în timp real statisticile de performanță ale conexiunii.</string>
-
     <!-- Array strings -->
     <string name="audioconf_stereo">Stereo</string>
     <string name="audioconf_51surround">Sunet Surround 5.1</string>
     <string name="audioconf_71surround">Sunet Surround 7.1</string>
-
     <string name="videoformat_hevcalways">Folosește HEVC mereu (se poate bloca)</string>
 </resources>

@@ -110,6 +110,9 @@ public class EvdevCaptureProvider extends InputCaptureProvider {
                     break;
                 }
 
+                // Note: The EvdevReader process already filters input events when grabbing
+                // is not enabled, so we don't need to that here.
+
                 switch (event.type) {
                     case EvdevEvent.EV_SYN:
                         if (deltaX != 0 || deltaY != 0) {
@@ -231,35 +234,8 @@ public class EvdevCaptureProvider extends InputCaptureProvider {
     }
 
     @Override
-    public void enableCapture() {
-        super.enableCapture();
-        if (!started) {
-            // Start the handler thread if it's our first time
-            // capturing
-            handlerThread.start();
-            started = true;
-        }
-        else {
-            // This may be called on the main thread
-            runInNetworkSafeContextSynchronously(new Runnable() {
-                @Override
-                public void run() {
-                    // Send a request to regrab if we're already capturing
-                    if (!shutdown && evdevOut != null) {
-                        try {
-                            evdevOut.write(REGRAB_REQUEST);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    @Override
-    public void disableCapture() {
-        super.disableCapture();
+    public void showCursor() {
+        super.showCursor();
         // This may be called on the main thread
         runInNetworkSafeContextSynchronously(new Runnable() {
             @Override
@@ -273,6 +249,39 @@ public class EvdevCaptureProvider extends InputCaptureProvider {
                 }
             }
         });
+    }
+
+    @Override
+    public void hideCursor() {
+        super.hideCursor();
+        // This may be called on the main thread
+        runInNetworkSafeContextSynchronously(new Runnable() {
+            @Override
+            public void run() {
+                // Send a request to regrab if we're already capturing
+                if (started && !shutdown && evdevOut != null) {
+                    try {
+                        evdevOut.write(REGRAB_REQUEST);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void enableCapture() {
+        if (!started) {
+            // Start the handler thread if it's our first time
+            // capturing
+            handlerThread.start();
+            started = true;
+        }
+
+        // Call the superclass only after we've started the handler thread.
+        // It will invoke hideCursor() when we call it.
+        super.enableCapture();
     }
 
     @Override

@@ -260,6 +260,11 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
                                 updateComputer(details);
                             }
                         });
+
+                        // Add a launcher shortcut for this PC (off the main thread to prevent ANRs)
+                        if (details.pairState == PairState.PAIRED) {
+                            shortcutHelper.createAppViewShortcutForOnlineHost(details);
+                        }
                     }
                 }
             });
@@ -718,11 +723,6 @@ public class PcView extends Activity implements AdapterFragmentCallbacks {
                 existingEntry = computer;
                 break;
             }
-        }
-
-        // Add a launcher shortcut for this PC
-        if (details.pairState == PairState.PAIRED) {
-            shortcutHelper.createAppViewShortcutForOnlineHost(details);
         }
 
         if (existingEntry != null) {

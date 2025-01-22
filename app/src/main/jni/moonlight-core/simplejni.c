@@ -212,6 +212,11 @@ Java_com_limelight_nvstream_jni_MoonBridge_getEstimatedRttInfo(JNIEnv *env, jcla
     return ((uint64_t)rtt << 32U) | variance;
 }
 
+JNIEXPORT jstring JNICALL
+Java_com_limelight_nvstream_jni_MoonBridge_getLaunchUrlQueryParameters(JNIEnv *env, jclass clazz) {
+    return (*env)->NewStringUTF(env, LiGetLaunchUrlQueryParameters());
+}
+
 JNIEXPORT jbyte JNICALL
 Java_com_limelight_nvstream_jni_MoonBridge_guessControllerType(JNIEnv *env, jclass clazz, jint vendorId, jint productId) {
     unsigned int unDeviceID = MAKE_CONTROLLER_ID(vendorId, productId);

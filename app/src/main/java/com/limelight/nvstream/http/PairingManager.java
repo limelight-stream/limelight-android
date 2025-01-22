@@ -98,10 +98,21 @@ public class PairingManager {
         System.arraycopy(pin.getBytes("UTF-8"), 0, saltedPin, salt.length, pin.length());
         return saltedPin;
     }
+
+    private static Signature getSha256SignatureInstanceForKey(Key key) throws NoSuchAlgorithmException {
+        switch (key.getAlgorithm()) {
+            case "RSA":
+                return Signature.getInstance("SHA256withRSA");
+            case "EC":
+                return Signature.getInstance("SHA256withECDSA");
+            default:
+                throw new NoSuchAlgorithmException("Unhandled key algorithm: " + key.getAlgorithm());
+        }
+    }
     
     private static boolean verifySignature(byte[] data, byte[] signature, Certificate cert) {
         try {
-            Signature sig = Signature.getInstance("SHA256withRSA");
+            Signature sig = PairingManager.getSha256SignatureInstanceForKey(cert.getPublicKey());
             sig.initVerify(cert.getPublicKey());
             sig.update(data);
             return sig.verify(signature);
@@ -113,12 +124,10 @@ public class PairingManager {
     
     private static byte[] signData(byte[] data, PrivateKey key) {
         try {
-            Signature sig = Signature.getInstance("SHA256withRSA");
+            Signature sig = PairingManager.getSha256SignatureInstanceForKey(key);
             sig.initSign(key);
             sig.update(data);
-            byte[] signature = new byte[256];
-            sig.sign(signature, 0, signature.length);
-            return signature;
+            return sig.sign();
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -245,7 +254,7 @@ public class PairingManager {
         // Get the server's signed secret
         byte[] serverSecretResp = hexToBytes(NvHTTP.getXmlString(secretResp, "pairingsecret", true));
         byte[] serverSecret = Arrays.copyOfRange(serverSecretResp, 0, 16);
-        byte[] serverSignature = Arrays.copyOfRange(serverSecretResp, 16, 272);
+        byte[] serverSignature = Arrays.copyOfRange(serverSecretResp, 16, serverSecretResp.length);
 
         // Ensure the authenticity of the data
         if (!verifySignature(serverSecret, serverSignature, serverCert)) {

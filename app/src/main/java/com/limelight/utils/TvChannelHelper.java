@@ -53,7 +53,11 @@ public class TvChannelHelper {
             intent.putExtra(TvContract.EXTRA_CHANNEL_ID, getChannelId(computer.uuid));
             try {
                 context.startActivityForResult(intent, 0);
-            } catch (ActivityNotFoundException e) {
+            } catch (Exception ignored) {
+                // ActivityNotFoundException is the only officially documented
+                // exception that can result from this call. However some buggy
+                // devices throw others.
+                // See https://github.com/moonlight-stream/moonlight-android/issues/1302
             }
         }
     }

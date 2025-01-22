@@ -11,12 +11,10 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 
 public class LanguagePreference extends ListPreference {
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public LanguagePreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public LanguagePreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }

@@ -112,7 +112,8 @@
     <string name="scut_not_paired">Ο υπολογιστής δεν έχει συζευχθεί</string>
     <string name="pcview_menu_header_offline">Εκτός σύνδεσης</string>
     <string name="pcview_menu_test_network">Δοκιμή σύνδεσης δικτύου</string>
-    <string name="nettest_text_waiting">Το Moonlight δοκιμάζει τη σύνδεση δικτύου σας για να καθορίσει εάν το NVIDIA GameStream είναι αποκλεισμένο.
+    <string name="nettest_text_waiting">Το Moonlight δοκιμάζει τη σύνδεση δικτύου σας για να διαπιστώσει εάν κάποια θύρα είναι αποκλεισμένη.
+\n
 \n
 \nΑυτό μπορεί να πάρει μερικά δευτερόλεπτα…</string>
     <string name="pair_fail">Η σύζευξη απέτυχε</string>
@@ -205,4 +206,10 @@
     <string name="title_video_format">Αλλαγή ρυθμίσεων HEVC</string>
     <string name="title_enable_post_stream_toast">Εμφάνιση μηνύματος λανθάνοντος χρόνου μετά τη ροή</string>
     <string name="summary_video_format">Το HEVC μειώνει τις απαιτήσεις εύρους ζώνης βίντεο, αλλά απαιτεί μια νεότερη συσκευή</string>
+    <string name="error_code_prefix">Κωδικός σφάλματος:</string>
+    <string name="frame_conversion_error">Ο υπολογιστής φιλοξενίας ανέφερε ένα σφάλμα κωδικοποίησης βίντεο.
+\n
+\nΔοκιμάστε να απενεργοποιήσετε τη λειτουργία HDR, να αλλάξετε την ανάλυση ροής ή να αλλάξετε την ανάλυση οθόνης του υπολογιστή φιλοξενίας.</string>
+    <string name="pcview_menu_eol">Λήξη Υποστήριξης NVIDA GameStream</string>
+    <string name="pair_pairing_help">Εάν ο υπολογιστής οικοδεσπότης χρησιμοποιεί το Sunshine, πλοηγηθείτε στην διαδικτυακή διεπαφή χρήστη του Sunshine για να εισάγετε το PIN.</string>
 </resources>

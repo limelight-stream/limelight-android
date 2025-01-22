@@ -1,5 +1,6 @@
 package com.limelight.binding.input.driver;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -210,28 +211,22 @@ public class UsbDriverService extends Service implements UsbDriverListener {
     }
 
     public static boolean isRecognizedInputDevice(UsbDevice device) {
-        // On KitKat and later, we can determine if this VID and PID combo
-        // matches an existing input device and defer to the built-in controller
-        // support in that case. Prior to KitKat, we'll always return true to be safe.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            for (int id : InputDevice.getDeviceIds()) {
-                InputDevice inputDev = InputDevice.getDevice(id);
-                if (inputDev == null) {
-                    // Device was removed while looping
-                    continue;
-                }
-
-                if (inputDev.getVendorId() == device.getVendorId() &&
-                        inputDev.getProductId() == device.getProductId()) {
-                    return true;
-                }
+        // Determine if this VID and PID combo matches an existing input device
+        // and defer to the built-in controller support in that case.
+        for (int id : InputDevice.getDeviceIds()) {
+            InputDevice inputDev = InputDevice.getDevice(id);
+            if (inputDev == null) {
+                // Device was removed while looping
+                continue;
             }
 
-            return false;
+            if (inputDev.getVendorId() == device.getVendorId() &&
+                    inputDev.getProductId() == device.getProductId()) {
+                return true;
+            }
         }
-        else {
-            return true;
-        }
+
+        return false;
     }
 
     public static boolean kernelSupportsXboxOne() {
@@ -286,8 +281,9 @@ public class UsbDriverService extends Service implements UsbDriverListener {
                 ((!kernelSupportsXbox360W() || claimAllAvailable) && Xbox360WirelessDongle.canClaimDevice(device));
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private void start() {
-        if (started) {
+        if (started || usbManager == null) {
             return;
         }
 

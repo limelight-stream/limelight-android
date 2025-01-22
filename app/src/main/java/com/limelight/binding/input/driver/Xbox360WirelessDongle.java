@@ -89,28 +89,26 @@ public class Xbox360WirelessDongle extends AbstractController {
     public boolean start() {
         int controllerIndex = 0;
 
-        // On KitKat, there is a controller number associated with input devices.
+        // On Android, there is a controller number associated with input devices.
         // We can use this to approximate the likely controller number. This won't
         // be completely accurate because there's no guarantee the order of interfaces
         // matches the order that devices were enumerated by xpad, but it's probably
         // better than nothing.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            for (int id : InputDevice.getDeviceIds()) {
-                InputDevice inputDev = InputDevice.getDevice(id);
-                if (inputDev == null) {
-                    // Device was removed while looping
-                    continue;
-                }
+        for (int id : InputDevice.getDeviceIds()) {
+            InputDevice inputDev = InputDevice.getDevice(id);
+            if (inputDev == null) {
+                // Device was removed while looping
+                continue;
+            }
 
-                // Newer xpad versions use a special product ID (0x02a1) for controllers
-                // rather than copying the product ID of the dongle itself.
-                if (inputDev.getVendorId() == device.getVendorId() &&
-                        (inputDev.getProductId() == device.getProductId() ||
-                                inputDev.getProductId() == 0x02a1) &&
-                        inputDev.getControllerNumber() > 0) {
-                    controllerIndex = inputDev.getControllerNumber() - 1;
-                    break;
-                }
+            // Newer xpad versions use a special product ID (0x02a1) for controllers
+            // rather than copying the product ID of the dongle itself.
+            if (inputDev.getVendorId() == device.getVendorId() &&
+                    (inputDev.getProductId() == device.getProductId() ||
+                            inputDev.getProductId() == 0x02a1) &&
+                    inputDev.getControllerNumber() > 0) {
+                controllerIndex = inputDev.getControllerNumber() - 1;
+                break;
             }
         }
 

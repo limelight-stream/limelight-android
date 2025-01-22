@@ -1,0 +1,1 @@
+Static libraries were built from https://github.com/cgutman/moonlight-mobile-deps using AppVeyor CI 

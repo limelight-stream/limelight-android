@@ -4,10 +4,10 @@
     <string name="title_enable_post_stream_toast">A késleltetési üzenet megjelenítése streaming után</string>
     <string name="summary_enable_perf_overlay">Valós idejű adatfolyam-adat megjelenítése streaming közben</string>
     <string name="title_enable_perf_overlay">Teljesítmény statisztikák megjelenítése közvetítés közben</string>
-    <string name="summary_enable_hdr">Streaming HDR, amikor a játék és a PC GPU támogatja. A HDR-hez GTX 1000 sorozatú vagy újabb verzió szükséges.</string>
+    <string name="summary_enable_hdr">HDR streamelés, ha a játék és a PC GPU támogatja. A HDR-hez HEVC Main 10 kódolási támogatással rendelkező GPU szükséges.</string>
     <string name="title_enable_hdr">HDR engedélyezése (kísérleti)</string>
-    <string name="summary_video_format">A HEVC csökkenti a video sávszélesség követelményeit, de újabb eszközt igényel</string>
-    <string name="title_video_format">Módosítsa a HEVC beállításait</string>
+    <string name="summary_video_format">Az újabb kodekek csökkenthetik a videó sávszélességigényét, ha a készülék támogatja őket. A codec-kiválasztások figyelmen kívül hagyhatók, ha a gazdaszoftver vagy a GPU nem támogatja őket.</string>
+    <string name="title_video_format">Módosítsa a Kodek beállításait</string>
     <string name="summary_disable_frame_drop">Csökkentheti a mikrodadogást egyes eszközökön, de növelheti a késést</string>
     <string name="title_disable_frame_drop">Soha ne ejtse le a kereteket</string>
     <string name="summary_checkbox_disable_warnings">Streaming közben tiltsa le a képernyőn megjelenő csatlakozási figyelmeztető üzeneteket</string>
@@ -72,13 +72,13 @@
     <string name="title_seekbar_bitrate">Videó bitráta</string>
     <string name="summary_fps_list">Növelje a gördülékenyebb videofolyamot. Csökkenjen a jobb teljesítmény érdekében az alsó kategóriás eszközökön.</string>
     <string name="title_fps_list">Videó képkockasebessége</string>
-    <string name="text_native_res_dialog">A natív felbontási módokat a GeForce Experience hivatalosan nem támogatja, így maga nem állítja be a gazdagép kijelzőjének felbontását. A játék során manuálisan kell beállítania.
+    <string name="text_native_res_dialog">Előfordulhat, hogy a streaming szerver nem támogatja a natív felbontást és/vagy FPS-t. Valószínűleg kézzel kell beállítania egy megfelelő egyéni megjelenítési módot a fogadó számítógépen.
 \n
-\nHa úgy dönt, hogy az NVIDIA vezérlőpultján egyedi felbontást hoz létre, hogy megfeleljen az eszköz felbontásának, kérjük, olvassa el és értette az NVIDIA figyelmeztetéseit a monitor esetleges károsodásával, a számítógép instabilitásával és más lehetséges problémákkal kapcsolatban.
+\nHa úgy dönt, hogy egyéni felbontást hoz létre az NVIDIA Vezérlőpultban a képernyő beállításainak megfelelően, kérjük, győződjön meg róla, hogy elolvasta és megértette az NVIDIA figyelmeztetését a monitor lehetséges károsodására, a számítógép instabilitására és más lehetséges problémákra vonatkozóan.
 \n
-\nNem vagyunk felelősek a PC-n egyedi felbontás létrehozásából eredő problémákért.
+\nNem vállalunk felelősséget a számítógépén egyéni felbontás létrehozásából eredő problémákért.
 \n
-\nVégül előfordulhat, hogy az eszköz vagy a fogadó PC nem támogatja a natív felbontású adatfolyamot. Ha a készülékén nem működik, sajnos csak nincs szerencséje.</string>
+\nElőfordulhat, hogy az Ön monitora nem támogatja a szükséges kijelzőkonfigurációt. Ebben az esetben megpróbálhat egy virtuális monitort beállítani. Végül, ha a készülék vagy a gazdaszámítógép nem támogatja a streaminget egy adott felbontáson vagy frissítési frekvencián, akkor sajnos nincs szerencséje.</string>
     <string name="title_native_res_dialog">Natív felbontás figyelmeztetés</string>
     <string name="summary_resolution_list">Növelje a kép tisztaságának növelése érdekében. Csökkenjen a jobb teljesítmény érdekében az alsó kategóriás eszközökön és a lassabb hálózatokon.</string>
     <string name="title_resolution_list">Videó felbontás</string>
@@ -124,10 +124,10 @@
     <string name="lost_connection">Megszakadt a kapcsolat a PC-vel</string>
     <string name="no">Nem</string>
     <string name="yes">Igen</string>
-    <string name="searching_pc">PC-k keresése futó GameStream segítségével ...
+    <string name="searching_pc">A helyi hálózaton lévő PC-k keresése...
 \n
-\n Győződjön meg arról, hogy a GameStream engedélyezve van a GeForce Experience SHIELD beállításaiban.</string>
-    <string name="ip_hint">A GeForce PC IP-címe</string>
+\nGyőződj meg róla, hogy a Sunshine fut a gazdaszámítógépen, vagy a GameStream engedélyezve van a GeForce Experience SHIELD beállításaiban.</string>
+    <string name="ip_hint">A számítógép IP-címe</string>
     <string name="conn_terminated_msg">A kapcsolat megszakadt</string>
     <string name="conn_terminated_title">A kapcsolat megszűnt</string>
     <string name="conn_error_msg">Nem sikerült elindítani</string>
@@ -139,9 +139,7 @@
     <string name="check_ports_msg">Ellenőrizze a tűzfal és a port-továbbítási szabályokat a port(ok)ra vonatkozóan:</string>
     <string name="early_termination_error">Valami nem sikerült a fogadó PC-n az adatfolyam indításakor.
 \n
-\nGyőződjön meg arról, hogy a fogadó PC-n nincs megnyitva DRM-védett tartalom. Megpróbálhatja újraindítani a gazdagépet is.
-\n
-\nHa a probléma továbbra is fennáll, próbálja meg újratelepíteni a GPU illesztőprogramokat és a GeForce Experience szoftvert.</string>
+\nGyőződjön meg arról, hogy a fogadó PC-n nincs megnyitva DRM-védett tartalom. Megpróbálhatja újraindítani a gazdagépet is.</string>
     <string name="no_frame_received_error">A hálózati kapcsolat nem működik megfelelően. Csökkentse a videó bitráta beállítását, vagy próbálkozzon gyorsabb kapcsolattal.</string>
     <string name="no_video_received_error">Nem kapott videót a gazdagéptől.</string>
     <string name="video_decoder_init_failed">A videó dekóder inicializálása nem sikerült. Előfordulhat, hogy készüléke nem támogatja a kiválasztott felbontást vagy képkockasebességet.</string>
@@ -149,7 +147,7 @@
     <string name="error_usb_prohibited">Az USB-hozzáférést az eszköz rendszergazdája tiltja. Ellenőrizze a Knox vagy az MDM beállításait.</string>
     <string name="message_decoding_reset">Az eszköz videodekóderje továbbra is összeomlik a kiválasztott adatfolyam-beállításoknál. A streaming beállításait visszaállította az alapértelmezettre.</string>
     <string name="title_decoding_reset">Videó Beállítások Alapra</string>
-    <string name="message_decoding_error">A Moonlight összeomlott, mert inkompatibilis volt az eszköz videó dekóderével. Győződjön meg arról, hogy a GeForce Experience frissítve van a számítógép legújabb verziójára. Próbálja meg módosítani a streaming beállításokat, ha az összeomlások továbbra is fennállnak.</string>
+    <string name="message_decoding_error">A Moonlight összeomlott az eszköz videódekóderével való inkompatibilitás miatt. Próbálja meg módosítani a streaming-beállításokat, ha az összeomlások továbbra is fennállnak.</string>
     <string name="title_decoding_error">A videó dekóder összeomlott</string>
     <string name="error_404">A GFE HTTP 404 hibát adott vissza. Győződjön meg arról, hogy a számítógépen támogatott GPU fut. A távoli asztali szoftver használata szintén ezt a hibát okozhatja. Próbálja újraindítani a gépet, vagy telepítse újra a GFE-t.</string>
     <string name="conn_error_title">Csatlakozási hiba</string>
@@ -165,7 +163,7 @@
     <string name="wol_fail">Nem sikerült elküldeni a Wake-On-LAN csomagokat</string>
     <string name="wol_waking_msg">Néhány másodpercbe telhet, mire a számítógép felébred. Ha nem, ellenőrizze, hogy megfelelően van-e konfigurálva a Wake-On-LAN számára.</string>
     <string name="wol_waking_pc">PC elindítása…</string>
-    <string name="wol_no_mac">Nem lehet elindítani a PC-t, mert a GFE nem küldött MAC-címet</string>
+    <string name="wol_no_mac">Nem lehet felébreszteni a számítógépet, mert nincs tárolt MAC-cím</string>
     <string name="wol_pc_online">A számítógép elérhető</string>
     <string name="pair_already_in_progress">A párosítás már folyamatban van</string>
     <string name="pairing">Párosítás…</string>
@@ -185,9 +183,9 @@
 \n
 \nHa az interneten keresztül kíván közvetíteni, telepítse a Moonlight Internet Hosting Tool alkalmazást a számítógépére, és futtassa a mellékelt Internet Streaming Tester szoftvert a számítógép internetkapcsolatának ellenőrzéséhez.</string>
     <string name="nettest_title_done">Hálózati kapcsolat teszt kész</string>
-    <string name="nettest_text_waiting">A Moonlight a hálózati kapcsolatot teszteli annak megállapítására, hogy az NVIDIA GameStream blokkolva van-e.
+    <string name="nettest_text_waiting">A Moonlight teszteli a hálózati kapcsolatot, hogy megállapítsa, nem blokkoltak-e szükséges portokat.
 \n
-\nEz eltarthat néhány másodpercig …</string>
+\nEz néhány másodpercig eltarthat…</string>
     <string name="pcview_menu_test_network">Hálózati kapcsolat teszt</string>
     <string name="nettest_title_waiting">Hálózati kapcsolat ellenőrzése</string>
     <string name="pcview_menu_details">Részletek megtekintése</string>
@@ -207,4 +205,58 @@
     <string name="scut_not_paired">PC nincs csatlakoztatva</string>
     <string name="scut_deleted_pc">PC eltávolítva</string>
     <string name="resolution_prefix_native_fullscreen">Natív teljes képernyős</string>
+    <string name="summary_setup_guide">Útmutató a játék-PC streamingre való beállításához</string>
+    <string name="title_troubleshooting">Hibaelhárítási útmutató</string>
+    <string name="title_checkbox_reduce_refresh_rate">A frissítési sebesség csökkentésének engedélyezése</string>
+    <string name="summary_frame_pacing">A videók késleltetésének és simaságának egyensúlyának megadása</string>
+    <string name="title_checkbox_enable_audiofx">Rendszeres kiegyenlítő támogatás engedélyezése</string>
+    <string name="resolution_360p">360p</string>
+    <string name="title_native_fps_dialog">Natív FPS figyelmeztetés</string>
+    <string name="pacing_balanced">Kiegyensúlyozott</string>
+    <string name="summary_full_range">Ez részletvesztést okoz a világos és sötét területeken, ha a készülék nem jeleníti meg megfelelően a teljes tartományú videotartalmat.</string>
+    <string name="summary_privacy_policy">A Moonlight adatvédelmi szabályzatának megtekintése</string>
+    <string name="resolution_4k">4K</string>
+    <string name="pacing_smoothness">A legsimább videó előnyben részesítése (jelentősen növelheti a késleltetést)</string>
+    <string name="fps_120">120 FPS</string>
+    <string name="category_help">Segítség</string>
+    <string name="videoformat_av1always">AV1 előnyben részesítése (kísérleti)</string>
+    <string name="audioconf_71surround">7.1 Térhatású hangzás</string>
+    <string name="pcview_menu_eol">NVIDIA GameStream szolgáltatás vége</string>
+    <string name="title_checkbox_gamepad_motion_sensors">Gamepad mozgásérzékelők használatának engedélyezése</string>
+    <string name="resolution_720p">720p</string>
+    <string name="videoformat_auto">Automatikus (ajánlott)</string>
+    <string name="pacing_balanced_alt">Kiegyensúlyozott FPS-korlátozással</string>
+    <string name="frame_conversion_error">A fogadó számítógép végzetes videokódolási hibát jelentett.
+\n
+\nPróbálja meg letiltani a HDR módot, megváltoztatni a streaming felbontást, vagy megváltoztatni a host PC kijelzőjének felbontását.</string>
+    <string name="summary_checkbox_gamepad_touchpad_as_mouse">Kényszeríti a gamepad touchpad bevitelét a host egér vezérlésére, még akkor is, ha egy touchpaddal ellátott gamepadot emulál.</string>
+    <string name="title_frame_pacing">Videó képkocka ütemezése</string>
+    <string name="resolution_1440p">1440p</string>
+    <string name="resolution_480p">480p</string>
+    <string name="videoformat_hevcalways">HEVC előnyben részesítése</string>
+    <string name="fps_60">60 FPS</string>
+    <string name="audioconf_51surround">5.1 Térhatású hangzás</string>
+    <string name="summary_checkbox_enable_audiofx">Lehetővé teszi az audioeffektek működését streaming közben, de növelheti a hang késleltetését</string>
+    <string name="fps_90">90 FPS</string>
+    <string name="summary_checkbox_gamepad_motion_sensors">Lehetővé teszi a támogatott hosztok számára, hogy mozgásérzékelős adatokat kérjenek, amikor mozgásérzékelőkkel ellátott gamepadot emulálnak. A letiltás némileg csökkentheti az energia- és hálózathasználatot, ha a játékban nem használnak mozgásérzékelőket.</string>
+    <string name="resolution_1080p">1080p</string>
+    <string name="summary_seekbar_deadzone">Megjegyzés: Egyes játékok nagyobb holtteret kényszeríthetnek ki, mint amire a Moonlight be van állítva.</string>
+    <string name="audioconf_stereo">Sztereó</string>
+    <string name="videoformat_h264always">Inkább H.264</string>
+    <string name="title_privacy_policy">Adatvédelmi irányelvek</string>
+    <string name="fps_suffix_fps">FPS</string>
+    <string name="category_gamepad_settings">Gamepad beállítások</string>
+    <string name="fps_30">30 FPS</string>
+    <string name="summary_troubleshooting">Tippek a gyakori streaming problémák diagnosztizálásához és javításához</string>
+    <string name="title_checkbox_absolute_mouse_mode">Távoli asztali egér mód</string>
+    <string name="title_full_range">Teljeskörű videó erőltetése (kísérleti)</string>
+    <string name="summary_checkbox_reduce_refresh_rate">Az alacsonyabb kijelzőfrissítési frekvencia energiát takaríthat meg némi további videokésleltetés árán</string>
+    <string name="resolution_prefix_native_portrait">(Portré)</string>
+    <string name="summary_checkbox_absolute_mouse_mode">Ezáltal az egérgyorsítás természetesebben viselkedik a távoli asztali használat során, de sok játékkal nem kompatibilis.</string>
+    <string name="pair_pairing_help">Ha a számítógépen Sunshine fut, lépj a Sunshine webes felhasználói felületére a PIN-kód megadásához.</string>
+    <string name="title_setup_guide">Telepítési útmutató</string>
+    <string name="title_checkbox_gamepad_touchpad_as_mouse">Az egeret mindig az érintőpaddal vezérelje</string>
+    <string name="resolution_prefix_native_landscape">(Tájkép)</string>
+    <string name="perf_overlay_hostprocessinglatency">Host feldolgozási késleltetés min/max/átlag: %1$.1f/%2$.1f/%3$.1f ms</string>
+    <string name="pacing_latency">A legalacsonyabb késleltetés előnyben részesítése</string>
 </resources>

@@ -20,7 +20,7 @@ public class NetHelper {
                 }
             }
         }
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        else {
             NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
             if (activeNetworkInfo != null) {
                 return activeNetworkInfo.getType() == ConnectivityManager.TYPE_VPN;
