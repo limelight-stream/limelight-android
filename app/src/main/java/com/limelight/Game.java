@@ -874,7 +874,9 @@ public class Game extends Activity implements SurfaceHolder.Callback,
 
             LimeLog.info("Best display mode: "+bestMode.getPhysicalWidth()+"x"+
                     bestMode.getPhysicalHeight()+"x"+bestMode.getRefreshRate());
-
+            //force display mode
+            windowLayoutParams.preferredDisplayModeId = bestMode.getModeId();
+            getWindow().setAttributes(windowLayoutParams);
             // Only apply new window layout parameters if we've actually changed the display mode
             if (display.getMode().getModeId() != bestMode.getModeId()) {
                 // If we only changed refresh rate and we're on an OS that supports Surface.setFrameRate()
