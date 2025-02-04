@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- PC view menu entries -->
-    <string name="pcview_menu_app_list">Toon Spel Lijst</string>
-    <string name="pcview_menu_pair_pc">Koppel met PC</string>
+    <string name="pcview_menu_app_list">Alle apps bekijken</string>
+    <string name="pcview_menu_pair_pc">Koppelen met PC</string>
     <string name="pcview_menu_unpair_pc">Ontkoppelen</string>
-    <string name="pcview_menu_send_wol">Stuur Wake-On-LAN aanvraag</string>
-    <string name="pcview_menu_delete_pc">Verwijder PC</string>
+    <string name="pcview_menu_send_wol">Wake-on-LAN-verzoek sturen</string>
+    <string name="pcview_menu_delete_pc">PC verwijderen</string>
     <!-- Pair messages -->
     <string name="pairing">Koppelen…</string>
     <string name="pair_pc_offline">Computer is onbereikbaar</string>
     <string name="pair_pc_ingame">Computer is op dit moment in een spel. Sluit het spel voordat je koppelt.</string>
     <string name="pair_pairing_title">Koppelen</string>
-    <string name="pair_pairing_msg">Voer de volgende PIN in op de doel PC:</string>
-    <string name="pair_incorrect_pin">Ongeldige PIN</string>
+    <string name="pair_pairing_msg">Voer de volgende pin in op de doel-PC:</string>
+    <string name="pair_incorrect_pin">Ongeldige pin</string>
     <string name="pair_fail">Koppelen mislukt</string>
     <!-- WOL messages -->
     <string name="wol_pc_online">Computer is online</string>
@@ -55,16 +55,16 @@
     <string name="no">Nee</string>
     <string name="lost_connection">Verbinding met PC verloren</string>
     <!-- AppList activity -->
-    <string name="applist_menu_resume">Hervat Sessie</string>
-    <string name="applist_menu_quit">Stop Sessie</string>
+    <string name="applist_menu_resume">Sessie hervatten</string>
+    <string name="applist_menu_quit">Sessie afsluiten</string>
     <string name="applist_menu_quit_and_start">Stop Huidige Spel en Start</string>
-    <string name="applist_menu_cancel">Annuleer</string>
-    <string name="applist_refresh_title">App Lijst</string>
-    <string name="applist_refresh_msg">Apps Verversen…</string>
+    <string name="applist_menu_cancel">Annuleren</string>
+    <string name="applist_refresh_title">App-lijst</string>
+    <string name="applist_refresh_msg">Apps verversen…</string>
     <string name="applist_refresh_error_title">Fout</string>
     <string name="applist_refresh_error_msg">App lijst ophalen mislukt</string>
     <string name="applist_quit_app">Stoppen</string>
-    <string name="applist_quit_success">Succesvol gestopt</string>
+    <string name="applist_quit_success">Succesvol afgesloten</string>
     <string name="applist_quit_fail">Stoppen mislukt</string>
     <string name="applist_quit_confirmation">Weet je het zeker dat je de app wilt sluiten? Alle niet-opgeslagen gegevens gaan verloren.</string>
     <!-- Add computer manually activity -->
@@ -75,16 +75,16 @@
     <string name="addpc_unknown_host">Adres achterhalen is mislukt. Controleer het ingevoerde adres op typfouten.</string>
     <string name="addpc_enter_ip">IP-adres invoeren is verplicht</string>
     <!-- Preferences -->
-    <string name="category_basic_settings">Algemene Instellingen</string>
-    <string name="title_resolution_list">Selecteer resolutie en FPS doel</string>
+    <string name="category_basic_settings">Basis­instellingen</string>
+    <string name="title_resolution_list">Video­resolutie</string>
     <string name="summary_resolution_list">Te hoge instellingen kunnen crashes en haperingen veroorzaken.</string>
-    <string name="title_seekbar_bitrate">Selecteer doel video bitsnelheid</string>
+    <string name="title_seekbar_bitrate">Video-bitsnelheid</string>
     <string name="summary_seekbar_bitrate">Verlaag bitsnelheid om haperingen te verminderen. Verhoog de bitsnelheid voor een betere videokwaliteit.</string>
     <string name="title_checkbox_stretch_video">Rek video uit tot volledig scherm</string>
     <string name="title_checkbox_disable_warnings">Verberg waarschuwingsberichten</string>
     <string name="summary_checkbox_disable_warnings">Verberg on-screen verbindingswaarschuwingen tijdens het streamen</string>
-    <string name="category_audio_settings">Geluidsinstellingen</string>
-    <string name="title_checkbox_multi_controller">Multi-gamepad support</string>
+    <string name="category_audio_settings">Audio­instellingen</string>
+    <string name="title_checkbox_multi_controller"></string>
     <string name="summary_checkbox_multi_controller">Deze optie uitvinken zorgt ervoor dat er altijd een gamepad beschikbaar is</string>
     <string name="title_seekbar_deadzone">Pas analoge dode zone aan</string>
     <string name="suffix_seekbar_deadzone">%</string>
@@ -93,18 +93,18 @@
     <string name="category_on_screen_controls_settings">On-screen Controller Instellingen</string>
     <string name="title_checkbox_show_onscreen_controls">Laat on-screen controls zien</string>
     <string name="summary_checkbox_show_onscreen_controls">Geeft een virtuele controller weer op het touchscreen</string>
-    <string name="category_ui_settings">UI Installingen</string>
+    <string name="category_ui_settings">Interface­instellingen</string>
     <string name="title_language_list">Taal</string>
     <string name="summary_language_list">Taal te gebruiken in Moonlight</string>
     <string name="title_checkbox_small_icon_mode">Gebruik kleine iconen</string>
     <string name="summary_checkbox_small_icon_mode">Gebruik kleine iconen in kolom onderdelen zodat meer items tegelijk zichtbaar worden</string>
-    <string name="category_host_settings">Host Instellingen</string>
+    <string name="category_host_settings">Host-instellingen</string>
     <string name="title_checkbox_enable_sops">Optimaliseer spel instellingen</string>
     <string name="summary_checkbox_enable_sops">Sta GFE toe om spel instellingen te veranderen voor een optimale stream</string>
     <string name="title_checkbox_host_audio">Speel audio af op PC</string>
     <string name="summary_checkbox_host_audio">Speel audio af op de computer en op dit apparaat</string>
-    <string name="category_advanced_settings">Geavanceerde Instellingen</string>
-    <string name="title_video_format">Verander HEVC instellingen</string>
+    <string name="category_advanced_settings">Geavanceerde instellingen</string>
+    <string name="title_video_format">Codec-instellingen wijzigen</string>
     <string name="summary_video_format">HEVC verlaagt video bandbreedte vereisten maar benodigd een recent apparaat</string>
     <string name="suffix_osc_opacity">%</string>
     <string name="message_decoding_error">Moonlight is gecrasht door een compatibiliteitsprobleem met de video decoder van dit toestel. Zorg ervoor dat GeForce Experience bijgewerkt is naar de laatste versie op uw PC. Probeer de streamingsinstellingen te wijzigen bij blijvende crashes.</string>
@@ -117,13 +117,13 @@
     <string name="pcview_menu_header_online">Online</string>
     <string name="pcview_menu_header_offline">Offline</string>
     <string name="pcview_menu_header_unknown">Vernieuwen</string>
-    <string name="pcview_menu_test_network">Netwerkconnectie testen</string>
-    <string name="pcview_menu_details">Details Bekijken</string>
-    <string name="nettest_title_waiting">Netwerkconnectie Testen</string>
+    <string name="pcview_menu_test_network">Netwerk­verbinding testen</string>
+    <string name="pcview_menu_details">Details bekijken</string>
+    <string name="nettest_title_waiting">Netwerk­verbinding testen</string>
     <string name="nettest_text_waiting">Moonlight is uw netwerkverbinding aan het testen om te bepalen of NVIDIA GameStream geblokkeerd is.
 \n
 \nDit kan enkele seconden duren…</string>
-    <string name="nettest_title_done">Netwerktest Compleet</string>
+    <string name="nettest_title_done">Netwerktest voltooid</string>
     <string name="nettest_text_success">Uw netwerk lijkt Moonlight niet te blokkeren. Als u nog steeds problemen ondervindt met verbinden, controleer de firewall instellingen van uw PC.
 \n
 \nAls u probeert te streamen over het internet, installeer de Moonlight Internet Hosting Tool op uw PC en voer de inbegrepen Internet Streaming Tester uit om uw PC\'s internetverbinding te controleren.</string>
@@ -147,18 +147,18 @@
 \nVerlaag uw bitrate</string>
     <string name="poor_connection_msg">Slechte verbinding met PC</string>
     <string name="applist_connect_msg">Verbinden met PC…</string>
-    <string name="applist_menu_details">Details Bekijken</string>
+    <string name="applist_menu_details">Details bekijken</string>
     <string name="applist_menu_scut">Snelkoppeling Maken</string>
     <string name="applist_menu_hide_app">App Verbergen</string>
-    <string name="applist_details_id">App ID:</string>
+    <string name="applist_details_id">App-id:</string>
     <string name="title_fps_list">Video frame rate</string>
     <string name="suffix_seekbar_bitrate_mbps">Mbps</string>
     <string name="resolution_prefix_native">Oorspronkelijk</string>
     <string name="title_audio_config_list">Surround sound configuratie</string>
-    <string name="category_input_settings">Invoerinstellingen</string>
+    <string name="category_input_settings">Invoer­instellingen</string>
     <string name="title_checkbox_touchscreen_trackpad">Gebruik het touchscreen als een trackpad</string>
     <string name="summary_osc_opacity">Maak de on-screen besturingselementen minder of meer transparant</string>
-    <string name="title_checkbox_mouse_emulation">Muis simulatie via gamepad</string>
+    <string name="title_checkbox_mouse_emulation">Muis­emulatie via gamepad</string>
     <string name="summary_checkbox_mouse_emulation">De startknop lang indrukken zal de muis-modus activeren op uw gamepad</string>
     <string name="title_checkbox_mouse_nav_buttons">Vorige en volgende muisknoppen activeren</string>
     <string name="summary_checkbox_flip_face_buttons">Schakelt de face-knoppen A/B en X/Y om voor gamepads en voor on-screen besturing</string>
@@ -166,7 +166,7 @@
     <string name="summary_checkbox_vibrate_osc">Trilt uw apparaat om gerommel te simuleren voor de on-screen besturing</string>
     <string name="summary_only_l3r3">Alle virtuele knoppen verbergen behalve L3 en R3</string>
     <string name="title_reset_osc">Opgeslagen on-screen layout wissen</string>
-    <string name="dialog_title_reset_osc">Reset Layout</string>
+    <string name="dialog_title_reset_osc">Lay-out resetten</string>
     <string name="toast_reset_osc_success">On-screen controle-elementen naar fabrieksinstellingen zetten</string>
     <string name="title_osc_opacity">Transparantie van on-screen besturingselementen aanpassen</string>
     <string name="title_checkbox_enable_pip">Scherm-in-Scherm toeschouwermodus inschakelen</string>
@@ -217,10 +217,36 @@
     <string name="summary_enable_post_stream_toast">Toon een informatiebericht van de vertraging na de stream beëindigd is</string>
     <string name="help_loading_title">Hulpwijzer</string>
     <string name="perf_overlay_decoder">Decoder: %1$s</string>
-    <string name="perf_overlay_renderingfps">Rendering frame rate: %1$.2f FPS</string>
+    <string name="perf_overlay_renderingfps"></string>
     <string name="perf_overlay_netdrops">Frames overgeslagen door uw netwerkverbinding: %1$.2f%%</string>
     <string name="perf_overlay_dectime">Gemiddelde decodeertijd: %1$.2f ms</string>
     <string name="applist_menu_tv_channel">Toevoegen aan Kanaal</string>
     <!-- Array strings -->
-    <string name="videoformat_hevcalways">Gebruik HEVC altijd (mogelijkheid tot crashes)</string>
+    <string name="videoformat_hevcalways">Voorkeur geven aan HEVC</string>
+    <string name="pair_pairing_help">Als uw host-PC Sunshine draait, navigeert u naar de Sunshine-webinterface om de pincode in te voeren.</string>
+    <string name="error_code_prefix">Fout­code:</string>
+    <string name="resolution_prefix_native_portrait">(portret)</string>
+    <string name="suffix_seekbar_vibrate_fallback_strength">%</string>
+    <string name="title_troubleshooting">Handleiding voor probleem­oplossing</string>
+    <string name="title_privacy_policy">Privacy­beleid</string>
+    <string name="resolution_360p">360p</string>
+    <string name="resolution_720p">720p</string>
+    <string name="resolution_1080p">1080p</string>
+    <string name="resolution_1440p">1440p</string>
+    <string name="resolution_4k">4K</string>
+    <string name="fps_30">30 FPS</string>
+    <string name="fps_90">90 FPS</string>
+    <string name="fps_120">120 FPS</string>
+    <string name="videoformat_auto">Automatisch (aanbevolen)</string>
+    <string name="videoformat_av1always">Voorkeur geven aan AV1 (experimenteel)</string>
+    <string name="videoformat_h264always">Voorkeur geven aan H.264</string>
+    <string name="pacing_balanced">Gebalanceerd</string>
+    <string name="resolution_480p">480p</string>
+    <string name="audioconf_stereo">Stereo</string>
+    <string name="title_setup_guide">Installatie­handleiding</string>
+    <string name="category_help">Hulp</string>
+    <string name="fps_60">60 FPS</string>
+    <string name="resolution_prefix_native_landscape">(landschap)</string>
+    <string name="fps_suffix_fps">FPS</string>
+    <string name="category_gamepad_settings">Gamepad­instellingen</string>
 </resources>
